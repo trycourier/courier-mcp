@@ -6,8 +6,7 @@
   "type": "module",
   "scripts": {
     "build": "tsc",
-    "copy-assets": "cp -R src/assets dist/",
-    "dev": "nodemon --watch src --ext ts --exec \"tsc && npm run copy-assets && node dist/index.js\""
+    "dev": "nodemon --watch src --ext ts --exec \"tsc && node dist/index.js\""
   },
   "keywords": [],
   "author": "",
