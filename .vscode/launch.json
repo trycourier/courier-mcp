@@ -4,13 +4,12 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Develop",
+      "name": "Start Development",
       "runtimeExecutable": "npm",
       "runtimeArgs": [
         "run",
         "dev"
       ],
-      "cwd": "${workspaceFolder}/courier-mcp",
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen"
     }

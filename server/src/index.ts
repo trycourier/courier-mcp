@@ -1,8 +1,6 @@
 import express from 'express';
-import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
-import { z } from 'zod';
 import { statelessHandler } from 'express-mcp-handler';
-import { CourierClient } from '@trycourier/courier';
+import CourierMcpServer from '../../mcp/dist/index.js';
 
 // Create Express app
 const app = express();
@@ -10,61 +8,7 @@ app.use(express.json());
 
 // Factory function to configure and create the MCP server
 const createServer = () => {
-  const server = new McpServer({
-    name: 'courier-mcp',
-    version: '1.0.0',
-  });
-
-  server.tool(
-    'send_message',
-    {
-      user_id: z.string(),
-      title: z.string(),
-      body: z.string(),
-      api_key: z.string().optional()
-    },
-    async ({ user_id, title, body, api_key }) => {
-      try {
-        const client = new CourierClient({ authorizationToken: api_key });
-
-        await client.send({
-          message: {
-            to: {
-              user_id: user_id,
-            },
-            content: {
-              title: title ?? 'Example Title',
-              body: body ?? 'Example Body',
-            },
-            routing: {
-              method: 'single',
-              channels: ['inbox']
-            }
-          },
-        });
-
-        return {
-          content: [
-            {
-              type: 'text',
-              text: `Message sent to ${user_id}: "${body}" (using ${api_key ? 'provided' : 'environment'} API key)`,
-            },
-          ],
-        };
-      } catch (err: any) {
-        return {
-          content: [
-            {
-              type: 'text',
-              text: `Error sending message: ${err.message || err}`,
-            },
-          ],
-        };
-      }
-    }
-  );
-
-  return server;
+  return new CourierMcpServer();
 };
 
 // Configure the stateless handler
