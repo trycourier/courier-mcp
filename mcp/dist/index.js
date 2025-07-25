@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
-import { getCourierConfig } from './utils';
-import { getCourierClient } from './client';
+import { getCourierConfig } from './utils.js';
+import { getCourierClient } from './client.js';
 // Flutter markdown files to support
 const FLUTTER_MARKDOWN_FILES = [
     {
@@ -72,29 +72,66 @@ export default class CourierMcpServer extends McpServer {
         this.registerTools();
     }
     registerTools() {
-        // Register send_message tool
+        // Export the Courier config from mcp.json
+        this.tool('get_config', 'Get the Courier config from mcp.json', {}, async () => {
+            const config = getCourierConfig();
+            return {
+                content: [
+                    {
+                        type: 'text',
+                        text: JSON.stringify(config, null, 2),
+                    },
+                ],
+            };
+        });
+        // Send a message to a user with Courier
         this.tool('send_message', 'Send a message to a user with Courier', {
             user_id: z.string(),
-            title: z.string(),
-            body: z.string(),
-        }, async ({ user_id, title, body }) => {
+            template: z.string().optional(),
+            title: z.string().optional(),
+            body: z.string().optional(),
+            data: z.record(z.string(), z.string()).optional(),
+            method: z.enum(['all', 'single']).optional(),
+            channels: z.array(z.string()).optional(),
+        }, async ({ user_id, template, title, body, data, method, channels }) => {
             try {
-                const client = getCourierClient();
-                const response = await client.send({
+                if (!template && (!title || !body)) {
+                    throw new Error('Either a template or both title and body must be provided.');
+                }
+                if (template && (title || body)) {
+                    throw new Error('Provide either a template or title/body, not both.');
+                }
+                if (!method) {
+                    throw new Error('Method must be provided.');
+                }
+                if (!channels || channels.length === 0) {
+                    throw new Error('At least one channel must be provided. Available channels: inbox, email, sms, push');
+                }
+                let request = {
                     message: {
                         to: {
                             user_id: user_id,
                         },
-                        content: {
-                            title: title ?? 'Example Title',
-                            body: body ?? 'Example Body',
-                        },
+                        data: data,
                         routing: {
-                            method: 'single',
-                            channels: ['inbox']
+                            method: method,
+                            channels: channels
                         }
                     },
-                });
+                };
+                // Add either a template or content (title/body) to the message, but never both.
+                // If a template is provided, add it to the message; otherwise, add content with title and body.
+                if (template) {
+                    request.message.template = template;
+                }
+                else {
+                    request.message.content = {
+                        title: title,
+                        body: body,
+                    };
+                }
+                const client = getCourierClient();
+                const response = await client.send(request);
                 return {
                     content: [
                         {
@@ -109,23 +146,12 @@ export default class CourierMcpServer extends McpServer {
                     content: [
                         {
                             type: 'text',
-                            text: `Error sending message: ${err.message || err}`,
+                            text: JSON.stringify(err, null, 2),
                         },
                     ],
                 };
             }
         });
-        // Register export_config tool
-        this.tool('export_config', 'Export the Courier config from mcp.json', {}, async () => {
-            const config = getCourierConfig();
-            return {
-                content: [
-                    {
-                        type: 'text',
-                        text: JSON.stringify(config, null, 2),
-                    },
-                ],
-            };
-        });
     }
 }
+//# sourceMappingURL=index.js.map

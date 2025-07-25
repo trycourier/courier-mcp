@@ -1,6 +1,6 @@
 import express from 'express';
 import { statelessHandler } from 'express-mcp-handler';
-import CourierMcpServer from '../../mcp/dist/index.js';
+import CourierMcpServer from 'courier-mcp';
 
 // Create Express app
 const app = express();

@@ -1,5 +1,5 @@
 import { CourierClient } from '@trycourier/courier';
-import { getCourierConfig } from './utils';
+import { getCourierConfig } from './utils.js';
 
 export function getCourierClient(): CourierClient {
   const config = getCourierConfig();

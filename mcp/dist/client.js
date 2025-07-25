@@ -1,5 +1,5 @@
 import { CourierClient } from '@trycourier/courier';
-import { getCourierConfig } from './utils';
+import { getCourierConfig } from './utils.js';
 export function getCourierClient() {
     const config = getCourierConfig();
     if (!config?.API_KEY) {
@@ -10,3 +10,4 @@ export function getCourierClient() {
         baseUrl: config?.BASE_URL,
     });
 }
+//# sourceMappingURL=client.js.map

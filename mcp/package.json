@@ -4,9 +4,17 @@
   "description": "",
   "main": "dist/index.js",
   "type": "module",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": "./dist/index.js"
+  },
   "scripts": {
     "build": "tsc",
-    "dev": "nodemon --watch src --ext ts --exec \"tsc && node dist/index.js\""
+    "dev": "nodemon --watch src --ext ts --exec \"npm run build\"",
+    "prepare": "npm run build"
   },
   "keywords": [],
   "author": "",

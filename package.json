@@ -1,7 +1,9 @@
 {
-  "name": "courier-mcp-dev",
-  "version": "1.0.0",
   "private": true,
+  "workspaces": [
+    "mcp",
+    "server"
+  ],
   "scripts": {
     "dev": "./dev.sh"
   }
