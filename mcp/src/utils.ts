@@ -10,7 +10,22 @@ export type CourierMcpConfig = {
  * Attempts to load just the Courier "config" part from mcp.json from several possible locations.
  * Returns the config object, or undefined if not found.
  */
-export function getCourierConfig(): CourierMcpConfig | undefined {
+export function getCourierConfig(headers?: Record<string, any>): CourierMcpConfig {
+
+  if (headers) {
+    let authHeader = headers['Authorization'] || headers['authorization'];
+    let token: string | undefined = undefined;
+    if (typeof authHeader === 'string') {
+      // Split out "Bearer <token>"
+      const match = authHeader.match(/^Bearer\s+(.+)$/i);
+      token = match ? match[1] : authHeader;
+    }
+    return {
+      API_KEY: token,
+      BASE_URL: undefined, // TODO: add base url
+    };
+  }
+
   const possiblePaths = [
     path.resolve(process.cwd(), 'mcp.json'),
     path.resolve(process.cwd(), '.cursor', 'mcp.json'),
@@ -33,5 +48,8 @@ export function getCourierConfig(): CourierMcpConfig | undefined {
       console.error(err);
     }
   }
-  return undefined;
+  return {
+    API_KEY: undefined,
+    BASE_URL: undefined,
+  };
 }

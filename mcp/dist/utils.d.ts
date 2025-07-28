@@ -6,4 +6,4 @@ export type CourierMcpConfig = {
  * Attempts to load just the Courier "config" part from mcp.json from several possible locations.
  * Returns the config object, or undefined if not found.
  */
-export declare function getCourierConfig(): CourierMcpConfig | undefined;
+export declare function getCourierConfig(headers?: Record<string, any>): CourierMcpConfig;

@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import { statelessHandler } from 'express-mcp-handler';
 import CourierMcpServer from 'courier-mcp';
 
@@ -7,21 +7,56 @@ const app = express();
 app.use(express.json());
 
 // Factory function to configure and create the MCP server
-const createServer = () => {
-  return new CourierMcpServer();
-};
+// Accepts the request as an argument and passes it to CourierMcpServer if needed
+// const createServer = (req: Request) => {
+//   console.log('Request headers:', req.headers);
+//   return new CourierMcpServer();
+// };
 
-// Configure the stateless handler
-const handler = statelessHandler(createServer, {
-  onClose: (_req: any, _res: any) => {
-    console.log('Request completed and transport closed');
-  },
-  onError: (error: any) => {
-    console.error('Error handling request:', error);
-  }
+// // Configure the stateless handler
+// const handler = statelessHandler(
+//   createServer,
+//   {
+//     onClose: (_req: Request, _res: Response) => {
+//       console.log('Request completed and transport closed');
+//     },
+//     onError: (error: any) => {
+//       console.error('Error handling request:', error);
+//     }
+//   }
+// );
+
+// Use the handler directly as Express middleware
+app.post('/mcp', (req: Request, res: Response, next: NextFunction) => {
+
+  // The statelessHandler expects a ServerFactory with at least one argument (the request)
+  // So we pass a function that takes the request and returns the server
+  const createServer = () => {
+    const mcpServer = new CourierMcpServer(req.headers);
+
+    // When the request is done, close the MCP server if it has a close method
+    // TODO: This needs to be confirmed that it works
+    res.on('finish', () => {
+      if (typeof (mcpServer as any).close === 'function') {
+        (mcpServer as any).close();
+        console.log('MCP server instance closed');
+      }
+    });
+
+    return mcpServer;
+  };
+
+  // Use the statelessHandler to handle the request
+  return statelessHandler(createServer, {
+    onClose: (_req: Request, _res: Response) => {
+      console.log('Request completed and transport closed');
+    },
+    onError: (error: any) => {
+      console.error('Error handling request:', error);
+    }
+  })(req, res, next);
+
 });
-
-app.post('/mcp', handler);
 
 // Start the server
 const PORT = process.env.PORT || 3000;
