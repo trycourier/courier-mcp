@@ -1,5 +1,5 @@
 import z from "zod";
-import { CourierMcpTools } from "./courier-mcp-tools.js";
+import { CourierMcpTools } from "./tools.js";
 
 /**
  * Tool class for sending a message using CourierMcpServer.
@@ -10,7 +10,7 @@ export class SendTools extends CourierMcpTools {
   public register() {
 
     // Send a message to a user with Courier using title/body (no template)
-    this.server.tool(
+    this.mcp.tool(
       'send_message',
       'Send a message to a user with Courier using title and body (no template)',
       {
@@ -44,7 +44,7 @@ export class SendTools extends CourierMcpTools {
             },
           };
 
-          const response = await this.server.courierClient.send(request);
+          const response = await this.mcp.courierClient.send(request);
           return {
             content: [
               {
@@ -67,7 +67,7 @@ export class SendTools extends CourierMcpTools {
     );
 
     // Send a message to a user with Courier using a template
-    this.server.tool(
+    this.mcp.tool(
       'send_message_template',
       'Send a message to a user with Courier using a template',
       {
@@ -91,7 +91,7 @@ export class SendTools extends CourierMcpTools {
             },
           };
 
-          const response = await this.server.courierClient.send(request);
+          const response = await this.mcp.courierClient.send(request);
           return {
             content: [
               {

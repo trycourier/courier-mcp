@@ -1,11 +1,11 @@
 import z from "zod";
-import { CourierMcpTools } from "./courier-mcp-tools.js";
+import { CourierMcpTools } from "./tools.js";
 
 export class AudienceTools extends CourierMcpTools {
 
   public register() {
     // Get an audience by audience_id
-    this.server.tool(
+    this.mcp.tool(
       'get_audience',
       'Get an audience by its ID',
       {
@@ -13,7 +13,7 @@ export class AudienceTools extends CourierMcpTools {
       },
       async ({ audience_id }) => {
         try {
-          const response = await this.server.courierClient.audiences.get(audience_id);
+          const response = await this.mcp.courierClient.audiences.get(audience_id);
           return {
             content: [
               {
@@ -105,7 +105,7 @@ export class AudienceTools extends CourierMcpTools {
     // );
 
     // List members of an audience
-    this.server.tool(
+    this.mcp.tool(
       'list_audience_members',
       'List members of an audience by its ID',
       {
@@ -118,7 +118,7 @@ export class AudienceTools extends CourierMcpTools {
           const request: any = {};
           if (cursor !== undefined) request.cursor = cursor;
           if (limit !== undefined) request.limit = limit;
-          const response = await this.server.courierClient.audiences.listMembers(audience_id, request);
+          const response = await this.mcp.courierClient.audiences.listMembers(audience_id, request);
           return {
             content: [
               {
@@ -141,7 +141,7 @@ export class AudienceTools extends CourierMcpTools {
     );
 
     // List all audiences
-    this.server.tool(
+    this.mcp.tool(
       'list_audiences',
       'List all audiences associated with the authorization token',
       {
@@ -153,7 +153,7 @@ export class AudienceTools extends CourierMcpTools {
           const request: any = {};
           if (cursor !== undefined) request.cursor = cursor;
           if (limit !== undefined) request.limit = limit;
-          const response = await this.server.courierClient.audiences.listAudiences(request);
+          const response = await this.mcp.courierClient.audiences.listAudiences(request);
           return {
             content: [
               {

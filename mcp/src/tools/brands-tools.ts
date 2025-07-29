@@ -1,11 +1,11 @@
 import z from "zod";
-import { CourierMcpTools } from "./courier-mcp-tools.js";
+import { CourierMcpTools } from "./tools.js";
 
 export class BrandsTools extends CourierMcpTools {
 
   public register() {
     // Create a brand
-    this.server.tool(
+    this.mcp.tool(
       'create_brand',
       'Create a new brand.',
       {
@@ -31,7 +31,7 @@ export class BrandsTools extends CourierMcpTools {
           if (idempotency_key !== undefined) requestOptions.idempotencyKey = idempotency_key;
           if (idempotency_expiry !== undefined) requestOptions.idempotencyExpiry = idempotency_expiry;
 
-          const response = await this.server.courierClient.brands.create(request, requestOptions);
+          const response = await this.mcp.courierClient.brands.create(request, requestOptions);
 
           return {
             content: [
@@ -55,7 +55,7 @@ export class BrandsTools extends CourierMcpTools {
     );
 
     // Get a brand by ID
-    this.server.tool(
+    this.mcp.tool(
       'get_brand',
       'Fetch a specific brand by brand ID.',
       {
@@ -69,7 +69,7 @@ export class BrandsTools extends CourierMcpTools {
           if (timeout_in_seconds !== undefined) requestOptions.timeoutInSeconds = timeout_in_seconds;
           if (max_retries !== undefined) requestOptions.maxRetries = max_retries;
 
-          const response = await this.server.courierClient.brands.get(brand_id, requestOptions);
+          const response = await this.mcp.courierClient.brands.get(brand_id, requestOptions);
 
           return {
             content: [
@@ -93,7 +93,7 @@ export class BrandsTools extends CourierMcpTools {
     );
 
     // List brands
-    this.server.tool(
+    this.mcp.tool(
       'list_brands',
       'Get the list of brands.',
       {
@@ -112,7 +112,7 @@ export class BrandsTools extends CourierMcpTools {
           if (timeout_in_seconds !== undefined) requestOptions.timeoutInSeconds = timeout_in_seconds;
           if (max_retries !== undefined) requestOptions.maxRetries = max_retries;
 
-          const response = await this.server.courierClient.brands.list(request, requestOptions);
+          const response = await this.mcp.courierClient.brands.list(request, requestOptions);
 
           return {
             content: [

@@ -1,18 +1,18 @@
-import { CourierMcpTools } from "./courier-mcp-tools.js";
+import { CourierMcpTools } from "./tools.js";
 
-export class ConfigTools extends CourierMcpTools {
+export class EnvironmentTools extends CourierMcpTools {
 
   public register() {
-    this.server.tool(
-      'get_config',
-      'Get the Courier tool configuration',
+    this.mcp.tool(
+      'get_environment_config',
+      'Get the Courier environment configuration',
       {},
       async () => {
         return {
           content: [
             {
               type: 'text',
-              text: JSON.stringify(this.server.config, null, 2),
+              text: JSON.stringify(this.mcp.environment, null, 2),
             },
           ],
         };

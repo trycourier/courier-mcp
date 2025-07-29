@@ -1,10 +1,10 @@
-import CourierMcpServer from "../index.js";
+import CourierMcp from "../index.js";
 
 export class CourierMcpTools {
-  readonly server: CourierMcpServer;
+  readonly mcp: CourierMcp;
 
-  constructor(server: CourierMcpServer) {
-    this.server = server;
+  constructor(mcp: CourierMcp) {
+    this.mcp = mcp;
   }
 
   /**

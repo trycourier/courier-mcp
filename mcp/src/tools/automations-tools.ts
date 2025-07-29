@@ -1,11 +1,11 @@
 import z from "zod";
-import { CourierMcpTools } from "./courier-mcp-tools.js";
+import { CourierMcpTools } from "./tools.js";
 
 export class AutomationsTools extends CourierMcpTools {
 
   public register() {
     // Invoke an automation run from an automation template
-    this.server.tool(
+    this.mcp.tool(
       'invoke_automation_template',
       'Invoke an automation run from an automation template.',
       {
@@ -31,7 +31,7 @@ export class AutomationsTools extends CourierMcpTools {
           if (idempotency_key !== undefined) requestOptions.idempotencyKey = idempotency_key;
           if (idempotency_expiry !== undefined) requestOptions.idempotencyExpiry = idempotency_expiry;
 
-          const response = await this.server.courierClient.automations.invokeAutomationTemplate(
+          const response = await this.mcp.courierClient.automations.invokeAutomationTemplate(
             template_id,
             request,
             requestOptions
@@ -59,7 +59,7 @@ export class AutomationsTools extends CourierMcpTools {
     );
 
     // Invoke an ad hoc automation run
-    this.server.tool(
+    this.mcp.tool(
       'invoke_ad_hoc_automation',
       'Invoke an ad hoc automation run.',
       {
@@ -86,7 +86,7 @@ export class AutomationsTools extends CourierMcpTools {
           if (idempotency_key !== undefined) requestOptions.idempotencyKey = idempotency_key;
           if (idempotency_expiry !== undefined) requestOptions.idempotencyExpiry = idempotency_expiry;
 
-          const response = await this.server.courierClient.automations.invokeAdHocAutomation(
+          const response = await this.mcp.courierClient.automations.invokeAdHocAutomation(
             request,
             requestOptions
           );

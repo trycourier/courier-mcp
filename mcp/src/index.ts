@@ -1,9 +1,8 @@
 #!/usr/bin/env node
 
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
-import { CourierMcpConfig, getCourierConfig } from './utils.js';
 import { CourierClient } from '@trycourier/courier';
-import { ConfigTools } from './tools/config-tools.js';
+import { EnvironmentTools } from './tools/config-tools.js';
 import { SendTools } from './tools/send-tools.js';
 import { DocsTools } from './tools/docs-tools.js';
 import { AuthTokenTools } from './tools/auth-token-tools.js';
@@ -17,11 +16,14 @@ import { InboundTools } from './tools/inbound-tools.js';
 import { ListsTools } from './tools/lists-tools.js';
 import { NotificationsTools } from './tools/notifications-tools.js';
 import { ProfilesTools } from './tools/profiles-tools.js';
+import { CourierMcpEnvironment } from './utils/environment.js';
+import { CourierClient2 } from './client/courier-client.js';
 
-export default class CourierMcpServer extends McpServer {
+export default class CourierMcp extends McpServer {
 
-  readonly config: CourierMcpConfig;
+  readonly environment: CourierMcpEnvironment;
   readonly courierClient: CourierClient;
+  readonly courierClient2: CourierClient2;
 
   constructor(headers?: Record<string, any>) {
     super({
@@ -30,10 +32,15 @@ export default class CourierMcpServer extends McpServer {
     });
 
     // Get the Courier config from mcp.json or headers
-    this.config = getCourierConfig(headers);
+    this.environment = new CourierMcpEnvironment(headers);
     this.courierClient = new CourierClient({
-      authorizationToken: this.config.API_KEY,
-      baseUrl: this.config.BASE_URL,
+      authorizationToken: this.environment.apiKey,
+      baseUrl: this.environment.baseUrl,
+    });
+
+    this.courierClient2 = new CourierClient2({
+      apiKey: this.environment.apiKey,
+      baseUrl: this.environment.baseUrl,
     });
 
     this.registerTools();
@@ -60,7 +67,7 @@ export default class CourierMcpServer extends McpServer {
     new BulkTools(this).register();
 
     // Configuration of the MCP
-    new ConfigTools(this).register();
+    new EnvironmentTools(this).register();
 
     // Documentation tools
     new DocsTools(this).register();

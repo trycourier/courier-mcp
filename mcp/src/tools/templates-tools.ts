@@ -1,11 +1,11 @@
 import z from "zod";
-import { CourierMcpTools } from "./courier-mcp-tools.js";
+import { CourierMcpTools } from "./tools.js";
 
 export class TemplatesTools extends CourierMcpTools {
 
   public register() {
     // List notification templates
-    this.server.tool(
+    this.mcp.tool(
       'list_templates',
       'Returns a list of notification templates',
       {
@@ -17,7 +17,7 @@ export class TemplatesTools extends CourierMcpTools {
           const request: any = {};
           if (cursor !== undefined) request.cursor = cursor;
           if (limit !== undefined) request.limit = limit;
-          const response = await this.server.courierClient.templates.list(request);
+          const response = await this.mcp.courierClient.templates.list(request);
           return {
             content: [
               {

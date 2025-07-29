@@ -1,10 +1,10 @@
 import z from "zod";
-import { CourierMcpTools } from "./courier-mcp-tools.js";
+import { CourierMcpTools } from "./tools.js";
 
 export class BulkTools extends CourierMcpTools {
   public register() {
     // Create a bulk job
-    this.server.tool(
+    this.mcp.tool(
       "create_bulk_job",
       "Create a new bulk job.",
       {
@@ -26,7 +26,7 @@ export class BulkTools extends CourierMcpTools {
           if (idempotency_key !== undefined) requestOptions.idempotencyKey = idempotency_key;
           if (idempotency_expiry !== undefined) requestOptions.idempotencyExpiry = idempotency_expiry;
 
-          const response = await this.server.courierClient.bulk.createJob(request, requestOptions);
+          const response = await this.mcp.courierClient.bulk.createJob(request, requestOptions);
 
           return {
             content: [
@@ -50,7 +50,7 @@ export class BulkTools extends CourierMcpTools {
     );
 
     // Ingest users into a bulk job
-    this.server.tool(
+    this.mcp.tool(
       "ingest_bulk_users",
       "Ingest user data into a bulk job.",
       {
@@ -74,7 +74,7 @@ export class BulkTools extends CourierMcpTools {
           if (idempotency_key !== undefined) requestOptions.idempotencyKey = idempotency_key;
           if (idempotency_expiry !== undefined) requestOptions.idempotencyExpiry = idempotency_expiry;
 
-          await this.server.courierClient.bulk.ingestUsers(job_id, request, requestOptions);
+          await this.mcp.courierClient.bulk.ingestUsers(job_id, request, requestOptions);
 
           return {
             content: [
@@ -98,7 +98,7 @@ export class BulkTools extends CourierMcpTools {
     );
 
     // Run a bulk job
-    this.server.tool(
+    this.mcp.tool(
       "run_bulk_job",
       "Run a bulk job.",
       {
@@ -112,7 +112,7 @@ export class BulkTools extends CourierMcpTools {
           if (idempotency_key !== undefined) requestOptions.idempotencyKey = idempotency_key;
           if (idempotency_expiry !== undefined) requestOptions.idempotencyExpiry = idempotency_expiry;
 
-          await this.server.courierClient.bulk.runJob(job_id, requestOptions);
+          await this.mcp.courierClient.bulk.runJob(job_id, requestOptions);
 
           return {
             content: [
@@ -136,7 +136,7 @@ export class BulkTools extends CourierMcpTools {
     );
 
     // Get a bulk job
-    this.server.tool(
+    this.mcp.tool(
       "get_bulk_job",
       "Get a bulk job by job ID.",
       {
@@ -150,7 +150,7 @@ export class BulkTools extends CourierMcpTools {
           if (timeout_in_seconds !== undefined) requestOptions.timeoutInSeconds = timeout_in_seconds;
           if (max_retries !== undefined) requestOptions.maxRetries = max_retries;
 
-          const response = await this.server.courierClient.bulk.getJob(job_id, requestOptions);
+          const response = await this.mcp.courierClient.bulk.getJob(job_id, requestOptions);
 
           return {
             content: [
@@ -174,7 +174,7 @@ export class BulkTools extends CourierMcpTools {
     );
 
     // Get users of a bulk job
-    this.server.tool(
+    this.mcp.tool(
       "get_bulk_job_users",
       "Get users of a bulk job.",
       {
@@ -194,7 +194,7 @@ export class BulkTools extends CourierMcpTools {
           if (timeout_in_seconds !== undefined) requestOptions.timeoutInSeconds = timeout_in_seconds;
           if (max_retries !== undefined) requestOptions.maxRetries = max_retries;
 
-          const response = await this.server.courierClient.bulk.getUsers(job_id, request, requestOptions);
+          const response = await this.mcp.courierClient.bulk.getUsers(job_id, request, requestOptions);
 
           return {
             content: [

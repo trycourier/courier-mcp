@@ -1,10 +1,10 @@
 import z from "zod";
-import { CourierMcpTools } from "./courier-mcp-tools.js";
+import { CourierMcpTools } from "./tools.js";
 
 export class NotificationsTools extends CourierMcpTools {
   public register() {
     // List notifications
-    this.server.tool(
+    this.mcp.tool(
       "list_notifications",
       "List notifications. Optionally filter by cursor, limit, or draft status.",
       {
@@ -25,7 +25,7 @@ export class NotificationsTools extends CourierMcpTools {
           if (timeout_in_seconds !== undefined) requestOptions.timeoutInSeconds = timeout_in_seconds;
           if (max_retries !== undefined) requestOptions.maxRetries = max_retries;
 
-          const response = await this.server.courierClient.notifications.list(request, requestOptions);
+          const response = await this.mcp.courierClient.notifications.list(request, requestOptions);
 
           return {
             content: [
@@ -49,7 +49,7 @@ export class NotificationsTools extends CourierMcpTools {
     );
 
     // Get notification content by ID
-    this.server.tool(
+    this.mcp.tool(
       "get_notification_content",
       "Get the content of a notification by its ID.",
       {
@@ -63,7 +63,7 @@ export class NotificationsTools extends CourierMcpTools {
           if (timeout_in_seconds !== undefined) requestOptions.timeoutInSeconds = timeout_in_seconds;
           if (max_retries !== undefined) requestOptions.maxRetries = max_retries;
 
-          const response = await this.server.courierClient.notifications.getContent(notification_id, requestOptions);
+          const response = await this.mcp.courierClient.notifications.getContent(notification_id, requestOptions);
 
           return {
             content: [
@@ -87,7 +87,7 @@ export class NotificationsTools extends CourierMcpTools {
     );
 
     // Get draft content of a notification by ID
-    this.server.tool(
+    this.mcp.tool(
       "get_notification_draft_content",
       "Get the draft content of a notification by its ID.",
       {
@@ -101,7 +101,7 @@ export class NotificationsTools extends CourierMcpTools {
           if (timeout_in_seconds !== undefined) requestOptions.timeoutInSeconds = timeout_in_seconds;
           if (max_retries !== undefined) requestOptions.maxRetries = max_retries;
 
-          const response = await this.server.courierClient.notifications.getDraftContent(notification_id, requestOptions);
+          const response = await this.mcp.courierClient.notifications.getDraftContent(notification_id, requestOptions);
 
           return {
             content: [
@@ -125,7 +125,7 @@ export class NotificationsTools extends CourierMcpTools {
     );
 
     // Get submission checks for a notification
-    this.server.tool(
+    this.mcp.tool(
       "get_notification_submission_checks",
       "Get submission checks for a notification by notification ID and submission ID.",
       {
@@ -140,7 +140,7 @@ export class NotificationsTools extends CourierMcpTools {
           if (timeout_in_seconds !== undefined) requestOptions.timeoutInSeconds = timeout_in_seconds;
           if (max_retries !== undefined) requestOptions.maxRetries = max_retries;
 
-          const response = await this.server.courierClient.notifications.getSubmissionChecks(
+          const response = await this.mcp.courierClient.notifications.getSubmissionChecks(
             notification_id,
             submission_id,
             requestOptions

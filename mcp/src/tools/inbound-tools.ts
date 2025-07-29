@@ -1,10 +1,10 @@
 import z from "zod";
-import { CourierMcpTools } from "./courier-mcp-tools.js";
+import { CourierMcpTools } from "./tools.js";
 
 export class InboundTools extends CourierMcpTools {
   public register() {
     // Track an inbound event
-    this.server.tool(
+    this.mcp.tool(
       "track_inbound_event",
       "Track an inbound event.",
       {
@@ -38,7 +38,7 @@ export class InboundTools extends CourierMcpTools {
           if (timeout_in_seconds !== undefined) requestOptions.timeoutInSeconds = timeout_in_seconds;
           if (max_retries !== undefined) requestOptions.maxRetries = max_retries;
 
-          const response = await this.server.courierClient.inbound.track(request, requestOptions);
+          const response = await this.mcp.courierClient.inbound.track(request, requestOptions);
 
           return {
             content: [

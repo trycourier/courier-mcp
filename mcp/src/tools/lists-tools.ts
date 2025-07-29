@@ -1,10 +1,10 @@
 import z from "zod";
-import { CourierMcpTools } from "./courier-mcp-tools.js";
+import { CourierMcpTools } from "./tools.js";
 
 export class ListsTools extends CourierMcpTools {
   public register() {
     // List all lists
-    this.server.tool(
+    this.mcp.tool(
       "list_lists",
       "Returns all of the lists, with the ability to filter based on a pattern.",
       {
@@ -25,7 +25,7 @@ export class ListsTools extends CourierMcpTools {
           if (timeout_in_seconds !== undefined) requestOptions.timeoutInSeconds = timeout_in_seconds;
           if (max_retries !== undefined) requestOptions.maxRetries = max_retries;
 
-          const response = await this.server.courierClient.lists.list(request, requestOptions);
+          const response = await this.mcp.courierClient.lists.list(request, requestOptions);
 
           return {
             content: [
@@ -49,7 +49,7 @@ export class ListsTools extends CourierMcpTools {
     );
 
     // Get a list by ID
-    this.server.tool(
+    this.mcp.tool(
       "get_list",
       "Returns a list based on the list ID provided.",
       {
@@ -63,7 +63,7 @@ export class ListsTools extends CourierMcpTools {
           if (timeout_in_seconds !== undefined) requestOptions.timeoutInSeconds = timeout_in_seconds;
           if (max_retries !== undefined) requestOptions.maxRetries = max_retries;
 
-          const response = await this.server.courierClient.lists.get(list_id, requestOptions);
+          const response = await this.mcp.courierClient.lists.get(list_id, requestOptions);
 
           return {
             content: [
@@ -207,7 +207,7 @@ export class ListsTools extends CourierMcpTools {
     // );
 
     // Get list subscribers
-    this.server.tool(
+    this.mcp.tool(
       "get_list_subscribers",
       "Get the list's subscriptions.",
       {
@@ -227,7 +227,7 @@ export class ListsTools extends CourierMcpTools {
           if (timeout_in_seconds !== undefined) requestOptions.timeoutInSeconds = timeout_in_seconds;
           if (max_retries !== undefined) requestOptions.maxRetries = max_retries;
 
-          const response = await this.server.courierClient.lists.getSubscribers(list_id, request, requestOptions);
+          const response = await this.mcp.courierClient.lists.getSubscribers(list_id, request, requestOptions);
 
           return {
             content: [
@@ -364,7 +364,7 @@ export class ListsTools extends CourierMcpTools {
     // );
 
     // Subscribe a user to a list
-    this.server.tool(
+    this.mcp.tool(
       "subscribe_user_to_list",
       "Subscribe a user to an existing list (note: if the List does not exist, it will be automatically created).",
       {
@@ -383,7 +383,7 @@ export class ListsTools extends CourierMcpTools {
           if (timeout_in_seconds !== undefined) requestOptions.timeoutInSeconds = timeout_in_seconds;
           if (max_retries !== undefined) requestOptions.maxRetries = max_retries;
 
-          await this.server.courierClient.lists.subscribe(list_id, user_id, request, requestOptions);
+          await this.mcp.courierClient.lists.subscribe(list_id, user_id, request, requestOptions);
 
           return {
             content: [
@@ -407,7 +407,7 @@ export class ListsTools extends CourierMcpTools {
     );
 
     // Unsubscribe a user from a list
-    this.server.tool(
+    this.mcp.tool(
       "unsubscribe_user_from_list",
       "Delete a subscription to a list by list ID and user ID.",
       {
@@ -422,7 +422,7 @@ export class ListsTools extends CourierMcpTools {
           if (timeout_in_seconds !== undefined) requestOptions.timeoutInSeconds = timeout_in_seconds;
           if (max_retries !== undefined) requestOptions.maxRetries = max_retries;
 
-          await this.server.courierClient.lists.unsubscribe(list_id, user_id, requestOptions);
+          await this.mcp.courierClient.lists.unsubscribe(list_id, user_id, requestOptions);
 
           return {
             content: [

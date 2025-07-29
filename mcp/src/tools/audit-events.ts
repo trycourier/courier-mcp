@@ -1,11 +1,11 @@
 import z from "zod";
-import { CourierMcpTools } from "./courier-mcp-tools.js";
+import { CourierMcpTools } from "./tools.js";
 
 export class AuditEventsTools extends CourierMcpTools {
 
   public register() {
     // Get an audit event by audit_event_id
-    this.server.tool(
+    this.mcp.tool(
       'get_audit_event',
       'Get an audit event by its ID',
       {
@@ -13,7 +13,7 @@ export class AuditEventsTools extends CourierMcpTools {
       },
       async ({ audit_event_id }) => {
         try {
-          const response = await this.server.courierClient.auditEvents.get(audit_event_id);
+          const response = await this.mcp.courierClient.auditEvents.get(audit_event_id);
           return {
             content: [
               {
@@ -36,7 +36,7 @@ export class AuditEventsTools extends CourierMcpTools {
     );
 
     // List all audit events
-    this.server.tool(
+    this.mcp.tool(
       'list_audit_events',
       'List all audit events associated with the authorization token',
       {
@@ -48,7 +48,7 @@ export class AuditEventsTools extends CourierMcpTools {
           const request: any = {};
           if (cursor !== undefined) request.cursor = cursor;
           if (limit !== undefined) request.limit = limit;
-          const response = await this.server.courierClient.auditEvents.list(request);
+          const response = await this.mcp.courierClient.auditEvents.list(request);
           return {
             content: [
               {

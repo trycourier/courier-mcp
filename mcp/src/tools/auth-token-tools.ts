@@ -1,10 +1,10 @@
 import z from "zod";
-import { CourierMcpTools } from "./courier-mcp-tools.js";
+import { CourierMcpTools } from "./tools.js";
 
 export class AuthTokenTools extends CourierMcpTools {
 
   public register() {
-    this.server.tool(
+    this.mcp.tool(
       'issue_token',
       'Generate a JWT authentication token for Courier.',
       {
@@ -15,7 +15,7 @@ export class AuthTokenTools extends CourierMcpTools {
       async ({ user_id, scopes, expires_in }) => {
         try {
 
-          const response = await this.server.courierClient.authTokens.issueToken({
+          const response = await this.mcp.courierClient.authTokens.issueToken({
             scope: `user_id:${user_id} ${scopes.join(' ')}`,
             expires_in: expires_in,
           });

@@ -1,47 +1,31 @@
 import z from "zod";
-import { CourierMcpTools } from "./courier-mcp-tools.js";
+import { CourierMcpTools } from "./tools.js";
+import Http from "../utils/http.js";
 
 export class ProfilesTools extends CourierMcpTools {
 
   public register() {
-    // Get a user profile by user_id
-    this.server.tool(
-      'get_user',
-      'Get a user by their ID',
+
+    // Get a user profile by user_id using HTTP utility
+    this.mcp.tool(
+      'get_user_profile_by_id',
+      'Get a user profile by their ID',
       {
         user_id: z.string(),
-        timeout_in_seconds: z.number().optional(),
-        max_retries: z.number().optional(),
       },
-      async ({ user_id, timeout_in_seconds, max_retries }) => {
-        try {
-          const requestOptions: any = {};
-          if (timeout_in_seconds !== undefined) requestOptions.timeoutInSeconds = timeout_in_seconds;
-          if (max_retries !== undefined) requestOptions.maxRetries = max_retries;
-          const response = await this.server.courierClient.profiles.get(user_id, requestOptions);
-          return {
-            content: [
-              {
-                type: 'text',
-                text: JSON.stringify(response, null, 2),
-              },
-            ],
-          };
-        } catch (err: any) {
-          return {
-            content: [
-              {
-                type: 'text',
-                text: JSON.stringify(err, null, 2),
-              },
-            ],
-          };
-        }
+      async ({ user_id }) => {
+        return await Http.get({
+          url: `${this.mcp.environment.baseUrl}/profiles/${encodeURIComponent(user_id)}`,
+          headers: {
+            'Authorization': `Bearer ${this.mcp.environment.apiKey}`,
+            'Content-Type': 'application/json',
+          },
+        });
       }
     );
 
     // Create or merge a user profile
-    this.server.tool(
+    this.mcp.tool(
       'create_or_merge_user',
       'Create or merge a user profile by user ID. Merges supplied values with an existing profile or creates a new one.',
       {
@@ -60,7 +44,7 @@ export class ProfilesTools extends CourierMcpTools {
           if (idempotency_expiry !== undefined) requestOptions.idempotencyExpiry = idempotency_expiry;
           if (timeout_in_seconds !== undefined) requestOptions.timeoutInSeconds = timeout_in_seconds;
           if (max_retries !== undefined) requestOptions.maxRetries = max_retries;
-          const response = await this.server.courierClient.profiles.create(user_id, request, requestOptions);
+          const response = await this.mcp.courierClient.profiles.create(user_id, request, requestOptions);
           return {
             content: [
               {
@@ -201,7 +185,7 @@ export class ProfilesTools extends CourierMcpTools {
     // );
 
     // Get a user's list subscriptions by user_id
-    this.server.tool(
+    this.mcp.tool(
       'get_user_list_subscriptions',
       'Get the list subscriptions for a user by their ID',
       {
@@ -218,7 +202,7 @@ export class ProfilesTools extends CourierMcpTools {
           const requestOptions: any = {};
           if (timeout_in_seconds !== undefined) requestOptions.timeoutInSeconds = timeout_in_seconds;
           if (max_retries !== undefined) requestOptions.maxRetries = max_retries;
-          const response = await this.server.courierClient.profiles.getListSubscriptions(user_id, request, requestOptions);
+          const response = await this.mcp.courierClient.profiles.getListSubscriptions(user_id, request, requestOptions);
           return {
             content: [
               {
