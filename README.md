@@ -1,0 +1,1 @@
+[![Install MCP Server](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/install-mcp?name=Courier&config=JTdCJTIydXJsJTIyJTNBJTIyaHR0cCUzQSUyRiUyRmxvY2FsaG9zdCUzQTMwMDAlMkZtY3AlMjIlMkMlMjJoZWFkZXJzJTIyJTNBJTdCJTIyQXV0aG9yaXphdGlvbiUyMiUzQSUyMkJlYXJlciUyMEFQSV9LRVklMjIlN0QlN0Q%3D)
