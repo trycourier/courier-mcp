@@ -6,26 +6,6 @@ import CourierMcpServer from 'courier-mcp';
 const app = express();
 app.use(express.json());
 
-// Factory function to configure and create the MCP server
-// Accepts the request as an argument and passes it to CourierMcpServer if needed
-// const createServer = (req: Request) => {
-//   console.log('Request headers:', req.headers);
-//   return new CourierMcpServer();
-// };
-
-// // Configure the stateless handler
-// const handler = statelessHandler(
-//   createServer,
-//   {
-//     onClose: (_req: Request, _res: Response) => {
-//       console.log('Request completed and transport closed');
-//     },
-//     onError: (error: any) => {
-//       console.error('Error handling request:', error);
-//     }
-//   }
-// );
-
 // Use the handler directly as Express middleware
 app.post('/mcp', (req: Request, res: Response, next: NextFunction) => {
 
