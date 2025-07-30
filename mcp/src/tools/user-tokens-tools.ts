@@ -30,15 +30,16 @@ export class UserTokensTools extends CourierMcpTools {
 
     // Create or replace a specific token for a user
     this.mcp.tool(
-      "put_user_token",
+      "create_or_replace_user_token",
       "Create or replace a specific token for a given user.",
       {
         user_id: z.string(),
         token: z.string(),
+        provider_key: z.string(),
         body: z.any(),
       },
-      async ({ user_id, token, body }) => {
-        return await this.mcp.client.userTokens.putToken(user_id, token, body);
+      async ({ user_id, token, provider_key, body }) => {
+        return await this.mcp.client.userTokens.putToken(user_id, token, provider_key, body);
       }
     );
 

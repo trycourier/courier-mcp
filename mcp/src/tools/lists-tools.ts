@@ -58,38 +58,38 @@ export class ListsTools extends CourierMcpTools {
       }
     );
 
-    // Subscribe a user to a list
-    this.mcp.tool(
-      "subscribe_user_to_list",
-      "Subscribe a user to an existing list (note: if the List does not exist, it will be automatically created).",
-      {
-        list_id: z.string(),
-        user_id: z.string(),
-        preferences: z.record(z.any()).optional(),
-        timeout_in_seconds: z.number().optional(),
-        max_retries: z.number().optional(),
-      },
-      async ({ list_id, user_id, preferences }) => {
-        const request: any = {};
-        if (preferences !== undefined) request.preferences = preferences;
+    // // Subscribe a user to a list
+    // this.mcp.tool(
+    //   "subscribe_user_to_list",
+    //   "Subscribe a user to an existing list (note: if the List does not exist, it will be automatically created).",
+    //   {
+    //     list_id: z.string(),
+    //     user_id: z.string(),
+    //     preferences: z.record(z.any()).optional(),
+    //     timeout_in_seconds: z.number().optional(),
+    //     max_retries: z.number().optional(),
+    //   },
+    //   async ({ list_id, user_id, preferences }) => {
+    //     const request: any = {};
+    //     if (preferences !== undefined) request.preferences = preferences;
 
-        return await this.mcp.client.lists.subscribe(list_id, user_id, request);
-      }
-    );
+    //     return await this.mcp.client.lists.subscribe(list_id, user_id, request);
+    //   }
+    // );
 
-    // Unsubscribe a user from a list
-    this.mcp.tool(
-      "unsubscribe_user_from_list",
-      "Delete a subscription to a list by list ID and user ID.",
-      {
-        list_id: z.string(),
-        user_id: z.string(),
-        timeout_in_seconds: z.number().optional(),
-        max_retries: z.number().optional(),
-      },
-      async ({ list_id, user_id }) => {
-        return await this.mcp.client.lists.unsubscribe(list_id, user_id);
-      }
-    );
+    // // Unsubscribe a user from a list
+    // this.mcp.tool(
+    //   "unsubscribe_user_from_list",
+    //   "Delete a subscription to a list by list ID and user ID.",
+    //   {
+    //     list_id: z.string(),
+    //     user_id: z.string(),
+    //     timeout_in_seconds: z.number().optional(),
+    //     max_retries: z.number().optional(),
+    //   },
+    //   async ({ list_id, user_id }) => {
+    //     return await this.mcp.client.lists.unsubscribe(list_id, user_id);
+    //   }
+    // );
   }
 }

@@ -62,17 +62,17 @@ export class MessagesTools extends CourierMcpTools {
     //   }
     // );
 
-    // Get message history
-    this.mcp.tool(
-      "get_message_history",
-      "Fetch the array of events of a message you've previously sent.",
-      {
-        message_id: z.string(),
-      },
-      async ({ message_id }) => {
-        return await this.mcp.client.messages.getHistory(message_id);
-      }
-    );
+    // // Get message history
+    // this.mcp.tool(
+    //   "get_message_history",
+    //   "Fetch the array of events of a message you've previously sent.",
+    //   {
+    //     message_id: z.string(),
+    //   },
+    //   async ({ message_id }) => {
+    //     return await this.mcp.client.messages.getHistory(message_id);
+    //   }
+    // );
 
     // Get message content
     this.mcp.tool(

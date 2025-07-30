@@ -29,49 +29,49 @@ export class ProfilesTools extends CourierMcpTools {
       }
     );
 
-    // Replace a user profile (PUT)
-    this.mcp.tool(
-      'replace_user',
-      'Replace a user profile by user ID. This is a full replacement (PUT).',
-      {
-        user_id: z.string(),
-        profile: z.record(z.any()),
-      },
-      async ({ user_id, profile }) => {
-        return await this.mcp.client.profiles.replace(user_id, profile);
-      }
-    );
+    // // Replace a user profile (PUT)
+    // this.mcp.tool(
+    //   'replace_user',
+    //   'Replace a user profile by user ID. This is a full replacement (PUT).',
+    //   {
+    //     user_id: z.string(),
+    //     profile: z.record(z.any()),
+    //   },
+    //   async ({ user_id, profile }) => {
+    //     return await this.mcp.client.profiles.replace(user_id, profile);
+    //   }
+    // );
 
-    // Patch/merge a user profile (PATCH)
-    this.mcp.tool(
-      'patch_user',
-      'Patch/merge a user profile by user ID. Use JSON Patch operations.',
-      {
-        user_id: z.string(),
-        patch: z.array(
-          z.object({
-            op: z.string(),
-            path: z.string(),
-            value: z.any().optional(),
-          })
-        ),
-      },
-      async ({ user_id, patch }) => {
-        return await this.mcp.client.profiles.mergeProfile(user_id, { patch });
-      }
-    );
+    // // Patch/merge a user profile (PATCH)
+    // this.mcp.tool(
+    //   'patch_user',
+    //   'Patch/merge a user profile by user ID. Use JSON Patch operations.',
+    //   {
+    //     user_id: z.string(),
+    //     patch: z.array(
+    //       z.object({
+    //         op: z.string(),
+    //         path: z.string(),
+    //         value: z.any().optional(),
+    //       })
+    //     ),
+    //   },
+    //   async ({ user_id, patch }) => {
+    //     return await this.mcp.client.profiles.mergeProfile(user_id, { patch });
+    //   }
+    // );
 
-    // Delete a user profile
-    this.mcp.tool(
-      'delete_user',
-      'Delete a user profile by user ID.',
-      {
-        user_id: z.string(),
-      },
-      async ({ user_id }) => {
-        return await this.mcp.client.profiles.delete(user_id);
-      }
-    );
+    // // Delete a user profile
+    // this.mcp.tool(
+    //   'delete_user',
+    //   'Delete a user profile by user ID.',
+    //   {
+    //     user_id: z.string(),
+    //   },
+    //   async ({ user_id }) => {
+    //     return await this.mcp.client.profiles.delete(user_id);
+    //   }
+    // );
 
     // Get a user's list subscriptions by user_id
     this.mcp.tool(

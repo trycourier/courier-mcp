@@ -52,22 +52,22 @@ export class NotificationsTools extends CourierMcpTools {
       }
     );
 
-    // Get submission checks for a notification
-    this.mcp.tool(
-      "get_notification_submission_checks",
-      "Get submission checks for a notification by notification ID and submission ID.",
-      {
-        notification_id: z.string(),
-        submission_id: z.string(),
-        timeout_in_seconds: z.number().optional(),
-        max_retries: z.number().optional(),
-      },
-      async ({ notification_id, submission_id }) => {
-        return await this.mcp.client.notifications.getSubmissionChecks(
-          notification_id,
-          submission_id
-        );
-      }
-    );
+    // // Get submission checks for a notification
+    // this.mcp.tool(
+    //   "get_notification_submission_checks",
+    //   "Get submission checks for a notification by notification ID and submission ID.",
+    //   {
+    //     notification_id: z.string(),
+    //     submission_id: z.string(),
+    //     timeout_in_seconds: z.number().optional(),
+    //     max_retries: z.number().optional(),
+    //   },
+    //   async ({ notification_id, submission_id }) => {
+    //     return await this.mcp.client.notifications.getSubmissionChecks(
+    //       notification_id,
+    //       submission_id
+    //     );
+    //   }
+    // );
   }
 }
