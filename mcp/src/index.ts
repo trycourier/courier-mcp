@@ -16,12 +16,13 @@ import { InboundTools } from './tools/inbound-tools.js';
 import { ListsTools } from './tools/lists-tools.js';
 import { NotificationsTools } from './tools/notifications-tools.js';
 import { ProfilesTools } from './tools/profiles-tools.js';
-import { CourierMcpEnvironment } from './utils/environment.js';
+import { CourierMcpConfig } from './utils/environment.js';
+import { CourierClient2 } from './client/courier-client.js';
 
 export default class CourierMcp extends McpServer {
 
-  readonly environment: CourierMcpEnvironment;
   readonly courierClient: CourierClient;
+  readonly client: CourierClient2;
 
   constructor(headers?: Record<string, any>) {
     super({
@@ -30,58 +31,62 @@ export default class CourierMcp extends McpServer {
     });
 
     // Get the Courier config from mcp.json or headers
-    this.environment = new CourierMcpEnvironment(headers);
+    const config = new CourierMcpConfig(headers);
     this.courierClient = new CourierClient({
-      authorizationToken: this.environment.apiKey,
-      baseUrl: this.environment.baseUrl,
+      authorizationToken: config.apiKey,
+      baseUrl: config.baseUrl,
     });
+    this.client = new CourierClient2(config.toCourierClientOptions());
+
+    this.client.logger.log('Courier MCP initialized');
+    this.client.logger.log(`Config: ${JSON.stringify(config, null, 2)}`);
 
     this.registerTools();
   }
 
   private registerTools() {
 
-    // Audience tools
-    new AudienceTools(this).register();
+    // // Audience tools
+    // new AudienceTools(this).register();
 
-    // Audit events tools
-    new AuditEventsTools(this).register();
+    // // Audit events tools
+    // new AuditEventsTools(this).register();
 
-    // Auth token tools
-    new AuthTokenTools(this).register();
+    // // Auth token tools
+    // new AuthTokenTools(this).register();
 
-    // Automations tools
-    new AutomationsTools(this).register();
+    // // Automations tools
+    // new AutomationsTools(this).register();
 
-    // Brands tools
-    new BrandsTools(this).register();
+    // // Brands tools
+    // new BrandsTools(this).register();
 
-    // Bulk tools
-    new BulkTools(this).register();
+    // // Bulk tools
+    // new BulkTools(this).register();
 
-    // Configuration of the MCP
-    new EnvironmentTools(this).register();
+    // // Configuration of the MCP
+    // new EnvironmentTools(this).register();
 
-    // Documentation tools
-    new DocsTools(this).register();
+    // // Documentation tools
+    // new DocsTools(this).register();
 
-    // Inbound tools
-    new InboundTools(this).register();
+    // // Inbound tools
+    // new InboundTools(this).register();
 
-    // Lists tools
-    new ListsTools(this).register();
+    // // Lists tools
+    // new ListsTools(this).register();
 
-    // Notifications tools
-    new NotificationsTools(this).register();
+    // // Notifications tools
+    // new NotificationsTools(this).register();
 
     // Profiles tools
     new ProfilesTools(this).register();
 
-    // Send tools
-    new SendTools(this).register();
+    // // Send tools
+    // new SendTools(this).register();
 
-    // Templates tools
-    new TemplatesTools(this).register();
+    // // Templates tools
+    // new TemplatesTools(this).register();
 
   }
 

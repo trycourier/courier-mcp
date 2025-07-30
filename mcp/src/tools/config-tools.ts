@@ -12,7 +12,7 @@ export class EnvironmentTools extends CourierMcpTools {
           content: [
             {
               type: 'text',
-              text: JSON.stringify(this.mcp.environment, null, 2),
+              text: JSON.stringify(this.mcp.client.options, null, 2),
             },
           ],
         };

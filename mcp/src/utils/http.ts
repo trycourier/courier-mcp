@@ -8,6 +8,8 @@ type HttpRequestParams = {
 export default class Http {
   static async get({ url, headers, responseType = 'json' }: HttpRequestParams) {
     try {
+      console.log('url', url);
+      console.log('headers', headers);
       const res = await fetch(url, {
         headers,
         method: 'GET',
@@ -55,6 +57,137 @@ export default class Http {
         headers,
         method: 'POST',
         body: body instanceof FormData ? body : JSON.stringify(body),
+      });
+      if (!res.ok) {
+        throw new Error(`Failed to fetch: ${res.statusText}`);
+      }
+      let data;
+      if (responseType === 'json') {
+        data = await res.json();
+        return {
+          content: [
+            {
+              type: 'text' as const,
+              text: JSON.stringify(data, null, 2),
+            },
+          ],
+        };
+      } else {
+        const text = await res.text();
+        return {
+          content: [
+            {
+              type: 'text' as const,
+              text: text,
+            },
+          ],
+        };
+      }
+    } catch (err: any) {
+      return {
+        content: [
+          {
+            type: 'text' as const,
+            text: JSON.stringify(err, null, 2),
+          },
+        ],
+      };
+    }
+  }
+
+  static async put({ url, headers, body, responseType = 'text' }: HttpRequestParams) {
+    try {
+      const res = await fetch(url, {
+        headers,
+        method: 'PUT',
+        body: body instanceof FormData ? body : JSON.stringify(body),
+      });
+      if (!res.ok) {
+        throw new Error(`Failed to fetch: ${res.statusText}`);
+      }
+      let data;
+      if (responseType === 'json') {
+        data = await res.json();
+        return {
+          content: [
+            {
+              type: 'text' as const,
+              text: JSON.stringify(data, null, 2),
+            },
+          ],
+        };
+      } else {
+        const text = await res.text();
+        return {
+          content: [
+            {
+              type: 'text' as const,
+              text: text,
+            },
+          ],
+        };
+      }
+    } catch (err: any) {
+      return {
+        content: [
+          {
+            type: 'text' as const,
+            text: JSON.stringify(err, null, 2),
+          },
+        ],
+      };
+    }
+  }
+
+  static async patch({ url, headers, body, responseType = 'text' }: HttpRequestParams) {
+    try {
+      const res = await fetch(url, {
+        headers,
+        method: 'PATCH',
+        body: body instanceof FormData ? body : JSON.stringify(body),
+      });
+      if (!res.ok) {
+        throw new Error(`Failed to fetch: ${res.statusText}`);
+      }
+      let data;
+      if (responseType === 'json') {
+        data = await res.json();
+        return {
+          content: [
+            {
+              type: 'text' as const,
+              text: JSON.stringify(data, null, 2),
+            },
+          ],
+        };
+      } else {
+        const text = await res.text();
+        return {
+          content: [
+            {
+              type: 'text' as const,
+              text: text,
+            },
+          ],
+        };
+      }
+    } catch (err: any) {
+      return {
+        content: [
+          {
+            type: 'text' as const,
+            text: JSON.stringify(err, null, 2),
+          },
+        ],
+      };
+    }
+  }
+
+  static async delete({ url, headers, responseType = 'text' }: HttpRequestParams) {
+    try {
+      const res = await fetch(url, {
+        headers,
+        method: 'DELETE',
       });
       if (!res.ok) {
         throw new Error(`Failed to fetch: ${res.statusText}`);
