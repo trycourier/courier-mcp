@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { CourierClient } from '@trycourier/courier';
+import { AudienceTools } from './tools/audience-tools.js';
 import { ProfilesTools } from './tools/profiles-tools.js';
 import { CourierMcpConfig } from './utils/environment.js';
 import { CourierClient2 } from './client/courier-client.js';
@@ -22,8 +23,8 @@ export default class CourierMcp extends McpServer {
         this.registerTools();
     }
     registerTools() {
-        // // Audience tools
-        // new AudienceTools(this).register();
+        // Audience tools
+        new AudienceTools(this).register();
         // // Audit events tools
         // new AuditEventsTools(this).register();
         // // Auth token tools

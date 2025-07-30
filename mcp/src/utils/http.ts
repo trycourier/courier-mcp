@@ -5,13 +5,25 @@ type HttpRequestParams = {
   responseType?: 'json' | 'text'; // allow caller to specify response type
 };
 
+function withJsonContentType(headers?: Record<string, any>, skipIfFormData?: boolean, body?: any): Record<string, any> {
+  let result = { ...(headers || {}) };
+  // If skipIfFormData is true and body is FormData, don't set content-type
+  if (!(skipIfFormData && body instanceof FormData)) {
+    if (!result['Content-Type']) {
+      result['Content-Type'] = 'application/json';
+    }
+  }
+  return result;
+}
+
 export default class Http {
   static async get({ url, headers, responseType = 'json' }: HttpRequestParams) {
     try {
       console.log('url', url);
       console.log('headers', headers);
+      const mergedHeaders = withJsonContentType(headers);
       const res = await fetch(url, {
-        headers,
+        headers: mergedHeaders,
         method: 'GET',
       });
       if (!res.ok) {
@@ -53,8 +65,9 @@ export default class Http {
 
   static async post({ url, headers, body, responseType = 'text' }: HttpRequestParams) {
     try {
+      const mergedHeaders = withJsonContentType(headers, true, body);
       const res = await fetch(url, {
-        headers,
+        headers: mergedHeaders,
         method: 'POST',
         body: body instanceof FormData ? body : JSON.stringify(body),
       });
@@ -97,8 +110,9 @@ export default class Http {
 
   static async put({ url, headers, body, responseType = 'text' }: HttpRequestParams) {
     try {
+      const mergedHeaders = withJsonContentType(headers, true, body);
       const res = await fetch(url, {
-        headers,
+        headers: mergedHeaders,
         method: 'PUT',
         body: body instanceof FormData ? body : JSON.stringify(body),
       });
@@ -141,8 +155,9 @@ export default class Http {
 
   static async patch({ url, headers, body, responseType = 'text' }: HttpRequestParams) {
     try {
+      const mergedHeaders = withJsonContentType(headers, true, body);
       const res = await fetch(url, {
-        headers,
+        headers: mergedHeaders,
         method: 'PATCH',
         body: body instanceof FormData ? body : JSON.stringify(body),
       });
@@ -185,8 +200,9 @@ export default class Http {
 
   static async delete({ url, headers, responseType = 'text' }: HttpRequestParams) {
     try {
+      const mergedHeaders = withJsonContentType(headers);
       const res = await fetch(url, {
-        headers,
+        headers: mergedHeaders,
         method: 'DELETE',
       });
       if (!res.ok) {

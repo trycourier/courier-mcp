@@ -46,8 +46,8 @@ export default class CourierMcp extends McpServer {
 
   private registerTools() {
 
-    // // Audience tools
-    // new AudienceTools(this).register();
+    // Audience tools
+    new AudienceTools(this).register();
 
     // // Audit events tools
     // new AuditEventsTools(this).register();

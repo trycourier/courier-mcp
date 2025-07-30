@@ -14,7 +14,6 @@ export class ProfilesClient {
       url: `${this.options.baseUrl}/profiles/${userId}`,
       headers: {
         'Authorization': `Bearer ${this.options.apiKey}`,
-        'Content-Type': 'application/json',
       },
     });
   }
@@ -24,7 +23,6 @@ export class ProfilesClient {
       url: `${this.options.baseUrl}/profiles/${userId}`,
       headers: {
         'Authorization': `Bearer ${this.options.apiKey}`,
-        'Content-Type': 'application/json',
       },
       body: request,
     });
@@ -35,7 +33,6 @@ export class ProfilesClient {
       url: `${this.options.baseUrl}/profiles/${userId}`,
       headers: {
         'Authorization': `Bearer ${this.options.apiKey}`,
-        'Content-Type': 'application/json',
       },
       body: request,
     });
@@ -46,7 +43,6 @@ export class ProfilesClient {
       url: `${this.options.baseUrl}/profiles/${userId}`,
       headers: {
         'Authorization': `Bearer ${this.options.apiKey}`,
-        'Content-Type': 'application/json',
       },
       body: request,
     });
@@ -57,7 +53,6 @@ export class ProfilesClient {
       url: `${this.options.baseUrl}/profiles/${userId}`,
       headers: {
         'Authorization': `Bearer ${this.options.apiKey}`,
-        'Content-Type': 'application/json',
       },
     });
   }
@@ -72,7 +67,6 @@ export class ProfilesClient {
       url,
       headers: {
         'Authorization': `Bearer ${this.options.apiKey}`,
-        'Content-Type': 'application/json',
       },
     });
   }
@@ -82,7 +76,6 @@ export class ProfilesClient {
       url: `${this.options.baseUrl}/profiles/${userId}/lists`,
       headers: {
         'Authorization': `Bearer ${this.options.apiKey}`,
-        'Content-Type': 'application/json',
       },
       body: request,
     });
@@ -93,7 +86,6 @@ export class ProfilesClient {
       url: `${this.options.baseUrl}/profiles/${userId}/lists`,
       headers: {
         'Authorization': `Bearer ${this.options.apiKey}`,
-        'Content-Type': 'application/json',
       },
     });
   }
