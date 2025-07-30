@@ -16,7 +16,6 @@ import { ListsTools } from './tools/lists-tools.js';
 import { NotificationsTools } from './tools/notifications-tools.js';
 import { ProfilesTools } from './tools/profiles-tools.js';
 import { CourierMcpEnvironment } from './utils/environment.js';
-import { CourierClient2 } from './client/courier-client.js';
 export default class CourierMcp extends McpServer {
     constructor(headers) {
         super({
@@ -27,10 +26,6 @@ export default class CourierMcp extends McpServer {
         this.environment = new CourierMcpEnvironment(headers);
         this.courierClient = new CourierClient({
             authorizationToken: this.environment.apiKey,
-            baseUrl: this.environment.baseUrl,
-        });
-        this.courierClient2 = new CourierClient2({
-            apiKey: this.environment.apiKey,
             baseUrl: this.environment.baseUrl,
         });
         this.registerTools();

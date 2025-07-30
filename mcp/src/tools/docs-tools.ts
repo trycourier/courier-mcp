@@ -18,7 +18,7 @@ export class DocsTools extends CourierMcpTools {
       async ({ user_id }) => {
 
         // Generate a JWT
-        const jwt = await this.mcp.courierClient2.authToken.issueToken({
+        const jwt = await this.mcp.courierClient.authTokens.issueToken({
           scope: `user_id:${user_id} write:user-tokens inbox:read:messages inbox:write:events read:preferences write:preferences read:brands`,
           expires_in: '1h',
         });
@@ -41,7 +41,6 @@ Authentication:
 import 'package:courier_flutter/courier_flutter.dart';
 
 _signIn() async {
-
   final jwt = '${jwt}'; // This should be generated on your backend.
 
   await Courier.shared.signIn(
@@ -82,78 +81,5 @@ Widget build(BuildContext context) {
         };
       }
     );
-
-    // // Flutter documentation tools
-    // this.mcp.tool(
-    //   'flutter_readme',
-    //   'Details about the Courier Flutter SDK.',
-    //   {},
-    //   async () => {
-    //     return await Http.get({
-    //       url: 'https://raw.githubusercontent.com/trycourier/courier-flutter/master/README.md',
-    //       responseType: 'text',
-    //     });
-    //   }
-    // );
-
-    // this.mcp.tool(
-    //   'flutter_authentication_guide',
-    //   'Authentication guide for the Courier Flutter SDK.',
-    //   {},
-    //   async () => {
-    //     return await Http.get({
-    //       url: 'https://raw.githubusercontent.com/trycourier/courier-flutter/master/Docs/1_Authentication.md',
-    //       responseType: 'text',
-    //     });
-    //   }
-    // );
-
-    // this.mcp.tool(
-    //   'flutter_inbox_guide',
-    //   'Inbox guide for the Courier Flutter SDK.',
-    //   {},
-    //   async () => {
-    //     return await Http.get({
-    //       url: 'https://raw.githubusercontent.com/trycourier/courier-flutter/master/Docs/2_Inbox.md',
-    //       responseType: 'text',
-    //     });
-    //   }
-    // );
-
-    // this.mcp.tool(
-    //   'flutter_push_notifications_guide',
-    //   'Push notifications guide for the Courier Flutter SDK.',
-    //   {},
-    //   async () => {
-    //     return await Http.get({
-    //       url: 'https://raw.githubusercontent.com/trycourier/courier-flutter/master/Docs/3_PushNotifications.md',
-    //       responseType: 'text',
-    //     });
-    //   }
-    // );
-
-    // this.mcp.tool(
-    //   'flutter_preferences_guide',
-    //   'Preferences guide for the Courier Flutter SDK.',
-    //   {},
-    //   async () => {
-    //     return await Http.get({
-    //       url: 'https://raw.githubusercontent.com/trycourier/courier-flutter/master/Docs/4_Preferences.md',
-    //       responseType: 'text',
-    //     });
-    //   }
-    // );
-
-    // this.mcp.tool(
-    //   'flutter_client_guide',
-    //   'API Client guide for the Courier Flutter SDK.',
-    //   {},
-    //   async () => {
-    //     return await Http.get({
-    //       url: 'https://raw.githubusercontent.com/trycourier/courier-flutter/master/Docs/5_Client.md',
-    //       responseType: 'text',
-    //     });
-    //   }
-    // );
   }
 }
