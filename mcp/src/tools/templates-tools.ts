@@ -13,29 +13,10 @@ export class TemplatesTools extends CourierMcpTools {
         limit: z.number().optional(),
       },
       async ({ cursor, limit }) => {
-        try {
-          const request: any = {};
-          if (cursor !== undefined) request.cursor = cursor;
-          if (limit !== undefined) request.limit = limit;
-          const response = await this.mcp.courierClient.templates.list(request);
-          return {
-            content: [
-              {
-                type: 'text',
-                text: JSON.stringify(response, null, 2),
-              },
-            ],
-          };
-        } catch (err: any) {
-          return {
-            content: [
-              {
-                type: 'text',
-                text: JSON.stringify(err, null, 2),
-              },
-            ],
-          };
-        }
+        const request: any = {};
+        if (cursor !== undefined) request.cursor = cursor;
+        if (limit !== undefined) request.limit = limit;
+        return await this.mcp.client.templates.list(request);
       }
     );
   }

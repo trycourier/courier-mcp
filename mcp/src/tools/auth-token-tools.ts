@@ -13,31 +13,10 @@ export class AuthTokenTools extends CourierMcpTools {
         expires_in: z.string().default('1h'),
       },
       async ({ user_id, scopes, expires_in }) => {
-        try {
-
-          const response = await this.mcp.courierClient.authTokens.issueToken({
-            scope: `user_id:${user_id} ${scopes.join(' ')}`,
-            expires_in: expires_in,
-          });
-
-          return {
-            content: [
-              {
-                type: 'text',
-                text: JSON.stringify(response, null, 2),
-              },
-            ],
-          };
-        } catch (err: any) {
-          return {
-            content: [
-              {
-                type: 'text',
-                text: JSON.stringify(err, null, 2),
-              },
-            ],
-          };
-        }
+        return await this.mcp.client.authTokens.issueToken({
+          scope: `user_id:${user_id} ${scopes.join(' ')}`,
+          expires_in: expires_in,
+        });
       }
     );
   }

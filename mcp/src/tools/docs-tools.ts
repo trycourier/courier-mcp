@@ -18,7 +18,7 @@ export class DocsTools extends CourierMcpTools {
       async ({ user_id }) => {
 
         // Generate a JWT
-        const jwt = await this.mcp.courierClient.authTokens.issueToken({
+        const jwt = await this.mcp.client.authTokens.issueToken({
           scope: `user_id:${user_id} write:user-tokens inbox:read:messages inbox:write:events read:preferences write:preferences read:brands`,
           expires_in: '1h',
         });

@@ -2,6 +2,7 @@ import z from "zod";
 import { CourierMcpTools } from "./tools.js";
 
 export class InboundTools extends CourierMcpTools {
+
   public register() {
     // Track an inbound event
     this.mcp.tool(
@@ -22,42 +23,16 @@ export class InboundTools extends CourierMcpTools {
         user_id,
         type,
         properties,
-        timeout_in_seconds,
-        max_retries,
       }) => {
-        try {
-          const request: any = {
-            event,
-          };
-          if (message_id !== undefined) request.messageId = message_id;
-          if (user_id !== undefined) request.userId = user_id;
-          if (type !== undefined) request.type = type;
-          if (properties !== undefined) request.properties = properties;
+        const request: any = {
+          event,
+        };
+        if (message_id !== undefined) request.messageId = message_id;
+        if (user_id !== undefined) request.userId = user_id;
+        if (type !== undefined) request.type = type;
+        if (properties !== undefined) request.properties = properties;
 
-          const requestOptions: any = {};
-          if (timeout_in_seconds !== undefined) requestOptions.timeoutInSeconds = timeout_in_seconds;
-          if (max_retries !== undefined) requestOptions.maxRetries = max_retries;
-
-          const response = await this.mcp.courierClient.inbound.track(request, requestOptions);
-
-          return {
-            content: [
-              {
-                type: "text",
-                text: JSON.stringify(response, null, 2),
-              },
-            ],
-          };
-        } catch (err: any) {
-          return {
-            content: [
-              {
-                type: "text",
-                text: JSON.stringify(err, null, 2),
-              },
-            ],
-          };
-        }
+        return await this.mcp.client.inbound.track(request);
       }
     );
   }
