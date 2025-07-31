@@ -1,3 +1,5 @@
+import { USER_AGENT } from './version.js';
+
 type HttpRequestParams = {
   url: string;
   headers?: Record<string, any>;
@@ -5,7 +7,11 @@ type HttpRequestParams = {
   responseType?: 'json' | 'text'; // allow caller to specify response type
 };
 
-function withJsonContentType(headers?: Record<string, any>, skipIfFormData?: boolean, body?: any): Record<string, any> {
+function withJsonContentType(
+  headers?: Record<string, any>,
+  skipIfFormData?: boolean,
+  body?: any
+): Record<string, any> {
   let result = { ...(headers || {}) };
   // If skipIfFormData is true and body is FormData, don't set content-type
   if (!(skipIfFormData && body instanceof FormData)) {
@@ -13,6 +19,8 @@ function withJsonContentType(headers?: Record<string, any>, skipIfFormData?: boo
       result['Content-Type'] = 'application/json';
     }
   }
+  // Always set a user agent
+  result['User-Agent'] = USER_AGENT;
   return result;
 }
 
