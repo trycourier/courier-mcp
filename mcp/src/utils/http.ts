@@ -27,8 +27,6 @@ function withJsonContentType(
 export default class Http {
   static async get({ url, headers, responseType = 'json' }: HttpRequestParams) {
     try {
-      console.log('url', url);
-      console.log('headers', headers);
       const mergedHeaders = withJsonContentType(headers);
       const res = await fetch(url, {
         headers: mergedHeaders,
