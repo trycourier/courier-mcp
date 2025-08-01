@@ -31,11 +31,7 @@
 }
 ```
 
-# MCP Container
-
-This project provides an MCP (Message Control Protocol) service.
-
-## Build and Run with Docker
+# MCP Server Container
 
 1. **Build the Docker image:**
 
@@ -56,9 +52,5 @@ The service will be available at [http://localhost:3000](http://localhost:3000).
 For local development, you can use the provided scripts:
 
 - `npm run dev` — Start the development server.
-- `npm run build:docker` — Build the Docker image.
-- `npm run run:docker` — Run the Docker container.
-
-Make sure you have Docker installed before running the docker commands.
 
 You can also use the launcher actions for these functions as well:
