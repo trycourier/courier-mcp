@@ -1,16 +1,6 @@
-# THIS WILL GET UPDATED MORE LATER
+# Install the MCP Server
 
-## Get Started
-
-1. Click the **Start Development** launcher.
-2. Install the MCP Server to your agent, IDE, or client.
-3. Start asking questions!
-
-### Add to Cursor
-
-[![Install MCP Server](https://cursor.com/deeplink/mcp-install-light.svg)](https://cursor.com/install-mcp?name=Courier&config=JTdCJTIydXJsJTIyJTNBJTIyaHR0cCUzQSUyRiUyRmxvY2FsaG9zdCUzQTMwMDAlMkZtY3AlMjIlMkMlMjJoZWFkZXJzJTIyJTNBJTdCJTIyQVBJX0tFWSUyMiUzQSUyMlhYWCUyMiU3RCU3RA%3D%3D)
-
-### Manually Add
+## Cursor
 
 ```json
 {
@@ -24,3 +14,51 @@
   }
 }
 ```
+
+## Claude Desktop
+
+```json
+{
+  "mcpServers": {
+    "courier": {
+      "command": "npx",
+      "args": ["-y", "mcp-remote", "http://localhost:3000/mcp"],
+      "headers": {
+        "API_KEY": "XXX"
+      }
+    }
+  }
+}
+```
+
+# MCP Container
+
+This project provides an MCP (Message Control Protocol) service.
+
+## Build and Run with Docker
+
+1. **Build the Docker image:**
+
+   ```sh
+   docker build -t courier-mcp-server .
+   ```
+
+2. **Run the Docker container:**
+
+   ```sh
+   docker run --rm -p 3000:3000 courier-mcp-server
+   ```
+
+The service will be available at [http://localhost:3000](http://localhost:3000).
+
+## Development
+
+For local development, you can use the provided scripts:
+
+- `npm run dev` — Start the development server.
+- `npm run build:docker` — Build the Docker image.
+- `npm run run:docker` — Run the Docker container.
+
+Make sure you have Docker installed before running the docker commands.
+
+You can also use the launcher actions for these functions as well:
