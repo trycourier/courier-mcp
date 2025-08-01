@@ -18,16 +18,13 @@ import { CourierMcpConfig } from './utils/environment.js';
 import { CourierClient } from './client/courier-client.js';
 import { UserTokensTools } from './tools/user-tokens-tools.js';
 import { MessagesTools } from './tools/messages-tools.js';
+import { MCP_DETAILS } from './utils/version.js';
 export default class CourierMcp extends McpServer {
     constructor(headers) {
-        super({
-            name: 'courier-mcp',
-            version: '1.0.0',
-        });
+        super(MCP_DETAILS);
         // Get the Courier config from mcp.json or headers
         const config = new CourierMcpConfig(headers);
         this.client = new CourierClient(config.toCourierClientOptions());
-        // Register tools
         this.registerTools();
     }
     registerTools() {
