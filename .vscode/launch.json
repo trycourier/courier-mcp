@@ -12,6 +12,30 @@
       ],
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Build Docker Image",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "build:docker"
+      ],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Run Docker Container",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "run:docker"
+      ],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen"
     }
   ]
 }

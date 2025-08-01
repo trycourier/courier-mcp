@@ -22,7 +22,7 @@ export class ProfilesTools extends CourierMcpTools {
       'Create or merge a user profile by user ID. Merges supplied values with an existing profile or creates a new one.',
       {
         user_id: z.string(),
-        profile: z.record(z.any()),
+        profile: z.record(z.any()).default({}),
       },
       async ({ user_id, profile }) => {
         return await this.mcp.client.profiles.create(user_id, profile);

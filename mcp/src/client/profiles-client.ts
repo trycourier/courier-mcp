@@ -24,7 +24,9 @@ export class ProfilesClient {
       headers: {
         'Authorization': `Bearer ${this.options.apiKey}`,
       },
-      body: request,
+      body: {
+        profile: request,
+      },
     });
   }
 
@@ -34,7 +36,9 @@ export class ProfilesClient {
       headers: {
         'Authorization': `Bearer ${this.options.apiKey}`,
       },
-      body: request,
+      body: {
+        profile: request,
+      },
     });
   }
 
@@ -44,7 +48,9 @@ export class ProfilesClient {
       headers: {
         'Authorization': `Bearer ${this.options.apiKey}`,
       },
-      body: request,
+      body: {
+        profile: request,
+      },
     });
   }
 

@@ -5,6 +5,8 @@
     "server"
   ],
   "scripts": {
-    "dev": "./dev.sh"
+    "dev": "./dev.sh",
+    "build:docker": "docker build -t courier-mcp-server .",
+    "run:docker": "docker run --rm -p 3000:3000 courier-mcp-server"
   }
 }
