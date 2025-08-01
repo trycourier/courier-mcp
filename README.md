@@ -54,3 +54,4 @@ For local development, you can use the provided scripts:
 - `npm run dev` — Start the development server.
 
 You can also use the launcher actions for these functions as well:
+<img width="245" height="222" alt="Screenshot 2025-08-01 at 2 36 46 PM" src="https://github.com/user-attachments/assets/d9c06cae-9b2b-4e30-90bc-441e11ef633e" />
