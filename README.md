@@ -56,3 +56,36 @@ For local development, you can use the provided scripts:
 You can also use the launcher actions for these functions as well:
 
 <img width="245" height="222" alt="Screenshot 2025-08-01 at 2 36 46 PM" src="https://github.com/user-attachments/assets/d9c06cae-9b2b-4e30-90bc-441e11ef633e" />
+
+# Deploying to AWS
+
+This project is using its own standalone Stack and is currently not part of any other stacks at 
+Courier (will probably change). The stack just consists of a simple ECS Fargate deployment, bundling
+the MCP server in a docker container.
+
+## Pre-requisites
+
+Ensure that you have your AWS `aws_access_key_id` and `aws_secret_access_key` defined and pointing to your
+dev account.
+
+## Bootstrap
+
+The very first time, you have to bootstrap your CDK app.
+
+`npx cdk bootstrap`
+
+You only need to do this once.
+
+## Deploy
+
+`npx cdk deploy`
+
+## Destroy your stack
+
+If you don't intend to use it, please destroy your stack as it cost us money.
+
+`npx cdk destroy`
+
+
+
+
