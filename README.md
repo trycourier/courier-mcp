@@ -6,14 +6,37 @@
 {
   "mcpServers": {
     "Courier": {
-      "url": "http://localhost:3000/mcp",
-      "headers": {
+      "url": "http://localhost:3000/mcp", // TODO: Get real url
+      "env": {
         "API_KEY": "XXX"
       }
     }
   }
 }
 ```
+
+claude mcp add --transport http courier http://localhost:3000/mcp --env API_KEY=pk_prod_S9Z21QF7WW4DJSNKQBNN1X1FV15R
+
+{
+	"inputs": [
+		{
+			"type": "promptString",
+			"id": "courier-api-key",
+			"description": "API key for Courier service",
+			"password": true
+		}
+	],
+	"servers": {
+		"courier": {
+			"url": "http://courie-couri-vzqr9fnkry0j-39627219.us-east-1.elb.amazonaws.com/mcp",
+			"type": "http",
+			"headers": {
+				"BASE_URL": "https://d1m8b0tun8050f.cloudfront.net",
+				"API_KEY": "${input:courier-api-key}"
+			}
+		}
+	}
+}
 
 ## Claude Desktop
 

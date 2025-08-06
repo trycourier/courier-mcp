@@ -23,8 +23,11 @@ app.post('/mcp', (req, res, next) => {
         }
     })(req, res, next);
 });
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
+app.get('/health', (req, res) => {
+    res.status(200).send('OK');
+});
+const PORT = parseInt(process.env.PORT || '3000', 10);
+app.listen(PORT, '0.0.0.0', () => {
     console.log(`Stateless MCP server running on port ${PORT}`);
 });
 //# sourceMappingURL=index.js.map

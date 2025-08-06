@@ -321,7 +321,7 @@ export default function App() {
       userId: $YOUR_USER_ID,
       jwt: jwt,
     });
-  }, []);
+  }, []); // For this example, the deps can be empty.
 
   return <CourierInbox />;
 

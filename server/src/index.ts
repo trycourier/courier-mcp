@@ -15,7 +15,6 @@ app.post('/mcp', (req: Request, res: Response, next: NextFunction) => {
     const mcpServer = new CourierMcpServer(req.headers);
 
     // When the request is done, close the MCP server if it has a close method
-    // TODO: This needs to be confirmed that it works
     res.on('finish', () => {
       if (typeof (mcpServer as any).close === 'function') {
         (mcpServer as any).close();
