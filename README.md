@@ -133,7 +133,7 @@ const response = await your_open_ai_client.responses.create({
 ### 📤 Message Sending
 <table>
 <tr>
-<th width="400px" align="left">Tool ID</th>
+<th width="320px" align="left">Tool ID</th>
 <th width="900px" align="left">Description</th>
 </tr>
 <tr>
@@ -149,27 +149,27 @@ const response = await your_open_ai_client.responses.create({
 ### 👤 Profile Management
 <table>
 <tr>
-<th width="400px" align="left">Tool ID</th>
+<th width="320px" align="left">Tool ID</th>
 <th width="900px" align="left">Description</th>
 </tr>
 <tr>
-<td align="left"><a href="https://www.courier.com/docs/reference/profiles/by-id"><code>get_user_profile_by_id</code></a></td>
+<td width="500px" align="left"><a href="https://www.courier.com/docs/reference/profiles/by-id"><code>get_user_profile_by_id</code></a></td>
 <td align="left">Get a user profile by their ID</td>
 </tr>
 <tr>
-<td align="left"><a href="https://www.courier.com/docs/reference/profiles/create"><code>create_or_merge_user</code></a></td>
+<td width="500px" align="left"><a href="https://www.courier.com/docs/reference/profiles/create"><code>create_or_merge_user</code></a></td>
 <td align="left">Create or merge a user profile by user ID</td>
 </tr>
 <tr>
-<td align="left"><a href="https://www.courier.com/docs/reference/profiles/subscribed-list"><code>get_user_list_subscriptions</code></a></td>
+<td width="500px" align="left"><a href="https://www.courier.com/docs/reference/profiles/subscribed-list"><code>get_user_list_subscriptions</code></a></td>
 <td align="left">Get the list subscriptions for a user by their ID</td>
 </tr>
 <tr>
-<td align="left"><a href="https://www.courier.com/docs/reference/profiles/subscribe-to-list"><code>subscribe_user_to_lists</code></a></td>
+<td width="500px" align="left"><a href="https://www.courier.com/docs/reference/profiles/subscribe-to-list"><code>subscribe_user_to_lists</code></a></td>
 <td align="left">Subscribe a user to one or more lists</td>
 </tr>
 <tr>
-<td align="left"><a href="https://www.courier.com/docs/reference/profiles/remove-subscription"><code>delete_user_list_subscriptions</code></a></td>
+<td width="500px" align="left"><a href="https://www.courier.com/docs/reference/profiles/remove-subscription"><code>delete_user_list_subscriptions</code></a></td>
 <td align="left">Delete all list subscriptions for a user by their ID</td>
 </tr>
 </table>
