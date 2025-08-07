@@ -218,7 +218,7 @@ const response = await your_open_ai_client.responses.create({
 <td align="left">🎨 Get the list of brands</td>
 </tr>
 <tr>
-<td align="left"><a href="hhttps://www.courier.com/docs/reference/inbound/courier-track-event"><code>track_inbound_event</code></a></td>
+<td align="left"><a href="https://www.courier.com/docs/reference/inbound/courier-track-event"><code>track_inbound_event</code></a></td>
 <td align="left">📥 Track an inbound event</td>
 </tr>
 <tr>
