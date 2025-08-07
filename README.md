@@ -133,7 +133,7 @@ const response = await your_open_ai_client.responses.create({
 ### 📤 Message Sending
 <table>
 <tr>
-<th width="300px" align="left">Tool ID</th>
+<th width="400px" align="left">Tool ID</th>
 <th width="900px" align="left">Description</th>
 </tr>
 <tr>
@@ -149,7 +149,7 @@ const response = await your_open_ai_client.responses.create({
 ### 👤 Profile Management
 <table>
 <tr>
-<th width="300px" align="left">Tool ID</th>
+<th width="400px" align="left">Tool ID</th>
 <th width="900px" align="left">Description</th>
 </tr>
 <tr>
@@ -177,7 +177,7 @@ const response = await your_open_ai_client.responses.create({
 ### 📋 List Management
 <table>
 <tr>
-<th width="300px" align="left">Tool ID</th>
+<th width="400px" align="left">Tool ID</th>
 <th width="900px" align="left">Description</th>
 </tr>
 <tr>
@@ -197,7 +197,7 @@ const response = await your_open_ai_client.responses.create({
 ### 👥 Audience Management
 <table>
 <tr>
-<th width="300px" align="left">Tool ID</th>
+<th width="400px" align="left">Tool ID</th>
 <th width="900px" align="left">Description</th>
 </tr>
 <tr>
@@ -217,7 +217,7 @@ const response = await your_open_ai_client.responses.create({
 ### 🔐 Authentication
 <table>
 <tr>
-<th width="300px" align="left">Tool ID</th>
+<th width="400px" align="left">Tool ID</th>
 <th width="900px" align="left">Description</th>
 </tr>
 <tr>
@@ -229,7 +229,7 @@ const response = await your_open_ai_client.responses.create({
 ### 🔑 User Token Management
 <table>
 <tr>
-<th width="300px" align="left">Tool ID</th>
+<th width="400px" align="left">Tool ID</th>
 <th width="900px" align="left">Description</th>
 </tr>
 <tr>
@@ -249,7 +249,7 @@ const response = await your_open_ai_client.responses.create({
 ### ⚡ Automation
 <table>
 <tr>
-<th width="300px" align="left">Tool ID</th>
+<th width="400px" align="left">Tool ID</th>
 <th width="900px" align="left">Description</th>
 </tr>
 <tr>
@@ -261,7 +261,7 @@ const response = await your_open_ai_client.responses.create({
 ### 🎨 Brand Management
 <table>
 <tr>
-<th width="300px" align="left">Tool ID</th>
+<th width="400px" align="left">Tool ID</th>
 <th width="900px" align="left">Description</th>
 </tr>
 <tr>
@@ -281,7 +281,7 @@ const response = await your_open_ai_client.responses.create({
 ### 📥 Inbound Events
 <table>
 <tr>
-<th width="300px" align="left">Tool ID</th>
+<th width="400px" align="left">Tool ID</th>
 <th width="900px" align="left">Description</th>
 </tr>
 <tr>
@@ -293,7 +293,7 @@ const response = await your_open_ai_client.responses.create({
 ### 💬 Message Management
 <table>
 <tr>
-<th width="300px" align="left">Tool ID</th>
+<th width="400px" align="left">Tool ID</th>
 <th width="900px" align="left">Description</th>
 </tr>
 <tr>
@@ -313,7 +313,7 @@ const response = await your_open_ai_client.responses.create({
 ### 🔔 Notification Management
 <table>
 <tr>
-<th width="300px" align="left">Tool ID</th>
+<th width="400px" align="left">Tool ID</th>
 <th width="900px" align="left">Description</th>
 </tr>
 <tr>
@@ -333,7 +333,7 @@ const response = await your_open_ai_client.responses.create({
 ### 📚 Documentation & Installation Guides
 <table>
 <tr>
-<th width="300px" align="left">Tool ID</th>
+<th width="400px" align="left">Tool ID</th>
 <th width="900px" align="left">Description</th>
 </tr>
 <tr>
@@ -369,7 +369,7 @@ const response = await your_open_ai_client.responses.create({
 ### ⚙️ Configuration
 <table>
 <tr>
-<th width="300px" align="left">Tool ID</th>
+<th width="400px" align="left">Tool ID</th>
 <th width="900px" align="left">Description</th>
 </tr>
 <tr>
