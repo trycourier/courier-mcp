@@ -137,11 +137,11 @@ const response = await your_open_ai_client.responses.create({
 <th width="900px" align="left">Description</th>
 </tr>
 <tr width="600px">
-<td><a href="https://www.courier.com/docs/reference/send/message/"><code>send_message</code></a></td>
+<td width="300px"><a href="https://www.courier.com/docs/reference/send/message/"><code>send_message</code></a></td>
 <td>Send a message using title and body (no template)</td>
 </tr>
 <tr width="600px">
-<td><a href="https://www.courier.com/docs/reference/send/message/"><code>send_message_template</code></a></td>
+<td width="300px"><a href="https://www.courier.com/docs/reference/send/message/"><code>send_message_template</code></a></td>
 <td>Send a message using a predefined template</td>
 </tr>
 </table>
@@ -153,23 +153,23 @@ const response = await your_open_ai_client.responses.create({
 <th width="900px" align="left">Description</th>
 </tr>
 <tr width="600px">
-<td><a href="https://www.courier.com/docs/reference/profiles/by-id"><code>get_user_profile_by_id</code></a></td>
+<td width="300px"><a href="https://www.courier.com/docs/reference/profiles/by-id"><code>get_user_profile_by_id</code></a></td>
 <td>Get a user profile by their ID</td>
 </tr>
 <tr width="600px">
-<td><a href="https://www.courier.com/docs/reference/profiles/create"><code>create_or_merge_user</code></a></td>
+<td width="300px"><a href="https://www.courier.com/docs/reference/profiles/create"><code>create_or_merge_user</code></a></td>
 <td>Create or merge a user profile by user ID</td>
 </tr>
 <tr width="600px">
-<td><a href="https://www.courier.com/docs/reference/profiles/subscribed-list"><code>get_user_list_subscriptions</code></a></td>
+<td width="300px"><a href="https://www.courier.com/docs/reference/profiles/subscribed-list"><code>get_user_list_subscriptions</code></a></td>
 <td>Get the list subscriptions for a user by their ID</td>
 </tr>
 <tr width="600px">
-<td><a href="https://www.courier.com/docs/reference/profiles/subscribe-to-list"><code>subscribe_user_to_lists</code></a></td>
+<td width="300px"><a href="https://www.courier.com/docs/reference/profiles/subscribe-to-list"><code>subscribe_user_to_lists</code></a></td>
 <td>Subscribe a user to one or more lists</td>
 </tr>
 <tr width="600px">
-<td><a href="https://www.courier.com/docs/reference/profiles/remove-subscription"><code>delete_user_list_subscriptions</code></a></td>
+<td width="300px"><a href="https://www.courier.com/docs/reference/profiles/remove-subscription"><code>delete_user_list_subscriptions</code></a></td>
 <td>Delete all list subscriptions for a user by their ID</td>
 </tr>
 </table>
@@ -181,15 +181,15 @@ const response = await your_open_ai_client.responses.create({
 <th width="900px" align="left">Description</th>
 </tr>
 <tr width="600px">
-<td><a href="https://www.courier.com/docs/reference/lists/list"><code>list_lists</code></a></td>
+<td width="300px"><a href="https://www.courier.com/docs/reference/lists/list"><code>list_lists</code></a></td>
 <td>Returns all lists with optional pattern filtering</td>
 </tr>
 <tr width="600px">
-<td><a href="https://www.courier.com/docs/reference/lists/by-id"><code>get_list</code></a></td>
+<td width="300px"><a href="https://www.courier.com/docs/reference/lists/by-id"><code>get_list</code></a></td>
 <td>Returns a list based on the list ID provided</td>
 </tr>
 <tr width="600px">
-<td><a href="https://www.courier.com/docs/reference/lists/subscriptions"><code>get_list_subscribers</code></a></td>
+<td width="300px"><a href="https://www.courier.com/docs/reference/lists/subscriptions"><code>get_list_subscribers</code></a></td>
 <td>Get the list's subscriptions</td>
 </tr>
 </table>
@@ -201,15 +201,15 @@ const response = await your_open_ai_client.responses.create({
 <th width="900px" align="left">Description</th>
 </tr>
 <tr width="600px">
-<td><a href="https://www.courier.com/docs/reference/audiences/by-id"><code>get_audience</code></a></td>
+<td width="300px"><a href="https://www.courier.com/docs/reference/audiences/by-id"><code>get_audience</code></a></td>
 <td>Get an audience by its ID</td>
 </tr>
 <tr width="600px">
-<td><a href="https://www.courier.com/docs/reference/audiences/list-audience-members"><code>list_audience_members</code></a></td>
+<td width="300px"><a href="https://www.courier.com/docs/reference/audiences/list-audience-members"><code>list_audience_members</code></a></td>
 <td>List members of an audience by its ID</td>
 </tr>
 <tr width="600px">
-<td><a href="https://www.courier.com/docs/reference/audiences/list-audiences"><code>list_audiences</code></a></td>
+<td width="300px"><a href="https://www.courier.com/docs/reference/audiences/list-audiences"><code>list_audiences</code></a></td>
 <td>List all audiences associated with the authorization token</td>
 </tr>
 </table>
@@ -221,7 +221,7 @@ const response = await your_open_ai_client.responses.create({
 <th width="900px" align="left">Description</th>
 </tr>
 <tr width="600px">
-<td><a href="https://www.courier.com/docs/reference/auth/issue-token"><code>issue_token</code></a></td>
+<td width="300px"><a href="https://www.courier.com/docs/reference/auth/issue-token"><code>issue_token</code></a></td>
 <td>Generate a JWT authentication token for Courier</td>
 </tr>
 </table>
@@ -233,16 +233,16 @@ const response = await your_open_ai_client.responses.create({
 <th width="900px" align="left">Description</th>
 </tr>
 <tr width="600px">
-<td><a href="https://www.courier.com/docs/reference/token-management/get-tokens"><code>list_user_tokens</code></a></td>
+<td width="300px"><a href="https://www.courier.com/docs/reference/token-management/get-tokens"><code>list_user_tokens</code></a></td>
 <td>List all tokens for a given user</td>
 </tr>
 <tr width="600px">
-<td><a href="https://www.courier.com/docs/reference/token-management/get-token"><code>get_user_token</code></a></td>
+<td width="300px"><a href="https://www.courier.com/docs/reference/token-management/get-token"><code>get_user_token</code></a></td>
 <td>Get a specific token for a given user</td>
 </tr>
 <tr width="600px">
-<td><a href="https://www.courier.com/docs/reference/token-management/put-token"><code>create_or_replace_user_token</code></a></td>
-<td>Create or replace a specific token for a given user</td>
+<td width="300px"><a href="https://www.courier.com/docs/reference/token-management/put-token"><code>create_or_replace_user_token</code></a></td>
+<td width="300px">Create or replace a specific token for a given user</td>
 </tr>
 </table>
 
@@ -253,7 +253,7 @@ const response = await your_open_ai_client.responses.create({
 <th width="900px" align="left">Description</th>
 </tr>
 <tr width="600px">
-<td><a href="https://www.courier.com/docs/reference/automation/invoke-template"><code>invoke_automation_template</code></a></td>
+<td width="300px"><a href="https://www.courier.com/docs/reference/automation/invoke-template"><code>invoke_automation_template</code></a></td>
 <td>Invoke an automation run from an automation template</td>
 </tr>
 </table>
@@ -265,15 +265,15 @@ const response = await your_open_ai_client.responses.create({
 <th width="900px" align="left">Description</th>
 </tr>
 <tr width="600px">
-<td><a href="https://www.courier.com/docs/reference/brands/create-a-brand"><code>create_brand</code></a></td>
+<td width="300px"><a href="https://www.courier.com/docs/reference/brands/create-a-brand"><code>create_brand</code></a></td>
 <td>Create a new brand</td>
 </tr>
 <tr width="600px">
-<td><a href="https://www.courier.com/docs/reference/brands/get-a-brand"><code>get_brand</code></a></td>
+<td width="300px"><a href="https://www.courier.com/docs/reference/brands/get-a-brand"><code>get_brand</code></a></td>
 <td>Fetch a specific brand by brand ID</td>
 </tr>
 <tr width="600px">
-<td><a href="https://www.courier.com/docs/reference/brands/list-brands"><code>list_brands</code></a></td>
+<td width="300px"><a href="https://www.courier.com/docs/reference/brands/list-brands"><code>list_brands</code></a></td>
 <td>Get the list of brands</td>
 </tr>
 </table>
@@ -285,7 +285,7 @@ const response = await your_open_ai_client.responses.create({
 <th width="900px" align="left">Description</th>
 </tr>
 <tr width="600px">
-<td><a href="hhttps://www.courier.com/docs/reference/inbound/courier-track-event"><code>track_inbound_event</code></a></td>
+<td width="300px"><a href="hhttps://www.courier.com/docs/reference/inbound/courier-track-event"><code>track_inbound_event</code></a></td>
 <td>Track an inbound event</td>
 </tr>
 </table>
@@ -297,15 +297,15 @@ const response = await your_open_ai_client.responses.create({
 <th width="900px" align="left">Description</th>
 </tr>
 <tr width="600px">
-<td><a href="https://www.courier.com/docs/reference/logs/list"><code>list_messages</code></a></td>
+<td width="300px"><a href="https://www.courier.com/docs/reference/logs/list"><code>list_messages</code></a></td>
 <td>Fetch the statuses of messages you've previously sent</td>
 </tr>
 <tr width="600px">
-<td><a href="https://www.courier.com/docs/reference/logs/by-id"><code>get_message</code></a></td>
+<td width="300px"><a href="https://www.courier.com/docs/reference/logs/by-id"><code>get_message</code></a></td>
 <td>Fetch the status of a message you've previously sent</td>
 </tr>
 <tr width="600px">
-<td><a href="https://www.courier.com/docs/reference/logs/output-by-id"><code>get_message_content</code></a></td>
+<td width="300px"><a href="https://www.courier.com/docs/reference/logs/output-by-id"><code>get_message_content</code></a></td>
 <td>Fetch the rendered content of a message you've previously sent</td>
 </tr>
 </table>
@@ -317,15 +317,15 @@ const response = await your_open_ai_client.responses.create({
 <th width="900px" align="left">Description</th>
 </tr>
 <tr width="600px">
-<td><a href="https://www.courier.com/docs/reference/notifications/get-notifications"><code>list_notifications</code></a></td>
+<td width="300px"><a href="https://www.courier.com/docs/reference/notifications/get-notifications"><code>list_notifications</code></a></td>
 <td>List notifications with optional filtering</td>
 </tr>
 <tr width="600px">
-<td><a href="https://www.courier.com/docs/reference/notifications/get-notifications-content"><code>get_notification_content</code></a></td>
+<td width="300px"><a href="https://www.courier.com/docs/reference/notifications/get-notifications-content"><code>get_notification_content</code></a></td>
 <td>Get the content of a notification by its ID</td>
 </tr>
 <tr width="600px">
-<td><a href="https://www.courier.com/docs/reference/notifications/get-notifications-draftcontent"><code>get_notification_draft_content</code></a></td>
+<td width="300px"><a href="https://www.courier.com/docs/reference/notifications/get-notifications-draftcontent"><code>get_notification_draft_content</code></a></td>
 <td>Get the draft content of a notification by its ID</td>
 </tr>
 </table>
@@ -337,31 +337,31 @@ const response = await your_open_ai_client.responses.create({
 <th width="900px" align="left">Description</th>
 </tr>
 <tr width="600px">
-<td><code>flutter_installation_guide</code></a></td>
+<td width="300px"><code>flutter_installation_guide</code></a></td>
 <td>Flutter SDK integration instructions</td>
 </tr>
 <tr width="600px">
-<td><code>react_native_installation_guide</code></a></td>
+<td width="300px"><code>react_native_installation_guide</code></a></td>
 <td>React Native SDK integration instructions</td>
 </tr>
 <tr width="600px">
-<td><code>android_installation_guide</code></a></td>
+<td width="300px"><code>android_installation_guide</code></a></td>
 <td>Native Android SDK integration instructions</td>
 </tr>
 <tr width="600px">
-<td><code>ios_installation_guide</code></a></td>
+<td width="300px"><code>ios_installation_guide</code></a></td>
 <td>Native iOS SDK integration instructions</td>
 </tr>
 <tr width="600px">
-<td><code>react_installation_guide</code></a></td>
+<td width="300px"><code>react_installation_guide</code></a></td>
 <td>React web SDK integration instructions</td>
 </tr>
 <tr width="600px">
-<td><code>node_installation_guide</code></a></td>
+<td width="300px"><code>node_installation_guide</code></a></td>
 <td>Node.js backend SDK instructions</td>
 </tr>
 <tr width="600px">
-<td><code>python_installation_guide</code></a></td>
+<td width="300px"><code>python_installation_guide</code></a></td>
 <td>Python backend SDK instructions</td>
 </tr>
 </table>
@@ -373,7 +373,7 @@ const response = await your_open_ai_client.responses.create({
 <th width="900px" align="left">Description</th>
 </tr>
 <tr width="600px">
-<td><code>get_environment_config</code></a></td>
+<td width="300px"><code>get_environment_config</code></a></td>
 <td>Get the Courier environment configuration</td>
 </tr>
 </table>
