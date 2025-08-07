@@ -2,7 +2,7 @@
 
 ## Cursor
 
-[![Install MCP Server](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/install-mcp?name=postgres&config=JTdCJTIyY29tbWFuZCUyMiUzQSUyMm5weCUyMC15JTIwJTQwbW9kZWxjb250ZXh0cHJvdG9jb2wlMkZzZXJ2ZXItcG9zdGdyZXMlMjBwb3N0Z3Jlc3FsJTNBJTJGJTJGbG9jYWxob3N0JTJGbXlkYiUyMiU3RA%3D%3D)
+[![Install MCP Server](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/install-mcp?name=Courier&config=JTdCJTIydXJsJTIyJTNBJTIyaHR0cHMlM0ElMkYlMkZhcGkuY291cmllci5jb20lMkZtY3AlMjIlMkMlMjJlbnYlMjIlM0ElN0IlMjJBUElfS0VZJTIyJTNBJTIyWFhYJTIyJTdEJTdE)
 
 ```json
 {
