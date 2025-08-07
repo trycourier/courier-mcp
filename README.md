@@ -2,7 +2,7 @@
 
 ## Cursor
 
-[![Install MCP Server](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/install-mcp?name=Courier&config=JTdCJTIydXJsJTIyJTNBJTIyaHR0cHMlM0ElMkYlMkZhcGkuY291cmllci5jb20lMkZtY3AlMjIlMkMlMjJlbnYlMjIlM0ElN0IlMjJBUElfS0VZJTIyJTNBJTIyJTdCJTdCQ09VUklFUl9BUElfS0VZJTdEJTdEJTIyJTdEJTdE)
+[![Install MCP Server](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/install-mcp?name=Courier&config=JTdCJTIydXJsJTIyJTNBJTIyaHR0cHMlM0ElMkYlMkZhcGkuY291cmllci5jb20lMkZtY3AlMjIlMkMlMjJlbnYlMjIlM0ElN0IlMjJBUElfS0VZJTIyJTNBJTIyWFhYWCUyMiU3RCU3RA%3D%3D)
 
 ```json
 {
