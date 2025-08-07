@@ -6,7 +6,7 @@
 {
   "mcpServers": {
     "Courier": {
-      "url": "http://localhost:3000/mcp", // TODO: Get real url
+      "url": "http://courie-couri-vzqr9fnkry0j-39627219.us-east-1.elb.amazonaws.com/mcp", // TODO: Get real url
       "env": {
         "API_KEY": "XXX"
       }
@@ -15,8 +15,27 @@
 }
 ```
 
-claude mcp add --transport http courier http://localhost:3000/mcp --env API_KEY=pk_prod_S9Z21QF7WW4DJSNKQBNN1X1FV15R
+// Claude code
+claude mcp add --transport http courier http://courie-couri-vzqr9fnkry0j-39627219.us-east-1.elb.amazonaws.com/mcp --headers API_KEY=pk_prod_S9Z21QF7WW4DJSNKQBNN1X1FV15R
 
+## Claude Desktop
+
+```json
+{
+  "mcpServers": {
+    "Courier": {
+      "command": "npx",
+      "args": ["-y", "mcp-remote", "http://localhost:3000/mcp"],
+      "env": {
+        "API_KEY": "pk_prod_S9Z21QF7WW4DJSNKQBNN1X1FV15R"
+      }
+    }
+  }
+}
+```
+
+// VSCode
+```
 {
 	"inputs": [
 		{
@@ -31,28 +50,15 @@ claude mcp add --transport http courier http://localhost:3000/mcp --env API_KEY=
 			"url": "http://courie-couri-vzqr9fnkry0j-39627219.us-east-1.elb.amazonaws.com/mcp",
 			"type": "http",
 			"headers": {
-				"BASE_URL": "https://d1m8b0tun8050f.cloudfront.net",
 				"API_KEY": "${input:courier-api-key}"
 			}
 		}
 	}
 }
-
-## Claude Desktop
-
-```json
-{
-  "mcpServers": {
-    "courier": {
-      "command": "npx",
-      "args": ["-y", "mcp-remote", "http://localhost:3000/mcp"],
-      "headers": {
-        "API_KEY": "XXX"
-      }
-    }
-  }
-}
 ```
+
+# OpenAI API
+
 
 # MCP Server Container
 
