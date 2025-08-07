@@ -2,10 +2,6 @@
 
 ## Cursor
 
-[![Install MCP Server](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/install-mcp?name=Courier&config=JTdCJTIydXJsJTIyJTNBJTIyaHR0cHMlM0ElMkYlMkZhcGkuY291cmllci5jb20lMkZtY3AlMjIlMkMlMjJoZWFkZXJzJTIyJTNBJTdCJTIyQVBJX0tFWSUyMiUzQSUyMlhYWCUyMiU3RCU3RA%3D%3D)
-
-<a href="https://cursor.com/install-mcp?name=Courier&config=JTdCJTIydXJsJTIyJTNBJTIyaHR0cHMlM0ElMkYlMkZhcGkuY291cmllci5jb20lMkZtY3AlMjIlMkMlMjJoZWFkZXJzJTIyJTNBJTdCJTIyQVBJX0tFWSUyMiUzQSUyMlhYWCUyMiU3RCU3RA%3D%3D"><img src="https://cursor.com/deeplink/mcp-install-dark.svg" alt="Add Courier MCP server to Cursor" height="32" /></a>
-
 ```json
 {
   "mcpServers": {
