@@ -129,7 +129,7 @@ const response = await your_open_ai_client.responses.create({
 ## Available Tools by Category
 
 ### 📤 Message Sending
-<table style="width:100%">
+<table style="width:1200px">
 <tr>
 <th style="text-align:left">Tool ID</th>
 <th style="text-align:left">Description</th>
