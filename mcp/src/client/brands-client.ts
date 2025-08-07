@@ -11,20 +11,16 @@ export class BrandsClient {
 
   async create(request: any) {
     return await Http.post({
-      url: `${this.options.baseUrl}/brands`,
-      headers: {
-        'Authorization': `Bearer ${this.options.apiKey}`,
-      },
+      options: this.options,
+      route: `/brands`,
       body: request,
     });
   }
 
   async get(brandId: string) {
     return await Http.get({
-      url: `${this.options.baseUrl}/brands/${brandId}`,
-      headers: {
-        'Authorization': `Bearer ${this.options.apiKey}`,
-      },
+      options: this.options,
+      route: `/brands/${brandId}`,
     });
   }
 
@@ -39,10 +35,8 @@ export class BrandsClient {
       : `${this.options.baseUrl}/brands`;
 
     return await Http.get({
-      url,
-      headers: {
-        'Authorization': `Bearer ${this.options.apiKey}`,
-      },
+      options: this.options,
+      route: `/brands?${queryParams}`,
     });
   }
 } 

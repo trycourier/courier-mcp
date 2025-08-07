@@ -17,12 +17,12 @@ function loadMcpConfigFile(): any {
         const fileContent = fs.readFileSync(configPath, "utf-8");
         const parsed = JSON.parse(fileContent);
 
-        // Support Courier config from mcp.json (CLI/Server)
+        // Support envs
         if (parsed?.mcpServers?.Courier?.env) {
           return parsed.mcpServers.Courier.env;
         }
 
-        // Support Courier config from claude_desktop_config.json (Claude Desktop)
+        // Support headers
         if (parsed?.mcpServers?.courier?.headers) {
           return parsed.mcpServers.courier.headers;
         }

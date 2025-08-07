@@ -11,19 +11,15 @@ export class ProfilesClient {
 
   async getProfile(userId: string) {
     return await Http.get({
-      url: `${this.options.baseUrl}/profiles/${userId}`,
-      headers: {
-        'Authorization': `Bearer ${this.options.apiKey}`,
-      },
+      options: this.options,
+      route: `/profiles/${userId}`,
     });
   }
 
   async create(userId: string, request: any) {
     return await Http.post({
-      url: `${this.options.baseUrl}/profiles/${userId}`,
-      headers: {
-        'Authorization': `Bearer ${this.options.apiKey}`,
-      },
+      options: this.options,
+      route: `/profiles/${userId}`,
       body: {
         profile: request,
       },
@@ -32,10 +28,8 @@ export class ProfilesClient {
 
   async replace(userId: string, request: any) {
     return await Http.put({
-      url: `${this.options.baseUrl}/profiles/${userId}`,
-      headers: {
-        'Authorization': `Bearer ${this.options.apiKey}`,
-      },
+      options: this.options,
+      route: `/profiles/${userId}`,
       body: {
         profile: request,
       },
@@ -44,10 +38,8 @@ export class ProfilesClient {
 
   async mergeProfile(userId: string, request: any) {
     return await Http.patch({
-      url: `${this.options.baseUrl}/profiles/${userId}`,
-      headers: {
-        'Authorization': `Bearer ${this.options.apiKey}`,
-      },
+      options: this.options,
+      route: `/profiles/${userId}`,
       body: {
         profile: request,
       },
@@ -56,43 +48,35 @@ export class ProfilesClient {
 
   async delete(userId: string) {
     return await Http.delete({
-      url: `${this.options.baseUrl}/profiles/${userId}`,
-      headers: {
-        'Authorization': `Bearer ${this.options.apiKey}`,
-      },
+      options: this.options,
+      route: `/profiles/${userId}`,
     });
   }
 
   async getListSubscriptions(userId: string, request?: any) {
     const queryParams = request ? new URLSearchParams(request).toString() : '';
-    const url = queryParams
-      ? `${this.options.baseUrl}/profiles/${userId}/lists?${queryParams}`
-      : `${this.options.baseUrl}/profiles/${userId}/lists`;
+    const route = queryParams
+      ? `/profiles/${userId}/lists?${queryParams}`
+      : `/profiles/${userId}/lists`;
 
     return await Http.get({
-      url,
-      headers: {
-        'Authorization': `Bearer ${this.options.apiKey}`,
-      },
+      options: this.options,
+      route,
     });
   }
 
   async subscribeToLists(userId: string, request: any) {
     return await Http.post({
-      url: `${this.options.baseUrl}/profiles/${userId}/lists`,
-      headers: {
-        'Authorization': `Bearer ${this.options.apiKey}`,
-      },
+      options: this.options,
+      route: `/profiles/${userId}/lists`,
       body: request,
     });
   }
 
   async deleteListSubscription(userId: string) {
     return await Http.delete({
-      url: `${this.options.baseUrl}/profiles/${userId}/lists`,
-      headers: {
-        'Authorization': `Bearer ${this.options.apiKey}`,
-      },
+      options: this.options,
+      route: `/profiles/${userId}/lists`,
     });
   }
 

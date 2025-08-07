@@ -12,20 +12,16 @@ export class AudiencesClient {
   // Get an audience by its ID
   async get(audienceId: string) {
     return await Http.get({
-      url: `${this.options.baseUrl}/audiences/${audienceId}`,
-      headers: {
-        'Authorization': `Bearer ${this.options.apiKey}`,
-      },
+      options: this.options,
+      route: `/audiences/${audienceId}`,
     });
   }
 
   // Create or update an audience by its ID
   async update(audienceId: string, request: any) {
     return await Http.put({
-      url: `${this.options.baseUrl}/audiences/${audienceId}`,
-      headers: {
-        'Authorization': `Bearer ${this.options.apiKey}`,
-      },
+      options: this.options,
+      route: `/audiences/${audienceId}`,
       body: request,
     });
   }
@@ -33,10 +29,8 @@ export class AudiencesClient {
   // Delete an audience by its ID
   async delete(audienceId: string) {
     return await Http.delete({
-      url: `${this.options.baseUrl}/audiences/${audienceId}`,
-      headers: {
-        'Authorization': `Bearer ${this.options.apiKey}`,
-      },
+      options: this.options,
+      route: `/audiences/${audienceId}`,
     });
   }
 
@@ -52,10 +46,8 @@ export class AudiencesClient {
       : `${this.options.baseUrl}/audiences/${audienceId}/members`;
 
     return await Http.get({
-      url,
-      headers: {
-        'Authorization': `Bearer ${this.options.apiKey}`,
-      },
+      options: this.options,
+      route: `/audiences/${audienceId}/members?${queryParams}`,
     });
   }
 
@@ -71,10 +63,8 @@ export class AudiencesClient {
       : `${this.options.baseUrl}/audiences`;
 
     return await Http.get({
-      url,
-      headers: {
-        'Authorization': `Bearer ${this.options.apiKey}`,
-      },
+      options: this.options,
+      route: `/audiences?${queryParams}`,
     });
   }
 }

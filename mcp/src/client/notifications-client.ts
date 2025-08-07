@@ -15,42 +15,34 @@ export class NotificationsClient {
         .filter(([_, v]) => v !== undefined)
         .map(([k, v]) => [k, String(v)])
     ).toString() : '';
-    const url = queryParams
-      ? `${this.options.baseUrl}/notifications?${queryParams}`
-      : `${this.options.baseUrl}/notifications`;
+    const route = queryParams
+      ? `/notifications?${queryParams}`
+      : `/notifications`;
 
     return await Http.get({
-      url,
-      headers: {
-        'Authorization': `Bearer ${this.options.apiKey}`,
-      },
+      options: this.options,
+      route,
     });
   }
 
   async getContent(notificationId: string) {
     return await Http.get({
-      url: `${this.options.baseUrl}/notifications/${notificationId}/content`,
-      headers: {
-        'Authorization': `Bearer ${this.options.apiKey}`,
-      },
+      options: this.options,
+      route: `/notifications/${notificationId}/content`,
     });
   }
 
   async getDraftContent(notificationId: string) {
     return await Http.get({
-      url: `${this.options.baseUrl}/notifications/${notificationId}/draft/content`,
-      headers: {
-        'Authorization': `Bearer ${this.options.apiKey}`,
-      },
+      options: this.options,
+      route: `/notifications/${notificationId}/draft/content`,
     });
   }
 
   async getSubmissionChecks(notificationId: string, submissionId: string) {
     return await Http.get({
-      url: `${this.options.baseUrl}/notifications/${notificationId}/${submissionId}/checks`,
-      headers: {
-        'Authorization': `Bearer ${this.options.apiKey}`,
-      },
+      options: this.options,
+      route: `/notifications/${notificationId}/${submissionId}/checks`,
     });
   }
 } 

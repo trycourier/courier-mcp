@@ -15,24 +15,20 @@ export class ListsClient {
         .filter(([_, v]) => v !== undefined)
         .map(([k, v]) => [k, String(v)])
     ).toString() : '';
-    const url = queryParams
-      ? `${this.options.baseUrl}/lists?${queryParams}`
-      : `${this.options.baseUrl}/lists`;
+    const route = queryParams
+      ? `/lists?${queryParams}`
+      : `/lists`;
 
     return await Http.get({
-      url,
-      headers: {
-        'Authorization': `Bearer ${this.options.apiKey}`,
-      },
+      options: this.options,
+      route,
     });
   }
 
   async get(listId: string) {
     return await Http.get({
-      url: `${this.options.baseUrl}/lists/${listId}`,
-      headers: {
-        'Authorization': `Bearer ${this.options.apiKey}`,
-      },
+      options: this.options,
+      route: `/lists/${listId}`,
     });
   }
 
@@ -42,34 +38,28 @@ export class ListsClient {
         .filter(([_, v]) => v !== undefined)
         .map(([k, v]) => [k, String(v)])
     ).toString() : '';
-    const url = queryParams
-      ? `${this.options.baseUrl}/lists/${listId}/subscriptions?${queryParams}`
-      : `${this.options.baseUrl}/lists/${listId}/subscriptions`;
+    const route = queryParams
+      ? `/lists/${listId}/subscriptions?${queryParams}`
+      : `/lists/${listId}/subscriptions`;
 
     return await Http.get({
-      url,
-      headers: {
-        'Authorization': `Bearer ${this.options.apiKey}`,
-      },
+      options: this.options,
+      route,
     });
   }
 
   async subscribe(listId: string, userId: string, request?: any) {
     return await Http.put({
-      url: `${this.options.baseUrl}/lists/${listId}/subscriptions/${userId}`,
-      headers: {
-        'Authorization': `Bearer ${this.options.apiKey}`,
-      },
+      options: this.options,
+      route: `/lists/${listId}/subscriptions/${userId}`,
       body: request || {},
     });
   }
 
   async unsubscribe(listId: string, userId: string) {
     return await Http.delete({
-      url: `${this.options.baseUrl}/lists/${listId}/subscriptions/${userId}`,
-      headers: {
-        'Authorization': `Bearer ${this.options.apiKey}`,
-      },
+      options: this.options,
+      route: `/lists/${listId}/subscriptions/${userId}`,
     });
   }
 } 

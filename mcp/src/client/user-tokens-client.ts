@@ -11,20 +11,16 @@ export class UserTokensClient {
   // GET /users/{user_id}/tokens/{token}
   async getToken(userId: string, token: string) {
     return await Http.get({
-      url: `${this.options.baseUrl}/users/${userId}/tokens/${token}`,
-      headers: {
-        'Authorization': `Bearer ${this.options.apiKey}`,
-      },
+      options: this.options,
+      route: `/users/${userId}/tokens/${token}`,
     });
   }
 
   // GET /users/{user_id}/tokens
   async listTokens(userId: string) {
     return await Http.get({
-      url: `${this.options.baseUrl}/users/${userId}/tokens`,
-      headers: {
-        'Authorization': `Bearer ${this.options.apiKey}`,
-      },
+      options: this.options,
+      route: `/users/${userId}/tokens`,
     });
   }
 
@@ -81,10 +77,8 @@ export class UserTokensClient {
     }
   ) {
     return await Http.put({
-      url: `${this.options.baseUrl}/users/${userId}/tokens/${token}`,
-      headers: {
-        'Authorization': `Bearer ${this.options.apiKey}`,
-      },
+      options: this.options,
+      route: `/users/${userId}/tokens/${token}`,
       body: {
         token: token,
         provider_key: provider_key,
@@ -96,10 +90,8 @@ export class UserTokensClient {
   // PUT /users/{user_id}/tokens
   async putTokens(userId: string, body: any) {
     return await Http.put({
-      url: `${this.options.baseUrl}/users/${userId}/tokens`,
-      headers: {
-        'Authorization': `Bearer ${this.options.apiKey}`,
-      },
+      options: this.options,
+      route: `/users/${userId}/tokens`,
       body,
     });
   }
@@ -107,10 +99,8 @@ export class UserTokensClient {
   // PATCH /users/{user_id}/tokens/{token}
   async patchToken(userId: string, token: string, body: any) {
     return await Http.patch({
-      url: `${this.options.baseUrl}/users/${userId}/tokens/${token}`,
-      headers: {
-        'Authorization': `Bearer ${this.options.apiKey}`,
-      },
+      options: this.options,
+      route: `/users/${userId}/tokens/${token}`,
       body,
     });
   }
@@ -118,10 +108,8 @@ export class UserTokensClient {
   // DELETE /users/{user_id}/tokens/{token}
   async deleteToken(userId: string, token: string) {
     return await Http.delete({
-      url: `${this.options.baseUrl}/users/${userId}/tokens/${token}`,
-      headers: {
-        'Authorization': `Bearer ${this.options.apiKey}`,
-      },
+      options: this.options,
+      route: `/users/${userId}/tokens/${token}`,
     });
   }
 }

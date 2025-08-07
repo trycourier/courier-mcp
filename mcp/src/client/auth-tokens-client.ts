@@ -11,10 +11,8 @@ export class AuthTokensClient {
 
   async issueToken(request: any) {
     return await Http.post({
-      url: `${this.options.baseUrl}/auth/issue-token`,
-      headers: {
-        'Authorization': `Bearer ${this.options.apiKey}`,
-      },
+      options: this.options,
+      route: `/auth/issue-token`,
       body: request,
     });
   }

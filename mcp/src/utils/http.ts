@@ -1,113 +1,124 @@
+import { CourierClientOptions } from '../client/courier-client.js';
 import { USER_AGENT } from './version.js';
 
 type HttpRequestParams = {
-  url: string;
-  headers?: Record<string, any>;
+  options: CourierClientOptions;
+  route: string;
   body?: any;
   responseType?: 'json' | 'text';
 };
 
-function withJsonContentType(
-  headers?: Record<string, any>,
-  skipIfFormData?: boolean,
-  body?: any
-): Record<string, any> {
-  let result = { ...(headers || {}) };
-  if (!(skipIfFormData && body instanceof FormData)) {
-    if (!result['Content-Type']) {
-      result['Content-Type'] = 'application/json';
-    }
-  }
-  result['User-Agent'] = USER_AGENT;
-  return result;
-}
-
-function addStatusToText(text: string, status: number): string {
-  return `Status: ${status}\n${text}`;
-}
-
 type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 
 async function performRequest({
-  url,
+  options,
+  route,
   method,
-  headers,
   body,
   responseType = 'text',
-  skipIfFormData = false,
 }: {
-  url: string;
+  options: CourierClientOptions;
+  route: string;
   method: HttpMethod;
   headers?: Record<string, any>;
   body?: any;
   responseType?: 'json' | 'text';
-  skipIfFormData?: boolean;
 }) {
+
+  // Validate the options
+  if (!options.apiKey) {
+    throw new Error('API_KEY is required in the Courier MCP config. Get your API key from https://app.courier.com/settings/api-keys.');
+  }
+
   try {
-    const mergedHeaders = withJsonContentType(headers, skipIfFormData, body);
-    const fetchOptions: RequestInit = {
-      headers: mergedHeaders,
+
+    // Perform the request
+    const res = await fetch(`${options.baseUrl}${route}`, {
+      headers: {
+        'Authorization': `Bearer ${options.apiKey}`,
+        'Content-Type': 'application/json',
+        'User-Agent': USER_AGENT,
+      },
       method,
-    };
-    if (body !== undefined && method !== 'GET' && method !== 'DELETE') {
-      fetchOptions.body = body instanceof FormData ? body : JSON.stringify(body);
-    }
-    const res = await fetch(url, fetchOptions);
+      body,
+    });
+
+    // Handle the response
     if (!res.ok) {
       throw new Error(`Failed to fetch: ${res.statusText}`);
     }
+
+    // Handle the response body 
     let data;
     if (responseType === 'json') {
       data = await res.json();
-      return {
-        content: [
-          {
-            type: 'text' as const,
-            text: addStatusToText(JSON.stringify(data, null, 2), res.status),
-          },
-        ],
-      };
+      return respond(data);
     } else {
       const text = await res.text();
-      return {
-        content: [
-          {
-            type: 'text' as const,
-            text: addStatusToText(text, res.status),
-          },
-        ],
-      };
+      return respond(text);
     }
   } catch (err: any) {
-    return {
-      content: [
-        {
-          type: 'text' as const,
-          text: addStatusToText(JSON.stringify(err, null, 2), err?.status || 0),
-        },
-      ],
-    };
+    return respond(err);
   }
 }
 
+const respond = (content: any) => {
+  return {
+    content: [
+      {
+        type: 'text' as const,
+        text: JSON.stringify(content, null, 2),
+      },
+    ],
+  };
+}
+
 export default class Http {
-  static async get({ url, headers, responseType = 'json' }: HttpRequestParams) {
-    return performRequest({ url, method: 'GET', headers, responseType });
+  static async get({ options, route, responseType = 'json' }: HttpRequestParams) {
+    return performRequest({
+      options,
+      route,
+      method: 'GET',
+      responseType,
+    });
   }
 
-  static async post({ url, headers, body, responseType = 'text' }: HttpRequestParams) {
-    return performRequest({ url, method: 'POST', headers, body, responseType, skipIfFormData: true });
+  static async post({ options, route, body, responseType = 'text' }: HttpRequestParams) {
+    return performRequest({
+      options,
+      route,
+      method: 'POST',
+      body,
+      responseType,
+    });
   }
 
-  static async put({ url, headers, body, responseType = 'text' }: HttpRequestParams) {
-    return performRequest({ url, method: 'PUT', headers, body, responseType, skipIfFormData: true });
+  static async put({ options, route, body, responseType = 'text' }: HttpRequestParams) {
+    return performRequest({
+      options,
+      route,
+      method: 'PUT',
+      body,
+      responseType,
+    });
   }
 
-  static async patch({ url, headers, body, responseType = 'text' }: HttpRequestParams) {
-    return performRequest({ url, method: 'PATCH', headers, body, responseType, skipIfFormData: true });
+  static async patch({ options, route, body, responseType = 'text' }: HttpRequestParams) {
+    return performRequest({
+      options,
+      route,
+      method: 'PATCH',
+      body,
+      responseType,
+    });
   }
 
-  static async delete({ url, headers, responseType = 'text' }: HttpRequestParams) {
-    return performRequest({ url, method: 'DELETE', headers, responseType });
+  static async delete({ options, route, responseType = 'text' }: HttpRequestParams) {
+    return performRequest({
+      options,
+      route,
+      method: 'DELETE',
+      responseType,
+    });
   }
 }

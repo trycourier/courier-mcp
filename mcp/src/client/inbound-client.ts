@@ -11,10 +11,8 @@ export class InboundClient {
 
   async track(request: any) {
     return await Http.post({
-      url: `${this.options.baseUrl}/inbound/track`,
-      headers: {
-        'Authorization': `Bearer ${this.options.apiKey}`,
-      },
+      options: this.options,
+      route: `/inbound/track`,
       body: request,
     });
   }

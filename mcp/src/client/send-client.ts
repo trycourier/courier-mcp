@@ -11,10 +11,8 @@ export class SendClient {
 
   async send(request: any) {
     return await Http.post({
-      url: `${this.options.baseUrl}/send`,
-      headers: {
-        'Authorization': `Bearer ${this.options.apiKey}`,
-      },
+      options: this.options,
+      route: `/send`,
       body: request,
     });
   }

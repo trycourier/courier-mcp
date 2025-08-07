@@ -15,15 +15,13 @@ export class TemplatesClient {
         .filter(([_, v]) => v !== undefined)
         .map(([k, v]) => [k, String(v)])
     ).toString() : '';
-    const url = queryParams
-      ? `${this.options.baseUrl}/templates?${queryParams}`
-      : `${this.options.baseUrl}/templates`;
+    const route = queryParams
+      ? `/templates?${queryParams}`
+      : `/templates`;
 
     return await Http.get({
-      url,
-      headers: {
-        'Authorization': `Bearer ${this.options.apiKey}`,
-      },
+      options: this.options,
+      route,
     });
   }
 } 

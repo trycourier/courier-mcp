@@ -11,20 +11,16 @@ export class AutomationsClient {
 
   async invokeAutomationTemplate(templateId: string, request: any) {
     return await Http.post({
-      url: `${this.options.baseUrl}/automations/${templateId}/invoke`,
-      headers: {
-        'Authorization': `Bearer ${this.options.apiKey}`,
-      },
+      options: this.options,
+      route: `/automations/${templateId}/invoke`,
       body: request,
     });
   }
 
   async invokeAdHocAutomation(request: any) {
     return await Http.post({
-      url: `${this.options.baseUrl}/automations/invoke`,
-      headers: {
-        'Authorization': `Bearer ${this.options.apiKey}`,
-      },
+      options: this.options,
+      route: `/automations/invoke`,
       body: request,
     });
   }

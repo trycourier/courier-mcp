@@ -21,16 +21,16 @@ async function main() {
     // Create a chat completion
     const response = await openai.responses.create({
       model: "gpt-4o-mini",
-      input: "Send inbox message to mike. Make up the title and body.",
+      input: "Get user mike from courier",
       tools: [
         {
           type: "mcp",
-          server_label: "Courier",
-          server_url: process.env.COURIER_MCP_URL!, // Must use HTTPS
+          server_label: "courier",
+          server_url: process.env.COURIER_MCP_URL!, // Must use HTTPS. You will probably need to use ngrok if you use localhost.
           headers: {
-            API_KEY: process.env.COURIER_API_KEY!,
+            api_key: process.env.COURIER_API_KEY!,
           },
-          allowed_tools: ["send_message"],
+          allowed_tools: ["get_user_profile_by_id"],
           require_approval: "never",
         },
       ],

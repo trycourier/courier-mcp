@@ -6,6 +6,8 @@ app.use(express.json());
 app.post('/mcp', (req, res, next) => {
     const createServer = () => {
         const mcpServer = new CourierMcpServer(req.headers);
+        console.log('Headers:', req.headers);
+        console.log('Options:', mcpServer.client.options);
         res.on('finish', () => {
             if (typeof mcpServer.close === 'function') {
                 mcpServer.close();

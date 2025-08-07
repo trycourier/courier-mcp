@@ -9,69 +9,33 @@ export class BulkClient {
     this.options = options;
   }
 
-  async createJob(request: any, options?: any) {
-    const headers: Record<string, string> = {
-      'Authorization': `Bearer ${this.options.apiKey}`,
-    };
-
-    if (options?.idempotencyKey) {
-      headers['Idempotency-Key'] = options.idempotencyKey;
-    }
-    if (options?.idempotencyExpiry) {
-      headers['X-Idempotency-Expiry'] = options.idempotencyExpiry;
-    }
-
+  async createJob(request: any) {
     return await Http.post({
-      url: `${this.options.baseUrl}/bulk`,
-      headers,
+      options: this.options,
+      route: `/bulk`,
       body: request,
     });
   }
 
-  async ingestUsers(jobId: string, request: any, options?: any) {
-    const headers: Record<string, string> = {
-      'Authorization': `Bearer ${this.options.apiKey}`,
-    };
-
-    if (options?.idempotencyKey) {
-      headers['Idempotency-Key'] = options.idempotencyKey;
-    }
-    if (options?.idempotencyExpiry) {
-      headers['X-Idempotency-Expiry'] = options.idempotencyExpiry;
-    }
-
+  async ingestUsers(jobId: string, request: any) {
     return await Http.post({
-      url: `${this.options.baseUrl}/bulk/${jobId}`,
-      headers,
+      options: this.options,
+      route: `/bulk/${jobId}`,
       body: request,
     });
   }
 
-  async runJob(jobId: string, options?: any) {
-    const headers: Record<string, string> = {
-      'Authorization': `Bearer ${this.options.apiKey}`,
-    };
-
-    if (options?.idempotencyKey) {
-      headers['Idempotency-Key'] = options.idempotencyKey;
-    }
-    if (options?.idempotencyExpiry) {
-      headers['X-Idempotency-Expiry'] = options.idempotencyExpiry;
-    }
-
+  async runJob(jobId: string) {
     return await Http.post({
-      url: `${this.options.baseUrl}/bulk/${jobId}/run`,
-      headers,
-      body: {},
+      options: this.options,
+      route: `/bulk/${jobId}/run`,
     });
   }
 
   async getJob(jobId: string) {
     return await Http.get({
-      url: `${this.options.baseUrl}/bulk/${jobId}`,
-      headers: {
-        'Authorization': `Bearer ${this.options.apiKey}`,
-      },
+      options: this.options,
+      route: `/bulk/${jobId}`,
     });
   }
 
@@ -81,15 +45,13 @@ export class BulkClient {
         .filter(([_, v]) => v !== undefined)
         .map(([k, v]) => [k, String(v)])
     ).toString() : '';
-    const url = queryParams
-      ? `${this.options.baseUrl}/bulk/${jobId}/users?${queryParams}`
-      : `${this.options.baseUrl}/bulk/${jobId}/users`;
+    const route = queryParams
+      ? `/bulk/${jobId}/users?${queryParams}`
+      : `/bulk/${jobId}/users`;
 
     return await Http.get({
-      url,
-      headers: {
-        'Authorization': `Bearer ${this.options.apiKey}`,
-      },
+      options: this.options,
+      route: route,
     });
   }
 } 

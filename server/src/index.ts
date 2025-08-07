@@ -14,6 +14,10 @@ app.post('/mcp', (req: Request, res: Response, next: NextFunction) => {
   const createServer = () => {
     const mcpServer = new CourierMcpServer(req.headers);
 
+    // Log the headers and options for debugging
+    console.log('Headers:', req.headers);
+    console.log('Options:', mcpServer.client.options);
+
     // When the request is done, close the MCP server if it has a close method
     res.on('finish', () => {
       if (typeof (mcpServer as any).close === 'function') {

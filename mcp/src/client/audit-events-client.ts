@@ -11,10 +11,8 @@ export class AuditEventsClient {
 
   async get(auditEventId: string) {
     return await Http.get({
-      url: `${this.options.baseUrl}/audit-events/${auditEventId}`,
-      headers: {
-        'Authorization': `Bearer ${this.options.apiKey}`,
-      },
+      options: this.options,
+      route: `/audit-events/${auditEventId}`,
     });
   }
 
@@ -29,10 +27,8 @@ export class AuditEventsClient {
       : `${this.options.baseUrl}/audit-events`;
 
     return await Http.get({
-      url,
-      headers: {
-        'Authorization': `Bearer ${this.options.apiKey}`,
-      },
+      options: this.options,
+      route: `/audit-events?${queryParams}`,
     });
   }
 } 
