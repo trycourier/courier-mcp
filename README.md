@@ -105,7 +105,7 @@ VSCode works best when starting questions with `"#"` in the chat. For example, t
 4. Click the Gear icon in the top right, then click MCP Servers
 5. In the bottom right, click the gear next to "courier", then click "Start Server"
 
-# OpenAI API
+## OpenAI API
 
 ```ts
 const response = await your_open_ai_client.responses.create({
