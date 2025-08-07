@@ -131,16 +131,16 @@ const response = await your_open_ai_client.responses.create({
 ### 📤 Message Sending
 <table>
 <tr width="1200px">
-<th style="text-align:left">Tool ID</th>
-<th style="text-align:left">Description</th>
+<th align="left">Tool ID</th>
+<th align="left">Description</th>
 </tr>
 <tr width="1200px">
-<td style="text-align:left"><a href="https://www.courier.com/docs/reference/send/message/"><code>send_message</code></a></td>
-<td style="text-align:left">Send a message using title and body (no template)</td>
+<td><a href="https://www.courier.com/docs/reference/send/message/"><code>send_message</code></a></td>
+<td>Send a message using title and body (no template)</td>
 </tr>
 <tr width="1200px">
-<td style="text-align:left"><a href="https://www.courier.com/docs/reference/send/message/">`send_message_template`</a></td>
-<td style="text-align:left">Send a message using a predefined template</td>
+<td><a href="https://www.courier.com/docs/reference/send/message/">`send_message_template`</a></td>
+<td>Send a message using a predefined template</td>
 </tr>
 </table>
 
