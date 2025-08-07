@@ -126,19 +126,19 @@ const response = await your_open_ai_client.responses.create({
 });
 ```
 
-## Available Tools by Category
+## Available Tools
 
 ### 📤 Message Sending
 <table>
-<tr width="1200px">
-<th align="left">Tool ID</th>
-<th align="left">Description</th>
+<tr>
+<th width="300px" align="left">Tool ID</th>
+<th width="900px" align="left">Description</th>
 </tr>
-<tr width="1200px">
+<tr width="600px">
 <td><a href="https://www.courier.com/docs/reference/send/message/"><code>send_message</code></a></td>
 <td>Send a message using title and body (no template)</td>
 </tr>
-<tr width="1200px">
+<tr width="600px">
 <td><a href="https://www.courier.com/docs/reference/send/message/">`send_message_template`</a></td>
 <td>Send a message using a predefined template</td>
 </tr>
