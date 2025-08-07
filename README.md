@@ -129,97 +129,264 @@ const response = await your_open_ai_client.responses.create({
 ## Available Tools by Category
 
 ### 📤 Message Sending
-| Tool ID | Description |
-|---------|-------------|
-| `send_message` | Send a message using title and body (no template) |
-| `send_message_template` | Send a message using a predefined template |
+<table style="width:100%">
+<tr>
+<th style="text-align:left">Tool ID</th>
+<th style="text-align:left">Description</th>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.courier.com/docs/reference/send/message/">`send_message`</a></td>
+<td style="text-align:left">Send a message using title and body (no template)</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.courier.com/docs/reference/send/message/">`send_message_template`</a></td>
+<td style="text-align:left">Send a message using a predefined template</td>
+</tr>
+</table>
 
 ### 👤 Profile Management
-| Tool ID | Description |
-|---------|-------------|
-| `get_user_profile_by_id` | Get a user profile by their ID |
-| `create_or_merge_user` | Create or merge a user profile by user ID |
-| `get_user_list_subscriptions` | Get the list subscriptions for a user by their ID |
-| `subscribe_user_to_lists` | Subscribe a user to one or more lists |
-| `delete_user_list_subscriptions` | Delete all list subscriptions for a user by their ID |
+<table style="width:100%">
+<tr>
+<th style="text-align:left">Tool ID</th>
+<th style="text-align:left">Description</th>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.courier.com/docs/reference/profiles/get-profile/">`get_user_profile_by_id`</a></td>
+<td style="text-align:left">Get a user profile by their ID</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.courier.com/docs/reference/profiles/create/">`create_or_merge_user`</a></td>
+<td style="text-align:left">Create or merge a user profile by user ID</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.courier.com/docs/reference/profiles/get-list-subscriptions/">`get_user_list_subscriptions`</a></td>
+<td style="text-align:left">Get the list subscriptions for a user by their ID</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.courier.com/docs/reference/profiles/subscribe-to-lists/">`subscribe_user_to_lists`</a></td>
+<td style="text-align:left">Subscribe a user to one or more lists</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.courier.com/docs/reference/profiles/delete-list-subscription/">`delete_user_list_subscriptions`</a></td>
+<td style="text-align:left">Delete all list subscriptions for a user by their ID</td>
+</tr>
+</table>
 
 ### 📋 List Management
-| Tool ID | Description |
-|---------|-------------|
-| `list_lists` | Returns all lists with optional pattern filtering |
-| `get_list` | Returns a list based on the list ID provided |
-| `get_list_subscribers` | Get the list's subscriptions |
+<table style="width:100%">
+<tr>
+<th style="text-align:left">Tool ID</th>
+<th style="text-align:left">Description</th>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.courier.com/docs/reference/lists/list/">`list_lists`</a></td>
+<td style="text-align:left">Returns all lists with optional pattern filtering</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.courier.com/docs/reference/lists/get/">`get_list`</a></td>
+<td style="text-align:left">Returns a list based on the list ID provided</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.courier.com/docs/reference/lists/get-subscribers/">`get_list_subscribers`</a></td>
+<td style="text-align:left">Get the list's subscriptions</td>
+</tr>
+</table>
 
 ### 🔐 Authentication
-| Tool ID | Description |
-|---------|-------------|
-| `issue_token` | Generate a JWT authentication token for Courier |
+<table style="width:100%">
+<tr>
+<th style="text-align:left">Tool ID</th>
+<th style="text-align:left">Description</th>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.courier.com/docs/reference/auth-tokens/issue-token/">`issue_token`</a></td>
+<td style="text-align:left">Generate a JWT authentication token for Courier</td>
+</tr>
+</table>
 
 ### 🔑 User Token Management
-| Tool ID | Description |
-|---------|-------------|
-| `list_user_tokens` | List all tokens for a given user |
-| `get_user_token` | Get a specific token for a given user |
-| `create_or_replace_user_token` | Create or replace a specific token for a given user |
+<table style="width:100%">
+<tr>
+<th style="text-align:left">Tool ID</th>
+<th style="text-align:left">Description</th>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.courier.com/docs/reference/user-tokens/list/">`list_user_tokens`</a></td>
+<td style="text-align:left">List all tokens for a given user</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.courier.com/docs/reference/user-tokens/get/">`get_user_token`</a></td>
+<td style="text-align:left">Get a specific token for a given user</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.courier.com/docs/reference/user-tokens/put/">`create_or_replace_user_token`</a></td>
+<td style="text-align:left">Create or replace a specific token for a given user</td>
+</tr>
+</table>
 
 ### ⚡ Automation
-| Tool ID | Description |
-|---------|-------------|
-| `invoke_automation_template` | Invoke an automation run from an automation template |
+<table style="width:100%">
+<tr>
+<th style="text-align:left">Tool ID</th>
+<th style="text-align:left">Description</th>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.courier.com/docs/reference/automations/invoke-template/">`invoke_automation_template`</a></td>
+<td style="text-align:left">Invoke an automation run from an automation template</td>
+</tr>
+</table>
 
 ### 📝 Template Management
-| Tool ID | Description |
-|---------|-------------|
-| `list_templates` | Returns a list of notification templates |
+<table style="width:100%">
+<tr>
+<th style="text-align:left">Tool ID</th>
+<th style="text-align:left">Description</th>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.courier.com/docs/reference/notifications/list/">`list_templates`</a></td>
+<td style="text-align:left">Returns a list of notification templates</td>
+</tr>
+</table>
 
 ### 👥 Audience Management
-| Tool ID | Description |
-|---------|-------------|
-| `get_audience` | Get an audience by its ID |
-| `list_audience_members` | List members of an audience by its ID |
-| `list_audiences` | List all audiences associated with the authorization token |
+<table style="width:100%">
+<tr>
+<th style="text-align:left">Tool ID</th>
+<th style="text-align:left">Description</th>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.courier.com/docs/reference/audiences/get/">`get_audience`</a></td>
+<td style="text-align:left">Get an audience by its ID</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.courier.com/docs/reference/audiences/list-members/">`list_audience_members`</a></td>
+<td style="text-align:left">List members of an audience by its ID</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.courier.com/docs/reference/audiences/list/">`list_audiences`</a></td>
+<td style="text-align:left">List all audiences associated with the authorization token</td>
+</tr>
+</table>
 
 ### 🎨 Brand Management
-| Tool ID | Description |
-|---------|-------------|
-| `create_brand` | Create a new brand |
-| `get_brand` | Fetch a specific brand by brand ID |
-| `list_brands` | Get the list of brands |
+<table style="width:100%">
+<tr>
+<th style="text-align:left">Tool ID</th>
+<th style="text-align:left">Description</th>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.courier.com/docs/reference/brands/create/">`create_brand`</a></td>
+<td style="text-align:left">Create a new brand</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.courier.com/docs/reference/brands/get/">`get_brand`</a></td>
+<td style="text-align:left">Fetch a specific brand by brand ID</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.courier.com/docs/reference/brands/list/">`list_brands`</a></td>
+<td style="text-align:left">Get the list of brands</td>
+</tr>
+</table>
 
 ### 📥 Inbound Events
-| Tool ID | Description |
-|---------|-------------|
-| `track_inbound_event` | Track an inbound event |
+<table style="width:100%">
+<tr>
+<th style="text-align:left">Tool ID</th>
+<th style="text-align:left">Description</th>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.courier.com/docs/reference/inbound/track/">`track_inbound_event`</a></td>
+<td style="text-align:left">Track an inbound event</td>
+</tr>
+</table>
 
 ### 💬 Message Management
-| Tool ID | Description |
-|---------|-------------|
-| `list_messages` | Fetch the statuses of messages you've previously sent |
-| `get_message` | Fetch the status of a message you've previously sent |
-| `get_message_content` | Fetch the rendered content of a message you've previously sent |
+<table style="width:100%">
+<tr>
+<th style="text-align:left">Tool ID</th>
+<th style="text-align:left">Description</th>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.courier.com/docs/reference/messages/list/">`list_messages`</a></td>
+<td style="text-align:left">Fetch the statuses of messages you've previously sent</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.courier.com/docs/reference/messages/get/">`get_message`</a></td>
+<td style="text-align:left">Fetch the status of a message you've previously sent</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.courier.com/docs/reference/messages/get-content/">`get_message_content`</a></td>
+<td style="text-align:left">Fetch the rendered content of a message you've previously sent</td>
+</tr>
+</table>
 
 ### 🔔 Notification Management
-| Tool ID | Description |
-|---------|-------------|
-| `list_notifications` | List notifications with optional filtering |
-| `get_notification_content` | Get the content of a notification by its ID |
-| `get_notification_draft_content` | Get the draft content of a notification by its ID |
+<table style="width:100%">
+<tr>
+<th style="text-align:left">Tool ID</th>
+<th style="text-align:left">Description</th>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.courier.com/docs/reference/notifications/list/">`list_notifications`</a></td>
+<td style="text-align:left">List notifications with optional filtering</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.courier.com/docs/reference/notifications/get-content/">`get_notification_content`</a></td>
+<td style="text-align:left">Get the content of a notification by its ID</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.courier.com/docs/reference/notifications/get-draft-content/">`get_notification_draft_content`</a></td>
+<td style="text-align:left">Get the draft content of a notification by its ID</td>
+</tr>
+</table>
 
 ### 📚 Documentation & Installation Guides
-| Tool ID | Description |
-|---------|-------------|
-| `flutter_installation_guide` | Flutter SDK integration instructions |
-| `react_native_installation_guide` | React Native SDK integration instructions |
-| `android_installation_guide` | Native Android SDK integration instructions |
-| `ios_installation_guide` | Native iOS SDK integration instructions |
-| `react_installation_guide` | React web SDK integration instructions |
-| `node_installation_guide` | Node.js backend SDK instructions |
-| `python_installation_guide` | Python backend SDK instructions |
+<table style="width:100%">
+<tr>
+<th style="text-align:left">Tool ID</th>
+<th style="text-align:left">Description</th>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://github.com/trycourier/courier-flutter">`flutter_installation_guide`</a></td>
+<td style="text-align:left">Flutter SDK integration instructions</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://github.com/trycourier/courier-react-native">`react_native_installation_guide`</a></td>
+<td style="text-align:left">React Native SDK integration instructions</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://github.com/trycourier/courier-android">`android_installation_guide`</a></td>
+<td style="text-align:left">Native Android SDK integration instructions</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://github.com/trycourier/courier-ios">`ios_installation_guide`</a></td>
+<td style="text-align:left">Native iOS SDK integration instructions</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://github.com/trycourier/courier-web/tree/main/@trycourier/courier-react">`react_installation_guide`</a></td>
+<td style="text-align:left">React web SDK integration instructions</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.courier.com/docs/guides/getting-started/nodejs/">`node_installation_guide`</a></td>
+<td style="text-align:left">Node.js backend SDK instructions</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.courier.com/docs/guides/getting-started/python/">`python_installation_guide`</a></td>
+<td style="text-align:left">Python backend SDK instructions</td>
+</tr>
+</table>
 
 ### ⚙️ Configuration
-| Tool ID | Description |
-|---------|-------------|
-| `get_environment_config` | Get the Courier environment configuration |
+<table style="width:100%">
+<tr>
+<th style="text-align:left">Tool ID</th>
+<th style="text-align:left">Description</th>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.courier.com/docs/reference/">`get_environment_config`</a></td>
+<td style="text-align:left">Get the Courier environment configuration</td>
+</tr>
+</table>
 
 # MCP Server Container
 
