@@ -49,10 +49,9 @@ async function performRequest({
     }
 
     // Handle the response body 
-    let data;
     if (responseType === 'json') {
-      data = await res.json();
-      return respond(data);
+      const json = await res.json();
+      return respond(json);
     } else {
       const text = await res.text();
       return respond(text);
