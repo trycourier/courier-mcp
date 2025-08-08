@@ -1,6 +1,7 @@
-dist/
+**/dist/
 **/.DS_Store
 **/node_modules/
 **/cdk.out/
 **/.idea/
 **/.env
+

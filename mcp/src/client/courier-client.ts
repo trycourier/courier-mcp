@@ -10,7 +10,6 @@ import { InboundClient } from "./inbound-client.js";
 import { ListsClient } from "./lists-client.js";
 import { NotificationsClient } from "./notifications-client.js";
 import { SendClient } from "./send-client.js";
-import { TemplatesClient } from "./templates-client.js";
 import { MessagesClient } from "./messages-client.js";
 import { UserTokensClient } from "./user-tokens-client.js";
 
@@ -34,7 +33,6 @@ export class CourierClient {
   readonly lists: ListsClient;
   readonly notifications: NotificationsClient;
   readonly send: SendClient;
-  readonly templates: TemplatesClient;
   readonly messages: MessagesClient;
   readonly userTokens: UserTokensClient;
 
@@ -52,7 +50,6 @@ export class CourierClient {
     this.lists = new ListsClient(options);
     this.notifications = new NotificationsClient(options);
     this.send = new SendClient(options);
-    this.templates = new TemplatesClient(options);
     this.messages = new MessagesClient(options);
     this.userTokens = new UserTokensClient(options);
   }
