@@ -3,7 +3,7 @@
 ## Installation
 
 ```sh
-pip install courier
+pip install trycourier
 ```
 
 ## Send a Notification
