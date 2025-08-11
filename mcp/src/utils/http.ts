@@ -1,5 +1,6 @@
 import { CourierClientOptions } from '../client/courier-client.js';
 import { CourierMcpLogger } from './logger.js';
+import { TextContent } from './types.js';
 import { USER_AGENT } from './version.js';
 
 type HttpRequestParams = {
@@ -65,7 +66,7 @@ async function performRequest({
 
 }
 
-export const toJson = async (res: Response): Promise<{ content: { type: 'text', text: string }[] }> => {
+export const toJson = async (res: Response): Promise<TextContent> => {
   let data: any;
   try {
     // Try to parse JSON, but handle empty response bodies gracefully
@@ -84,7 +85,7 @@ export const toJson = async (res: Response): Promise<{ content: { type: 'text', 
   };
 }
 
-export const toText = async (res: Response): Promise<{ content: { type: 'text', text: string }[] }> => {
+export const toText = async (res: Response): Promise<TextContent> => {
   const text = await res.text();
   return {
     content: [

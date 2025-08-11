@@ -1,13 +1,14 @@
 import z from "zod";
 import { CourierMcpTools } from "./tools.js";
 import Http, { toText } from "../utils/http.js";
+import { TextContent } from "../utils/types.js";
 
 export class DocsTools extends CourierMcpTools {
 
   // Default user ID for the installation guides
   private readonly DEFAULT_USER_ID = 'example_user';
 
-  private addJWT(jwt: string, content: { content: { type: 'text', text: string }[] }) {
+  private addJWT(jwt: string, content: TextContent): TextContent {
     return {
       content: [
         {
