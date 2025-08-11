@@ -1,4 +1,4 @@
-import Http from "../utils/http.js";
+import Http, { toJson } from "../utils/http.js";
 import { CourierClientOptions } from "./courier-client.js";
 
 export class UserTokensClient {
@@ -10,22 +10,20 @@ export class UserTokensClient {
 
   // GET /users/{user_id}/tokens/{token}
   async getToken(userId: string, token: string) {
-    return await Http.get({
-      url: `${this.options.baseUrl}/users/${userId}/tokens/${token}`,
-      headers: {
-        'Authorization': `Bearer ${this.options.apiKey}`,
-      },
+    const res = await Http.get({
+      options: this.options,
+      route: `/users/${userId}/tokens/${token}`,
     });
+    return await toJson(res);
   }
 
   // GET /users/{user_id}/tokens
   async listTokens(userId: string) {
-    return await Http.get({
-      url: `${this.options.baseUrl}/users/${userId}/tokens`,
-      headers: {
-        'Authorization': `Bearer ${this.options.apiKey}`,
-      },
+    const res = await Http.get({
+      options: this.options,
+      route: `/users/${userId}/tokens`,
     });
+    return await toJson(res);
   }
 
   // PUT /users/{user_id}/tokens/{token}
@@ -80,48 +78,44 @@ export class UserTokensClient {
       [key: string]: any;
     }
   ) {
-    return await Http.put({
-      url: `${this.options.baseUrl}/users/${userId}/tokens/${token}`,
-      headers: {
-        'Authorization': `Bearer ${this.options.apiKey}`,
-      },
+    const res = await Http.put({
+      options: this.options,
+      route: `/users/${userId}/tokens/${token}`,
       body: {
         token: token,
         provider_key: provider_key,
         ...params,
       },
     });
+    return await toJson(res);
   }
 
   // PUT /users/{user_id}/tokens
   async putTokens(userId: string, body: any) {
-    return await Http.put({
-      url: `${this.options.baseUrl}/users/${userId}/tokens`,
-      headers: {
-        'Authorization': `Bearer ${this.options.apiKey}`,
-      },
+    const res = await Http.put({
+      options: this.options,
+      route: `/users/${userId}/tokens`,
       body,
     });
+    return await toJson(res);
   }
 
   // PATCH /users/{user_id}/tokens/{token}
   async patchToken(userId: string, token: string, body: any) {
-    return await Http.patch({
-      url: `${this.options.baseUrl}/users/${userId}/tokens/${token}`,
-      headers: {
-        'Authorization': `Bearer ${this.options.apiKey}`,
-      },
+    const res = await Http.patch({
+      options: this.options,
+      route: `/users/${userId}/tokens/${token}`,
       body,
     });
+    return await toJson(res);
   }
 
   // DELETE /users/{user_id}/tokens/{token}
   async deleteToken(userId: string, token: string) {
-    return await Http.delete({
-      url: `${this.options.baseUrl}/users/${userId}/tokens/${token}`,
-      headers: {
-        'Authorization': `Bearer ${this.options.apiKey}`,
-      },
+    const res = await Http.delete({
+      options: this.options,
+      route: `/users/${userId}/tokens/${token}`,
     });
+    return await toJson(res);
   }
 }

@@ -5,7 +5,6 @@ import { EnvironmentTools } from './tools/config-tools.js';
 import { SendTools } from './tools/send-tools.js';
 import { DocsTools } from './tools/docs-tools.js';
 import { AuthTokenTools } from './tools/auth-token-tools.js';
-import { TemplatesTools } from './tools/templates-tools.js';
 import { AudienceTools } from './tools/audience-tools.js';
 import { AuditEventsTools } from './tools/audit-events.js';
 import { AutomationsTools } from './tools/automations-tools.js';
@@ -50,7 +49,6 @@ export default class CourierMcp extends McpServer {
     new NotificationsTools(this).register();
     new ProfilesTools(this).register();
     new SendTools(this).register();
-    new TemplatesTools(this).register();
     new UserTokensTools(this).register();
   }
 

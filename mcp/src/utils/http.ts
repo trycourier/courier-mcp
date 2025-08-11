@@ -1,250 +1,136 @@
+import { CourierClientOptions } from '../client/courier-client.js';
+import { CourierMcpLogger } from './logger.js';
 import { USER_AGENT } from './version.js';
 
 type HttpRequestParams = {
-  url: string;
-  headers?: Record<string, any>;
+  options: CourierClientOptions;
+  route: string;
   body?: any;
-  responseType?: 'json' | 'text'; // allow caller to specify response type
 };
 
-function withJsonContentType(
-  headers?: Record<string, any>,
-  skipIfFormData?: boolean,
-  body?: any
-): Record<string, any> {
-  let result = { ...(headers || {}) };
-  // If skipIfFormData is true and body is FormData, don't set content-type
-  if (!(skipIfFormData && body instanceof FormData)) {
-    if (!result['Content-Type']) {
-      result['Content-Type'] = 'application/json';
-    }
+type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
+
+async function performRequest({
+  options,
+  route,
+  method,
+  body,
+}: {
+  options: CourierClientOptions;
+  route: string;
+  method: HttpMethod;
+  body?: any;
+}): Promise<Response> {
+
+  // Validate the options
+  if (!options.apiKey) {
+    throw new Error('api_key is required in the Courier MCP config. Get your API key from https://app.courier.com/settings/api-keys.');
   }
-  // Always set a user agent
-  result['User-Agent'] = USER_AGENT;
-  return result;
+  // Use CourierMcpLogger for logging if showLogs is enabled
+  const logger = new CourierMcpLogger(options);
+  logger.log('Perform Request:');
+  logger.log(
+    JSON.stringify(
+      {
+        url: `${options.baseUrl}${route}`,
+        headers: {
+          'Authorization': `Bearer ${options.apiKey}`,
+          'Content-Type': 'application/json',
+          'User-Agent': USER_AGENT,
+        },
+        method,
+        body,
+      },
+      null,
+      2
+    )
+  );
+
+  // Perform the request
+  return fetch(`${options.baseUrl}${route}`, {
+    headers: {
+      'Authorization': `Bearer ${options.apiKey}`,
+      'Content-Type': 'application/json',
+      'User-Agent': USER_AGENT,
+    },
+    method,
+    body: JSON.stringify(body),
+  });
+
+}
+
+export const toJson = async (res: Response): Promise<{ content: { type: 'text', text: string }[] }> => {
+  let data: any;
+  try {
+    // Try to parse JSON, but handle empty response bodies gracefully
+    data = await res.json();
+  } catch (e) {
+    // If parsing fails, fallback to empty object
+    data = {};
+  }
+  return {
+    content: [
+      {
+        type: 'text' as const,
+        text: JSON.stringify(data, null, 2),
+      },
+    ],
+  };
+}
+
+export const toText = async (res: Response): Promise<{ content: { type: 'text', text: string }[] }> => {
+  const text = await res.text();
+  return {
+    content: [
+      {
+        type: 'text' as const,
+        text,
+      },
+    ],
+  };
 }
 
 export default class Http {
-  static async get({ url, headers, responseType = 'json' }: HttpRequestParams) {
-    try {
-      const mergedHeaders = withJsonContentType(headers);
-      const res = await fetch(url, {
-        headers: mergedHeaders,
-        method: 'GET',
-      });
-      if (!res.ok) {
-        throw new Error(`Failed to fetch: ${res.statusText}`);
-      }
-      let data;
-      if (responseType === 'json') {
-        data = await res.json();
-        return {
-          content: [
-            {
-              type: 'text' as const,
-              text: JSON.stringify(data, null, 2),
-            },
-          ],
-        };
-      } else {
-        const text = await res.text();
-        return {
-          content: [
-            {
-              type: 'text' as const,
-              text: text,
-            },
-          ],
-        };
-      }
-    } catch (err: any) {
-      return {
-        content: [
-          {
-            type: 'text' as const,
-            text: JSON.stringify(err, null, 2),
-          },
-        ],
-      };
-    }
+  static async get({ options, route }: HttpRequestParams): Promise<Response> {
+    return performRequest({
+      options,
+      route,
+      method: 'GET',
+    });
   }
 
-  static async post({ url, headers, body, responseType = 'text' }: HttpRequestParams) {
-    try {
-      const mergedHeaders = withJsonContentType(headers, true, body);
-      const res = await fetch(url, {
-        headers: mergedHeaders,
-        method: 'POST',
-        body: body instanceof FormData ? body : JSON.stringify(body),
-      });
-      if (!res.ok) {
-        throw new Error(`Failed to fetch: ${res.statusText}`);
-      }
-      let data;
-      if (responseType === 'json') {
-        data = await res.json();
-        return {
-          content: [
-            {
-              type: 'text' as const,
-              text: JSON.stringify(data, null, 2),
-            },
-          ],
-        };
-      } else {
-        const text = await res.text();
-        return {
-          content: [
-            {
-              type: 'text' as const,
-              text: text,
-            },
-          ],
-        };
-      }
-    } catch (err: any) {
-      return {
-        content: [
-          {
-            type: 'text' as const,
-            text: JSON.stringify(err, null, 2),
-          },
-        ],
-      };
-    }
+  static async post({ options, route, body }: HttpRequestParams): Promise<Response> {
+    return performRequest({
+      options,
+      route,
+      method: 'POST',
+      body,
+    });
   }
 
-  static async put({ url, headers, body, responseType = 'text' }: HttpRequestParams) {
-    try {
-      const mergedHeaders = withJsonContentType(headers, true, body);
-      const res = await fetch(url, {
-        headers: mergedHeaders,
-        method: 'PUT',
-        body: body instanceof FormData ? body : JSON.stringify(body),
-      });
-      if (!res.ok) {
-        throw new Error(`Failed to fetch: ${res.statusText}`);
-      }
-      let data;
-      if (responseType === 'json') {
-        data = await res.json();
-        return {
-          content: [
-            {
-              type: 'text' as const,
-              text: JSON.stringify(data, null, 2),
-            },
-          ],
-        };
-      } else {
-        const text = await res.text();
-        return {
-          content: [
-            {
-              type: 'text' as const,
-              text: text,
-            },
-          ],
-        };
-      }
-    } catch (err: any) {
-      return {
-        content: [
-          {
-            type: 'text' as const,
-            text: JSON.stringify(err, null, 2),
-          },
-        ],
-      };
-    }
+  static async put({ options, route, body }: HttpRequestParams): Promise<Response> {
+    return performRequest({
+      options,
+      route,
+      method: 'PUT',
+      body,
+    });
   }
 
-  static async patch({ url, headers, body, responseType = 'text' }: HttpRequestParams) {
-    try {
-      const mergedHeaders = withJsonContentType(headers, true, body);
-      const res = await fetch(url, {
-        headers: mergedHeaders,
-        method: 'PATCH',
-        body: body instanceof FormData ? body : JSON.stringify(body),
-      });
-      if (!res.ok) {
-        throw new Error(`Failed to fetch: ${res.statusText}`);
-      }
-      let data;
-      if (responseType === 'json') {
-        data = await res.json();
-        return {
-          content: [
-            {
-              type: 'text' as const,
-              text: JSON.stringify(data, null, 2),
-            },
-          ],
-        };
-      } else {
-        const text = await res.text();
-        return {
-          content: [
-            {
-              type: 'text' as const,
-              text: text,
-            },
-          ],
-        };
-      }
-    } catch (err: any) {
-      return {
-        content: [
-          {
-            type: 'text' as const,
-            text: JSON.stringify(err, null, 2),
-          },
-        ],
-      };
-    }
+  static async patch({ options, route, body }: HttpRequestParams): Promise<Response> {
+    return performRequest({
+      options,
+      route,
+      method: 'PATCH',
+      body,
+    });
   }
 
-  static async delete({ url, headers, responseType = 'text' }: HttpRequestParams) {
-    try {
-      const mergedHeaders = withJsonContentType(headers);
-      const res = await fetch(url, {
-        headers: mergedHeaders,
-        method: 'DELETE',
-      });
-      if (!res.ok) {
-        throw new Error(`Failed to fetch: ${res.statusText}`);
-      }
-      let data;
-      if (responseType === 'json') {
-        data = await res.json();
-        return {
-          content: [
-            {
-              type: 'text' as const,
-              text: JSON.stringify(data, null, 2),
-            },
-          ],
-        };
-      } else {
-        const text = await res.text();
-        return {
-          content: [
-            {
-              type: 'text' as const,
-              text: text,
-            },
-          ],
-        };
-      }
-    } catch (err: any) {
-      return {
-        content: [
-          {
-            type: 'text' as const,
-            text: JSON.stringify(err, null, 2),
-          },
-        ],
-      };
-    }
+  static async delete({ options, route }: HttpRequestParams): Promise<Response> {
+    return performRequest({
+      options,
+      route,
+      method: 'DELETE',
+    });
   }
 }

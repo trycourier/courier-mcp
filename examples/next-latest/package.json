@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@trycourier/courier-react": "^8.0.26",
+    "@trycourier/courier-react": "^8.0.28",
     "next": "15.4.2",
     "react": "19.1.0",
     "react-dom": "19.1.0"

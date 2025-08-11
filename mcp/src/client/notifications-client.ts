@@ -1,4 +1,4 @@
-import Http from "../utils/http.js";
+import Http, { toJson } from "../utils/http.js";
 import { CourierClientOptions } from "./courier-client.js";
 
 export class NotificationsClient {
@@ -15,42 +15,38 @@ export class NotificationsClient {
         .filter(([_, v]) => v !== undefined)
         .map(([k, v]) => [k, String(v)])
     ).toString() : '';
-    const url = queryParams
-      ? `${this.options.baseUrl}/notifications?${queryParams}`
-      : `${this.options.baseUrl}/notifications`;
+    const route = queryParams
+      ? `/notifications?${queryParams}`
+      : `/notifications`;
 
-    return await Http.get({
-      url,
-      headers: {
-        'Authorization': `Bearer ${this.options.apiKey}`,
-      },
+    const res = await Http.get({
+      options: this.options,
+      route,
     });
+    return await toJson(res);
   }
 
   async getContent(notificationId: string) {
-    return await Http.get({
-      url: `${this.options.baseUrl}/notifications/${notificationId}/content`,
-      headers: {
-        'Authorization': `Bearer ${this.options.apiKey}`,
-      },
+    const res = await Http.get({
+      options: this.options,
+      route: `/notifications/${notificationId}/content`,
     });
+    return await toJson(res);
   }
 
   async getDraftContent(notificationId: string) {
-    return await Http.get({
-      url: `${this.options.baseUrl}/notifications/${notificationId}/draft/content`,
-      headers: {
-        'Authorization': `Bearer ${this.options.apiKey}`,
-      },
+    const res = await Http.get({
+      options: this.options,
+      route: `/notifications/${notificationId}/draft/content`,
     });
+    return await toJson(res);
   }
 
   async getSubmissionChecks(notificationId: string, submissionId: string) {
-    return await Http.get({
-      url: `${this.options.baseUrl}/notifications/${notificationId}/${submissionId}/checks`,
-      headers: {
-        'Authorization': `Bearer ${this.options.apiKey}`,
-      },
+    const res = await Http.get({
+      options: this.options,
+      route: `/notifications/${notificationId}/${submissionId}/checks`,
     });
+    return await toJson(res);
   }
 } 

@@ -1,4 +1,4 @@
-import Http from "../utils/http.js";
+import Http, { toJson } from "../utils/http.js";
 import { CourierClientOptions } from "./courier-client.js";
 
 export class BulkClient {
@@ -9,70 +9,38 @@ export class BulkClient {
     this.options = options;
   }
 
-  async createJob(request: any, options?: any) {
-    const headers: Record<string, string> = {
-      'Authorization': `Bearer ${this.options.apiKey}`,
-    };
-
-    if (options?.idempotencyKey) {
-      headers['Idempotency-Key'] = options.idempotencyKey;
-    }
-    if (options?.idempotencyExpiry) {
-      headers['X-Idempotency-Expiry'] = options.idempotencyExpiry;
-    }
-
-    return await Http.post({
-      url: `${this.options.baseUrl}/bulk`,
-      headers,
+  async createJob(request: any) {
+    const res = await Http.post({
+      options: this.options,
+      route: `/bulk`,
       body: request,
     });
+    return await toJson(res);
   }
 
-  async ingestUsers(jobId: string, request: any, options?: any) {
-    const headers: Record<string, string> = {
-      'Authorization': `Bearer ${this.options.apiKey}`,
-    };
-
-    if (options?.idempotencyKey) {
-      headers['Idempotency-Key'] = options.idempotencyKey;
-    }
-    if (options?.idempotencyExpiry) {
-      headers['X-Idempotency-Expiry'] = options.idempotencyExpiry;
-    }
-
-    return await Http.post({
-      url: `${this.options.baseUrl}/bulk/${jobId}`,
-      headers,
+  async ingestUsers(jobId: string, request: any) {
+    const res = await Http.post({
+      options: this.options,
+      route: `/bulk/${jobId}`,
       body: request,
     });
+    return await toJson(res);
   }
 
-  async runJob(jobId: string, options?: any) {
-    const headers: Record<string, string> = {
-      'Authorization': `Bearer ${this.options.apiKey}`,
-    };
-
-    if (options?.idempotencyKey) {
-      headers['Idempotency-Key'] = options.idempotencyKey;
-    }
-    if (options?.idempotencyExpiry) {
-      headers['X-Idempotency-Expiry'] = options.idempotencyExpiry;
-    }
-
-    return await Http.post({
-      url: `${this.options.baseUrl}/bulk/${jobId}/run`,
-      headers,
-      body: {},
+  async runJob(jobId: string) {
+    const res = await Http.post({
+      options: this.options,
+      route: `/bulk/${jobId}/run`,
     });
+    return await toJson(res);
   }
 
   async getJob(jobId: string) {
-    return await Http.get({
-      url: `${this.options.baseUrl}/bulk/${jobId}`,
-      headers: {
-        'Authorization': `Bearer ${this.options.apiKey}`,
-      },
+    const res = await Http.get({
+      options: this.options,
+      route: `/bulk/${jobId}`,
     });
+    return await toJson(res);
   }
 
   async getUsers(jobId: string, request?: { cursor?: string, limit?: number }) {
@@ -81,15 +49,14 @@ export class BulkClient {
         .filter(([_, v]) => v !== undefined)
         .map(([k, v]) => [k, String(v)])
     ).toString() : '';
-    const url = queryParams
-      ? `${this.options.baseUrl}/bulk/${jobId}/users?${queryParams}`
-      : `${this.options.baseUrl}/bulk/${jobId}/users`;
+    const route = queryParams
+      ? `/bulk/${jobId}/users?${queryParams}`
+      : `/bulk/${jobId}/users`;
 
-    return await Http.get({
-      url,
-      headers: {
-        'Authorization': `Bearer ${this.options.apiKey}`,
-      },
+    const res = await Http.get({
+      options: this.options,
+      route,
     });
+    return await toJson(res);
   }
 } 

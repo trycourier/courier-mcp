@@ -20,6 +20,13 @@ for dir in */ ; do
   fi
 done
 
+# Run 'npm run dev' in examples/next-latest
+if [ -f "examples/next-latest/package.json" ]; then
+  echo "Running 'npm run dev' in examples/next-latest"
+  (cd "examples/next-latest" && npm run dev) &
+  pids+=($!)
+fi
+
 # Wait for all background jobs to finish
 for pid in "${pids[@]}"; do
   wait "$pid"

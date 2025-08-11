@@ -1,4 +1,4 @@
-import Http from "../utils/http.js";
+import Http, { toJson } from "../utils/http.js";
 import { CourierClientOptions } from "./courier-client.js";
 
 export class SendClient {
@@ -10,12 +10,11 @@ export class SendClient {
   }
 
   async send(request: any) {
-    return await Http.post({
-      url: `${this.options.baseUrl}/send`,
-      headers: {
-        'Authorization': `Bearer ${this.options.apiKey}`,
-      },
+    const res = await Http.post({
+      options: this.options,
+      route: `/send`,
       body: request,
     });
+    return await toJson(res);
   }
 } 

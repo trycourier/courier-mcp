@@ -1,4 +1,4 @@
-import Http from "../utils/http.js";
+import Http, { toJson } from "../utils/http.js";
 import { CourierClientOptions } from "./courier-client.js";
 
 export class InboundClient {
@@ -10,12 +10,11 @@ export class InboundClient {
   }
 
   async track(request: any) {
-    return await Http.post({
-      url: `${this.options.baseUrl}/inbound/track`,
-      headers: {
-        'Authorization': `Bearer ${this.options.apiKey}`,
-      },
+    const res = await Http.post({
+      options: this.options,
+      route: `/inbound/track`,
       body: request,
     });
+    return await toJson(res);
   }
 } 

@@ -1,4 +1,4 @@
-import Http from "../utils/http.js";
+import Http, { toJson } from "../utils/http.js";
 import { CourierClientOptions } from "./courier-client.js";
 
 export class ListsClient {
@@ -15,25 +15,32 @@ export class ListsClient {
         .filter(([_, v]) => v !== undefined)
         .map(([k, v]) => [k, String(v)])
     ).toString() : '';
-    const url = queryParams
-      ? `${this.options.baseUrl}/lists?${queryParams}`
-      : `${this.options.baseUrl}/lists`;
+    const route = queryParams
+      ? `/lists?${queryParams}`
+      : `/lists`;
 
-    return await Http.get({
-      url,
-      headers: {
-        'Authorization': `Bearer ${this.options.apiKey}`,
-      },
+    const res = await Http.get({
+      options: this.options,
+      route,
     });
+    return await toJson(res);
   }
 
   async get(listId: string) {
-    return await Http.get({
-      url: `${this.options.baseUrl}/lists/${listId}`,
-      headers: {
-        'Authorization': `Bearer ${this.options.apiKey}`,
-      },
+    const res = await Http.get({
+      options: this.options,
+      route: `/lists/${listId}`,
     });
+    return await toJson(res);
+  }
+
+  async update(listId: string, request: any) {
+    const res = await Http.put({
+      options: this.options,
+      route: `/lists/${listId}`,
+      body: request,
+    });
+    return await toJson(res);
   }
 
   async getSubscribers(listId: string, request?: { cursor?: string, limit?: number }) {
@@ -42,34 +49,31 @@ export class ListsClient {
         .filter(([_, v]) => v !== undefined)
         .map(([k, v]) => [k, String(v)])
     ).toString() : '';
-    const url = queryParams
-      ? `${this.options.baseUrl}/lists/${listId}/subscriptions?${queryParams}`
-      : `${this.options.baseUrl}/lists/${listId}/subscriptions`;
+    const route = queryParams
+      ? `/lists/${listId}/subscriptions?${queryParams}`
+      : `/lists/${listId}/subscriptions`;
 
-    return await Http.get({
-      url,
-      headers: {
-        'Authorization': `Bearer ${this.options.apiKey}`,
-      },
+    const res = await Http.get({
+      options: this.options,
+      route,
     });
+    return await toJson(res);
   }
 
   async subscribe(listId: string, userId: string, request?: any) {
-    return await Http.put({
-      url: `${this.options.baseUrl}/lists/${listId}/subscriptions/${userId}`,
-      headers: {
-        'Authorization': `Bearer ${this.options.apiKey}`,
-      },
+    const res = await Http.put({
+      options: this.options,
+      route: `/lists/${listId}/subscriptions/${userId}`,
       body: request || {},
     });
+    return await toJson(res);
   }
 
   async unsubscribe(listId: string, userId: string) {
-    return await Http.delete({
-      url: `${this.options.baseUrl}/lists/${listId}/subscriptions/${userId}`,
-      headers: {
-        'Authorization': `Bearer ${this.options.apiKey}`,
-      },
+    const res = await Http.delete({
+      options: this.options,
+      route: `/lists/${listId}/subscriptions/${userId}`,
     });
+    return await toJson(res);
   }
 } 
