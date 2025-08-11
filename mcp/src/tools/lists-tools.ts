@@ -11,8 +11,6 @@ export class ListsTools extends CourierMcpTools {
         pattern: z.string().optional(),
         cursor: z.string().optional(),
         limit: z.number().optional(),
-        timeout_in_seconds: z.number().optional(),
-        max_retries: z.number().optional(),
       },
       async ({ pattern, cursor, limit }) => {
         const request: any = {};
@@ -46,8 +44,6 @@ export class ListsTools extends CourierMcpTools {
         list_id: z.string(),
         cursor: z.string().optional(),
         limit: z.number().optional(),
-        timeout_in_seconds: z.number().optional(),
-        max_retries: z.number().optional(),
       },
       async ({ list_id, cursor, limit }) => {
         const request: any = {};
@@ -58,38 +54,55 @@ export class ListsTools extends CourierMcpTools {
       }
     );
 
-    // // Subscribe a user to a list
-    // this.mcp.tool(
-    //   "subscribe_user_to_list",
-    //   "Subscribe a user to an existing list (note: if the List does not exist, it will be automatically created).",
-    //   {
-    //     list_id: z.string(),
-    //     user_id: z.string(),
-    //     preferences: z.record(z.any()).optional(),
-    //     timeout_in_seconds: z.number().optional(),
-    //     max_retries: z.number().optional(),
-    //   },
-    //   async ({ list_id, user_id, preferences }) => {
-    //     const request: any = {};
-    //     if (preferences !== undefined) request.preferences = preferences;
+    // Create a new list or update an existing one
+    this.mcp.tool(
+      "create_list",
+      "Upsert a list by list ID.",
+      {
+        list_id: z.string(),
+        name: z.string(),
+      },
+      async ({ list_id, name }) => {
+        const request: any = { name };
+        return await this.mcp.client.lists.update(list_id, request);
+      }
+    );
 
-    //     return await this.mcp.client.lists.subscribe(list_id, user_id, request);
-    //   }
-    // );
+    // Subscribe a user to a list
+    this.mcp.tool(
+      "subscribe_user_to_list",
+      "Subscribe a user to an existing list (note: if the List does not exist, it will be automatically created).",
+      {
+        list_id: z.string(),
+        user_id: z.string(),
+        preferences: z.object({
+          categories: z.record(z.any()).optional(),
+          notifications: z.record(z.any()).optional(),
+        }).optional(),
+      },
+      async ({ list_id, user_id, preferences }) => {
+        // Ensure preferences always has categories and notifications as objects (default to empty if missing)
+        const request: any = {
+          preferences: {
+            categories: preferences?.categories ?? {},
+            notifications: preferences?.notifications ?? {},
+          }
+        };
+        return await this.mcp.client.lists.subscribe(list_id, user_id, request);
+      }
+    );
 
-    // // Unsubscribe a user from a list
-    // this.mcp.tool(
-    //   "unsubscribe_user_from_list",
-    //   "Delete a subscription to a list by list ID and user ID.",
-    //   {
-    //     list_id: z.string(),
-    //     user_id: z.string(),
-    //     timeout_in_seconds: z.number().optional(),
-    //     max_retries: z.number().optional(),
-    //   },
-    //   async ({ list_id, user_id }) => {
-    //     return await this.mcp.client.lists.unsubscribe(list_id, user_id);
-    //   }
-    // );
+    // Unsubscribe a user from a list
+    this.mcp.tool(
+      "unsubscribe_user_from_list",
+      "Delete a subscription to a list by list ID and user ID.",
+      {
+        list_id: z.string(),
+        user_id: z.string(),
+      },
+      async ({ list_id, user_id }) => {
+        return await this.mcp.client.lists.unsubscribe(list_id, user_id);
+      }
+    );
   }
 }

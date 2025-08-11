@@ -1,4 +1,4 @@
-import Http from "../utils/http.js";
+import Http, { toJson } from "../utils/http.js";
 import { CourierClientOptions } from "./courier-client.js";
 
 export class BulkClient {
@@ -10,33 +10,37 @@ export class BulkClient {
   }
 
   async createJob(request: any) {
-    return await Http.post({
+    const res = await Http.post({
       options: this.options,
       route: `/bulk`,
       body: request,
     });
+    return await toJson(res);
   }
 
   async ingestUsers(jobId: string, request: any) {
-    return await Http.post({
+    const res = await Http.post({
       options: this.options,
       route: `/bulk/${jobId}`,
       body: request,
     });
+    return await toJson(res);
   }
 
   async runJob(jobId: string) {
-    return await Http.post({
+    const res = await Http.post({
       options: this.options,
       route: `/bulk/${jobId}/run`,
     });
+    return await toJson(res);
   }
 
   async getJob(jobId: string) {
-    return await Http.get({
+    const res = await Http.get({
       options: this.options,
       route: `/bulk/${jobId}`,
     });
+    return await toJson(res);
   }
 
   async getUsers(jobId: string, request?: { cursor?: string, limit?: number }) {
@@ -49,9 +53,10 @@ export class BulkClient {
       ? `/bulk/${jobId}/users?${queryParams}`
       : `/bulk/${jobId}/users`;
 
-    return await Http.get({
+    const res = await Http.get({
       options: this.options,
-      route: route,
+      route,
     });
+    return await toJson(res);
   }
 } 

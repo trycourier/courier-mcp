@@ -1,11 +1,11 @@
 import { CourierClientOptions } from '../client/courier-client.js';
+import { CourierMcpLogger } from './logger.js';
 import { USER_AGENT } from './version.js';
 
 type HttpRequestParams = {
   options: CourierClientOptions;
   route: string;
   body?: any;
-  responseType?: 'json' | 'text';
 };
 
 type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
@@ -15,109 +15,122 @@ async function performRequest({
   route,
   method,
   body,
-  responseType = 'text',
 }: {
   options: CourierClientOptions;
   route: string;
   method: HttpMethod;
-  headers?: Record<string, any>;
   body?: any;
-  responseType?: 'json' | 'text';
-}) {
+}): Promise<Response> {
 
   // Validate the options
   if (!options.apiKey) {
-    throw new Error('API_KEY is required in the Courier MCP config. Get your API key from https://app.courier.com/settings/api-keys.');
+    throw new Error('api_key is required in the Courier MCP config. Get your API key from https://app.courier.com/settings/api-keys.');
   }
-
-  try {
-
-    // Perform the request
-    const res = await fetch(`${options.baseUrl}${route}`, {
-      headers: {
-        'Authorization': `Bearer ${options.apiKey}`,
-        'Content-Type': 'application/json',
-        'User-Agent': USER_AGENT,
+  // Use CourierMcpLogger for logging if showLogs is enabled
+  const logger = new CourierMcpLogger(options);
+  logger.log('Perform Request:');
+  logger.log(
+    JSON.stringify(
+      {
+        url: `${options.baseUrl}${route}`,
+        headers: {
+          'Authorization': `Bearer ${options.apiKey}`,
+          'Content-Type': 'application/json',
+          'User-Agent': USER_AGENT,
+        },
+        method,
+        body,
       },
-      method,
-      body,
-    });
+      null,
+      2
+    )
+  );
 
-    // Handle the response
-    if (!res.ok) {
-      throw new Error(`Failed to fetch: ${res.statusText}`);
-    }
+  // Perform the request
+  return fetch(`${options.baseUrl}${route}`, {
+    headers: {
+      'Authorization': `Bearer ${options.apiKey}`,
+      'Content-Type': 'application/json',
+      'User-Agent': USER_AGENT,
+    },
+    method,
+    body: JSON.stringify(body),
+  });
 
-    // Handle the response body 
-    if (responseType === 'json') {
-      const json = await res.json();
-      return respond(json);
-    } else {
-      const text = await res.text();
-      return respond(text);
-    }
-  } catch (err: any) {
-    return respond(err);
-  }
 }
 
-const respond = (content: any) => {
+export const toJson = async (res: Response): Promise<{ content: { type: 'text', text: string }[] }> => {
+  let data: any;
+  try {
+    // Try to parse JSON, but handle empty response bodies gracefully
+    data = await res.json();
+  } catch (e) {
+    // If parsing fails, fallback to empty object
+    data = {};
+  }
   return {
     content: [
       {
         type: 'text' as const,
-        text: JSON.stringify(content, null, 2),
+        text: JSON.stringify(data, null, 2),
+      },
+    ],
+  };
+}
+
+export const toText = async (res: Response): Promise<{ content: { type: 'text', text: string }[] }> => {
+  const text = await res.text();
+  return {
+    content: [
+      {
+        type: 'text' as const,
+        text,
       },
     ],
   };
 }
 
 export default class Http {
-  static async get({ options, route, responseType = 'json' }: HttpRequestParams) {
+  static async get({ options, route }: HttpRequestParams): Promise<Response> {
     return performRequest({
       options,
       route,
       method: 'GET',
-      responseType,
     });
   }
 
-  static async post({ options, route, body, responseType = 'text' }: HttpRequestParams) {
+  static async post({ options, route, body }: HttpRequestParams): Promise<Response> {
     return performRequest({
       options,
       route,
       method: 'POST',
       body,
-      responseType,
     });
   }
 
-  static async put({ options, route, body, responseType = 'text' }: HttpRequestParams) {
+  static async put({ options, route, body }: HttpRequestParams): Promise<Response> {
     return performRequest({
       options,
       route,
       method: 'PUT',
       body,
-      responseType,
     });
   }
 
-  static async patch({ options, route, body, responseType = 'text' }: HttpRequestParams) {
+  static async patch({ options, route, body }: HttpRequestParams): Promise<Response> {
     return performRequest({
       options,
       route,
       method: 'PATCH',
       body,
-      responseType,
     });
   }
 
-  static async delete({ options, route, responseType = 'text' }: HttpRequestParams) {
+  static async delete({ options, route }: HttpRequestParams): Promise<Response> {
     return performRequest({
       options,
       route,
       method: 'DELETE',
-      responseType,
     });
   }
 }

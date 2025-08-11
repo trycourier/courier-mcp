@@ -1,4 +1,4 @@
-import Http from "../utils/http.js";
+import Http, { toJson } from "../utils/http.js";
 import { CourierClientOptions } from "./courier-client.js";
 
 export class AudiencesClient {
@@ -11,27 +11,30 @@ export class AudiencesClient {
 
   // Get an audience by its ID
   async get(audienceId: string) {
-    return await Http.get({
+    const res = await Http.get({
       options: this.options,
       route: `/audiences/${audienceId}`,
     });
+    return await toJson(res);
   }
 
   // Create or update an audience by its ID
   async update(audienceId: string, request: any) {
-    return await Http.put({
+    const res = await Http.put({
       options: this.options,
       route: `/audiences/${audienceId}`,
       body: request,
     });
+    return await toJson(res);
   }
 
   // Delete an audience by its ID
   async delete(audienceId: string) {
-    return await Http.delete({
+    const res = await Http.delete({
       options: this.options,
       route: `/audiences/${audienceId}`,
     });
+    return await toJson(res);
   }
 
   // List members of an audience
@@ -41,14 +44,11 @@ export class AudiencesClient {
         .filter(([_, v]) => v !== undefined)
         .map(([k, v]) => [k, String(v)])
     ).toString() : '';
-    const url = queryParams
+    const route = queryParams
       ? `${this.options.baseUrl}/audiences/${audienceId}/members?${queryParams}`
       : `${this.options.baseUrl}/audiences/${audienceId}/members`;
-
-    return await Http.get({
-      options: this.options,
-      route: `/audiences/${audienceId}/members?${queryParams}`,
-    });
+    const res = await Http.get({ options: this.options, route });
+    return await toJson(res);
   }
 
   // List all audiences
@@ -58,13 +58,10 @@ export class AudiencesClient {
         .filter(([_, v]) => v !== undefined)
         .map(([k, v]) => [k, String(v)])
     ).toString() : '';
-    const url = queryParams
+    const route = queryParams
       ? `${this.options.baseUrl}/audiences?${queryParams}`
       : `${this.options.baseUrl}/audiences`;
-
-    return await Http.get({
-      options: this.options,
-      route: `/audiences?${queryParams}`,
-    });
+    const res = await Http.get({ options: this.options, route });
+    return await toJson(res);
   }
 }

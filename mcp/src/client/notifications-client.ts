@@ -1,4 +1,4 @@
-import Http from "../utils/http.js";
+import Http, { toJson } from "../utils/http.js";
 import { CourierClientOptions } from "./courier-client.js";
 
 export class NotificationsClient {
@@ -19,30 +19,34 @@ export class NotificationsClient {
       ? `/notifications?${queryParams}`
       : `/notifications`;
 
-    return await Http.get({
+    const res = await Http.get({
       options: this.options,
       route,
     });
+    return await toJson(res);
   }
 
   async getContent(notificationId: string) {
-    return await Http.get({
+    const res = await Http.get({
       options: this.options,
       route: `/notifications/${notificationId}/content`,
     });
+    return await toJson(res);
   }
 
   async getDraftContent(notificationId: string) {
-    return await Http.get({
+    const res = await Http.get({
       options: this.options,
       route: `/notifications/${notificationId}/draft/content`,
     });
+    return await toJson(res);
   }
 
   async getSubmissionChecks(notificationId: string, submissionId: string) {
-    return await Http.get({
+    const res = await Http.get({
       options: this.options,
       route: `/notifications/${notificationId}/${submissionId}/checks`,
     });
+    return await toJson(res);
   }
 } 
