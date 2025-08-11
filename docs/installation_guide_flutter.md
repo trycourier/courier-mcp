@@ -1,5 +1,7 @@
+# Install Courier Flutter SDK
 
-# Install courier_flutter:
+## Installation
+
 ```sh
 flutter pub add courier_flutter
 ```
@@ -12,7 +14,7 @@ import 'package:courier_flutter/courier_flutter.dart';
 _signIn() async {
   await Courier.shared.signIn(
     accessToken: 'your_users_jwt', // This should be generated on your backend.
-    userId: '${user_id}',
+    userId: 'your_user_id',
   );
 }
 ```
