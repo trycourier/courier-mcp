@@ -4,7 +4,8 @@ import { USER_AGENT } from './version.js';
 
 type HttpRequestParams = {
   options: CourierClientOptions;
-  route: string;
+  route?: string;
+  url?: string;
   body?: any;
 };
 
@@ -13,11 +14,13 @@ type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 async function performRequest({
   options,
   route,
+  url,
   method,
   body,
 }: {
   options: CourierClientOptions;
-  route: string;
+  route?: string;
+  url?: string;
   method: HttpMethod;
   body?: any;
 }): Promise<Response> {
@@ -26,13 +29,16 @@ async function performRequest({
   if (!options.apiKey) {
     throw new Error('api_key is required in the Courier MCP config. Get your API key from https://app.courier.com/settings/api-keys.');
   }
+
+  const fullUrl = url ? url : `${options.baseUrl}${route ?? ''}`;
+
   // Use CourierMcpLogger for logging if showLogs is enabled
   const logger = new CourierMcpLogger(options);
   logger.log('Perform Request:');
   logger.log(
     JSON.stringify(
       {
-        url: `${options.baseUrl}${route}`,
+        url: fullUrl,
         headers: {
           'Authorization': `Bearer ${options.apiKey}`,
           'Content-Type': 'application/json',
@@ -47,7 +53,7 @@ async function performRequest({
   );
 
   // Perform the request
-  return fetch(`${options.baseUrl}${route}`, {
+  return fetch(fullUrl, {
     headers: {
       'Authorization': `Bearer ${options.apiKey}`,
       'Content-Type': 'application/json',
@@ -91,45 +97,50 @@ export const toText = async (res: Response): Promise<{ content: { type: 'text', 
 }
 
 export default class Http {
-  static async get({ options, route }: HttpRequestParams): Promise<Response> {
+  static async get({ options, route, url }: HttpRequestParams): Promise<Response> {
     return performRequest({
       options,
       route,
+      url,
       method: 'GET',
     });
   }
 
-  static async post({ options, route, body }: HttpRequestParams): Promise<Response> {
+  static async post({ options, route, url, body }: HttpRequestParams): Promise<Response> {
     return performRequest({
       options,
       route,
+      url,
       method: 'POST',
       body,
     });
   }
 
-  static async put({ options, route, body }: HttpRequestParams): Promise<Response> {
+  static async put({ options, route, url, body }: HttpRequestParams): Promise<Response> {
     return performRequest({
       options,
       route,
+      url,
       method: 'PUT',
       body,
     });
   }
 
-  static async patch({ options, route, body }: HttpRequestParams): Promise<Response> {
+  static async patch({ options, route, url, body }: HttpRequestParams): Promise<Response> {
     return performRequest({
       options,
       route,
+      url,
       method: 'PATCH',
       body,
     });
   }
 
-  static async delete({ options, route }: HttpRequestParams): Promise<Response> {
+  static async delete({ options, route, url }: HttpRequestParams): Promise<Response> {
     return performRequest({
       options,
       route,
+      url,
       method: 'DELETE',
     });
   }

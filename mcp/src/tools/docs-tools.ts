@@ -1,14 +1,32 @@
 import z from "zod";
 import { CourierMcpTools } from "./tools.js";
+import Http, { toText } from "../utils/http.js";
 
 export class DocsTools extends CourierMcpTools {
+
+  // Default user ID for the installation guides
+  private readonly DEFAULT_USER_ID = 'example_user';
+
+  private addJWT(jwt: string, content: { content: { type: 'text', text: string }[] }) {
+    return {
+      content: [
+        {
+          type: 'text' as const,
+          text: `${this.DEFAULT_USER_ID} JWT Access Token: ${jwt}\n\n${content}`,
+        },
+      ],
+    }
+  }
+
   public register() {
+
     // Helper to generate JWT
-    const getJwt = async (user_id: string) => {
-      return await this.mcp.client.authTokens.issueToken({
+    const getJwt = async (user_id: string): Promise<string> => {
+      const res = await this.mcp.client.authTokens.issueToken({
         scope: `user_id:${user_id} write:user-tokens inbox:read:messages inbox:write:events read:preferences write:preferences read:brands`,
         expires_in: '1h',
       });
+      return res.content[0].text;
     };
 
     // Flutter installation guide
@@ -18,69 +36,19 @@ export class DocsTools extends CourierMcpTools {
         title: 'Courier Flutter SDK Installation Guide',
         description: 'Example instructions to integrate Courier Inbox, Preferences, and Push Notifications into your Flutter application.',
         inputSchema: {
-          user_id: z.string().describe('The unique identifier for the user.'),
+          user_id: z.string().describe('The unique identifier for the user.').default(this.DEFAULT_USER_ID),
         },
       },
       async ({ user_id }) => {
-        const jwt = await getJwt(user_id);
-        return {
-          content: [
-            {
-              type: "text",
-              text: `
-JWT for ${user_id}:
-${jwt}
-
-Install courier_flutter:
-\`\`\`
-flutter pub add courier_flutter
-\`\`\`
-
-Authentication:
-\`\`\`
-import 'package:courier_flutter/courier_flutter.dart';
-
-_signIn() async {
-  final jwt = '${jwt}'; // This should be generated on your backend.
-
-  await Courier.shared.signIn(
-    accessToken: jwt,
-    userId: '${user_id}',
-  );
-}
-\`\`\`
-
-Inbox:
-\`\`\`
-import 'package:courier_flutter/ui/inbox/courier_inbox.dart';
-
-@override
-Widget build(BuildContext context) {
-  return CourierInbox(
-    onMessageClick: (message, index) {
-      message.isRead ? message.markAsUnread() : message.markAsRead();
-    },
-  );
-}
-\`\`\`
-
-Preferences:
-\`\`\`
-import 'package:courier_flutter/ui/preferences/courier_preferences.dart';
-
-@override
-Widget build(BuildContext context) {
-  return CourierPreferences(
-    mode: TopicMode(),
-  );
-}
-\`\`\`
-
-All documentation: https://github.com/trycourier/courier-flutter
-              `.trim(),
-            },
-          ],
-        };
+        const [res, jwt] = await Promise.all([
+          Http.get({
+            options: this.mcp.client.options,
+            url: `https://github.com/trycourier/courier-mcp/blob/main/docs/installation_guide_flutter.md`,
+          }),
+          getJwt(user_id)
+        ]);
+        const text = await toText(res);
+        return this.addJWT(jwt, text);
       }
     );
 
