@@ -28,7 +28,7 @@ export class DocsTools extends CourierMcpTools {
     return res.content[0].text;
   };
 
-  private async getDocs(url: string, user_id: string): Promise<TextContent> {
+  private async getDocsWithJWT(url: string, user_id: string): Promise<TextContent> {
     const [res, jwt] = await Promise.all([
       Http.get({
         options: this.mcp.client.options,
@@ -38,6 +38,14 @@ export class DocsTools extends CourierMcpTools {
     ]);
     const text = await toText(res);
     return this.addJWT(user_id, jwt, text);
+  }
+
+  private async getDocs(url: string): Promise<TextContent> {
+    const res = await Http.get({
+      options: this.mcp.client.options,
+      url: url,
+    });
+    return await toText(res);
   }
 
   public register() {
@@ -53,7 +61,7 @@ export class DocsTools extends CourierMcpTools {
         },
       },
       async ({ user_id }) => {
-        return await this.getDocs('https://github.com/trycourier/courier-mcp/blob/main/docs/installation_guide_flutter.md', user_id);
+        return await this.getDocsWithJWT('https://github.com/trycourier/courier-mcp/blob/main/docs/installation_guide_flutter.md', user_id);
       }
     );
 
@@ -68,7 +76,7 @@ export class DocsTools extends CourierMcpTools {
         },
       },
       async ({ user_id }) => {
-        return await this.getDocs('https://github.com/trycourier/courier-mcp/blob/main/docs/installation_guide_react_native.md', user_id);
+        return await this.getDocsWithJWT('https://github.com/trycourier/courier-mcp/blob/main/docs/installation_guide_react_native.md', user_id);
       }
     );
 
@@ -83,7 +91,7 @@ export class DocsTools extends CourierMcpTools {
         },
       },
       async ({ user_id }) => {
-        return await this.getDocs('https://github.com/trycourier/courier-mcp/blob/main/docs/installation_guide_android.md', user_id);
+        return await this.getDocsWithJWT('https://github.com/trycourier/courier-mcp/blob/main/docs/installation_guide_android.md', user_id);
       }
     );
 
@@ -98,7 +106,7 @@ export class DocsTools extends CourierMcpTools {
         },
       },
       async ({ user_id }) => {
-        return await this.getDocs('https://github.com/trycourier/courier-mcp/blob/main/docs/installation_guide_ios.md', user_id);
+        return await this.getDocsWithJWT('https://github.com/trycourier/courier-mcp/blob/main/docs/installation_guide_ios.md', user_id);
       }
     );
 
@@ -113,7 +121,7 @@ export class DocsTools extends CourierMcpTools {
         },
       },
       async ({ user_id }) => {
-        return await this.getDocs('https://github.com/trycourier/courier-mcp/blob/main/docs/installation_guide_react.md', user_id);
+        return await this.getDocsWithJWT('https://github.com/trycourier/courier-mcp/blob/main/docs/installation_guide_react.md', user_id);
       }
     );
 
@@ -123,12 +131,9 @@ export class DocsTools extends CourierMcpTools {
       {
         title: 'Courier Node.js SDK Installation Guide',
         description: 'Instructions to send notifications using Courier from a Node.js backend.',
-        inputSchema: {
-          user_id: z.string().describe('The unique identifier for the user.').default(this.DEFAULT_USER_ID),
-        },
       },
-      async ({ user_id }) => {
-        return await this.getDocs('https://github.com/trycourier/courier-mcp/blob/main/docs/installation_guide_node.md', user_id);
+      async () => {
+        return await this.getDocs('https://github.com/trycourier/courier-mcp/blob/main/docs/installation_guide_node.md');
       }
     );
 
@@ -138,12 +143,9 @@ export class DocsTools extends CourierMcpTools {
       {
         title: 'Courier Python SDK Installation Guide',
         description: 'Instructions to send notifications using Courier from a Python backend.',
-        inputSchema: {
-          user_id: z.string().describe('The unique identifier for the user.').default(this.DEFAULT_USER_ID),
-        },
       },
-      async ({ user_id }) => {
-        return await this.getDocs('https://github.com/trycourier/courier-mcp/blob/main/docs/installation_guide_python.md', user_id);
+      async () => {
+        return await this.getDocs('https://github.com/trycourier/courier-mcp/blob/main/docs/installation_guide_python.md');
       }
     );
   }
