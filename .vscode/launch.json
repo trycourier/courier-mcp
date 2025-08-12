@@ -16,36 +16,25 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Build Docker Image",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": [
-        "run",
-        "build:docker"
-      ],
-      "console": "integratedTerminal",
-      "internalConsoleOptions": "neverOpen"
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "Run Docker Container",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": [
-        "run",
-        "run:docker"
-      ],
-      "console": "integratedTerminal",
-      "internalConsoleOptions": "neverOpen"
-    },
-    {
-      "type": "node",
-      "request": "launch",
       "name": "Run OpenAI API",
       "cwd": "${workspaceFolder}/examples/open-ai-api",
       "runtimeExecutable": "npm",
       "runtimeArgs": [
         "run",
         "test"
+      ],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "MCP Package Deployment",
+      "cwd": "${workspaceFolder}/mcp",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "deploy"
       ],
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen"
