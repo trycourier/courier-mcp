@@ -11,7 +11,7 @@ pip install trycourier
 ```python
 from courier import Courier
 
-// You can get your auth token here: https://app.courier.com/settings/api-keys
+# You can get your auth token here: https://app.courier.com/settings/api-keys
 client = Courier(auth_token="YOUR_AUTH_TOKEN")
 
 resp = client.send_message(
