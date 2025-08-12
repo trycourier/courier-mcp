@@ -1,6 +1,6 @@
 {
   "name": "@trycourier/courier-mcp",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Courier's official MCP package",
   "main": "dist/index.js",
   "type": "module",
