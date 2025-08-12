@@ -1,7 +1,7 @@
 {
-  "name": "courier-mcp",
+  "name": "@trycourier/courier-mcp",
   "version": "1.0.0",
-  "description": "",
+  "description": "Courier's official MCP package",
   "main": "dist/index.js",
   "type": "module",
   "types": "dist/index.d.ts",
@@ -14,11 +14,15 @@
   "scripts": {
     "build": "tsc",
     "dev": "nodemon --watch src --ext ts --exec \"npm run build\"",
-    "prepare": "npm run build"
+    "prepare": "npm run build",
+    "deploy": "npm run build && npm publish --access public"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "courier",
+    "mcp"
+  ],
+  "author": "Courier",
+  "license": "MIT",
   "devDependencies": {
     "@types/node": "^24.0.14",
     "nodemon": "^3.0.0",
