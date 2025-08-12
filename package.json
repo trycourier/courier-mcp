@@ -8,12 +8,5 @@
     "dev": "./dev.sh",
     "build:docker": "docker build -t courier-mcp-server .",
     "run:docker": "docker run --rm -p 3000:3000 courier-mcp-server"
-  },
-  "dependencies": {
-    "aws-cdk-lib": "^2.208.0",
-    "constructs": "^10.4.2"
-  },
-  "devDependencies": {
-    "aws-cdk": "^2.1023.0"
   }
 }
