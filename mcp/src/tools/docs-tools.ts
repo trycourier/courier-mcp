@@ -8,7 +8,7 @@ export class DocsTools extends CourierMcpTools {
   // Default user ID for the installation guides
   private readonly DEFAULT_USER_ID = 'example_user';
 
-  private addJWT(user_id: string, jwt: string, content: TextContent): TextContent {
+  private appendJwtToResponse(user_id: string, jwt: string, content: TextContent): TextContent {
     return {
       content: [
         {
@@ -37,7 +37,7 @@ export class DocsTools extends CourierMcpTools {
       this.getJwt(user_id)
     ]);
     const text = await toText(res);
-    return this.addJWT(user_id, jwt, text);
+    return this.appendJwtToResponse(user_id, jwt, text);
   }
 
   private async getDocs(url: string): Promise<TextContent> {

@@ -67,22 +67,26 @@ async function performRequest({
 }
 
 export const toJson = async (res: Response): Promise<TextContent> => {
-  let data: any;
   try {
-    // Try to parse JSON, but handle empty response bodies gracefully
-    data = await res.json();
+    const data = await res.json();
+    return {
+      content: [
+        {
+          type: 'text' as const,
+          text: JSON.stringify(data, null, 2),
+        },
+      ],
+    };
   } catch (e) {
-    // If parsing fails, fallback to empty object
-    data = {};
+    return {
+      content: [
+        {
+          type: 'text' as const,
+          text: JSON.stringify({}, null, 2),
+        },
+      ],
+    };
   }
-  return {
-    content: [
-      {
-        type: 'text' as const,
-        text: JSON.stringify(data, null, 2),
-      },
-    ],
-  };
 }
 
 export const toText = async (res: Response): Promise<TextContent> => {

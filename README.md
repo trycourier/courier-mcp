@@ -1,129 +1,57 @@
-# Install Courier MCP
+# Courier MCP
 
-To get your `api_key`, go to the [Courier API Key settings page](https://app.courier.com/settings/api-keys).
+The official [Model Context Protocol](https://modelcontext.org/) server for [Courier](https://www.courier.com/).
 
-## Cursor
+## Quick Setup
 
-In Cursor, go to:
-1. Cursor > Cursor Settings > Tools & Integrations > MCP Tools > New MCP Server
-2. Add the following to your `mcp.json`
+### 1. Get your API key
+Go to [Courier API Keys](https://app.courier.com/settings/api-keys) and create a new API key.
 
+### 2. Install and run
+
+**Option A: Using npx (recommended)**
+```bash
+npx @trycourier/courier-mcp
+```
+
+**Option B: Local development**
+```bash
+git clone https://github.com/trycourier/courier-mcp
+cd courier-mcp
+npm install
+npm run dev
+```
+
+### 3. Configure your MCP client
+
+**Claude Desktop**
 ```json
 {
   "mcpServers": {
     "courier": {
-      "url": "TODO/mcp",
-      "headers": {
-        "api_key": "XXXX"
+      "command": "npx",
+      "args": ["@trycourier/courier-mcp"],
+      "env": {
+        "COURIER_API_KEY": "your-api-key-here"
       }
     }
   }
 }
 ```
 
-## Claude Code
-
-In a terminal, type the following command:
-
-```bash
-claude mcp add --transport http Courier TODO/mcp --header api_key:XXXX
-```
-
-## Claude Desktop
-
-In Claude Desktop, go to:
-1. Claude > Settings > Developer > Edit Config
-2. Open `claude_desktop_condig.json`
-3. Add the following to your `claude_desktop_condig.json`
-
+**Cursor**
 ```json
 {
   "mcpServers": {
     "courier": {
-		"command": "npx",
-        "args": ["-y", "mcp-remote", "TODO/mcp"],
-        "headers": {
-        	"api_key": "XXXX"
-        }
+      "command": "npx",
+      "args": ["@trycourier/courier-mcp"],
+      "env": {
+        "COURIER_API_KEY": "your-api-key-here"
+      }
     }
   }
 }
-```
-
-## Windsurf
-
-In Windsurf, go to:
-1. Windsurf > Windsurf Settings > Manage MCP Servers > View Raw Config
-2. Add the following to your `mcp_config.json`
-
-```json
-{
-  "mcpServers": {
-    "courier": {
-      "serverUrl": "TODO/mcp",
-      "headers": {
-        "api_key": "XXXX"
-      },
-      "disabled": false,
-      "disabledTools": []
-    }
-  }
-}
-```
-
-## VSCode
-
-In a VSCode project:
-1. Create the file `.vscode/mcp.json` if you don't already have one
-2. Add the snippet below
-
-VSCode works best when starting questions with `"#"` in the chat. For example, try getting a user from Courier with `#get_user_profile_by_id example_user_id`.
-
-```json
-{
-	"inputs": [
-		{
-			"type": "promptString",
-			"id": "courier-api-key",
-			"description": "API key for Courier service",
-			"password": true
-		}
-	],
-	"servers": {
-		"courier": {
-			"url": "TODO/mcp",
-			"type": "http",
-			"headers": {
-				"api_key": "${input:courier-api-key}"
-			}
-		}
-	}
-}
-```
-
-3. Open the chat window on the right
-4. Click the Gear icon in the top right, then click MCP Servers
-5. In the bottom right, click the gear next to "courier", then click "Start Server"
-
-## OpenAI API
-
-```ts
-const response = await your_open_ai_client.responses.create({
-  model: 'gpt-4o-mini',
-  input: 'Get user mike from courier',
-  tools: [
-	{
-	  type: 'mcp',
-	  server_label: 'courier',
-	  server_url: 'TODO',
-	  headers: {
-		api_key: 'XXXX',
-	  },
-	  allowed_tools: ['get_user_profile_by_id'],
-	  require_approval: 'never',
-	},
-  ],
-});
 ```
 
 ## Available Tools
