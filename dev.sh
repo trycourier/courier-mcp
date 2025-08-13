@@ -4,6 +4,14 @@ if [ -f "package.json" ]; then
   npm install
 fi
 
+# Install dependencies in mcp and server
+for pkg in mcp server; do
+  if [ -f "$pkg/package.json" ]; then
+    echo "Installing dependencies in $pkg"
+    (cd "$pkg" && npm install)
+  fi
+done
+
 # Only build the mcp package
 if [ -f "mcp/package.json" ]; then
   echo "Building package in mcp"
