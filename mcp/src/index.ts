@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { EnvironmentTools } from './tools/config-tools.js';
 import { SendTools } from './tools/send-tools.js';
