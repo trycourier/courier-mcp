@@ -74,5 +74,74 @@ export class SendTools extends CourierMcpTools {
         return await this.mcp.client.send.send(request);
       }
     );
+
+    // Send a message to a user with Courier using title/body (no template)
+    this.mcp.tool(
+      'send_message_to_list',
+      'Send a message to a list with Courier using title and body (no template)',
+      {
+        list_id: z.string(),
+        title: z.string(),
+        body: z.string(),
+        data: z.record(z.string(), z.string()).optional(),
+        method: z.enum(['all', 'single']).default('all'),
+        channels: z.array(z.string()),
+      },
+      async ({ list_id, title, body, data, method, channels }) => {
+        if (!title || !body) {
+          throw new Error('Both title and body must be provided.');
+        }
+
+        let request: any = {
+          message: {
+            to: {
+              list_id: list_id,
+            },
+            data: data,
+            routing: {
+              method: method,
+              channels: channels
+            },
+            content: {
+              title: title,
+              body: body,
+            }
+          },
+        };
+
+        return await this.mcp.client.send.send(request);
+      }
+    );
+
+    // Send a message to a user with Courier using title/body (no template)
+    this.mcp.tool(
+      'send_message_to_list_template',
+      'Send a message to a list with Courier using a template',
+      {
+        list_id: z.string(),
+        template: z.string(),
+        data: z.record(z.string(), z.string()).optional(),
+        method: z.enum(['all', 'single']).default('all'),
+        channels: z.array(z.string()),
+      },
+      async ({ list_id, template, data, method, channels }) => {
+        if (!template) {
+          throw new Error('Template must be provided.');
+        }
+
+        let request: any = {
+          message: {
+            to: {
+              list_id: list_id,
+            },
+            data: data,
+            template: template
+          },
+        };
+
+        return await this.mcp.client.send.send(request);
+      }
+    );
+
   }
 }
