@@ -23,9 +23,17 @@ function loadMcpConfigFile(): any {
           return parsed.mcpServers.Courier.env;
         }
 
+        if (parsed?.mcpServers?.courier?.env) {
+          return parsed.mcpServers.courier.env;
+        }
+
         // Support headers
-        if (parsed?.mcpServers?.courier?.headers) {
-          return parsed.mcpServers.courier.headers;
+        if (parsed?.mcpServers?.Courier?.headers) {
+          return parsed.mcpServers.Courier.headers;
+        }
+
+        if (parsed?.mcpServers?.courier?.env) {
+          return parsed.mcpServers.courier.env;
         }
 
         // Fallback: return the whole file if structure is different
