@@ -7,7 +7,7 @@ const app = express();
 app.use(express.json());
 
 // Use the handler directly as Express middleware
-app.post('/mcp', (req: Request, res: Response, next: NextFunction) => {
+app.post('/', (req: Request, res: Response, next: NextFunction) => {
 
   // The statelessHandler expects a ServerFactory with at least one argument (the request)
   // So we pass a function that takes the request and returns the server

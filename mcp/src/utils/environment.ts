@@ -63,7 +63,7 @@ export class CourierMcpConfig {
       headers?.['show_logs'] ??
       fileConfig['SHOW_LOGS'] ??
       fileConfig['show_logs'] ??
-      true;
+      false; // Off by default to keep costs down
   }
 
   public toCourierClientOptions(): CourierClientOptions {

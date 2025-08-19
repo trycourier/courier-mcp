@@ -75,7 +75,7 @@ export class SendTools extends CourierMcpTools {
       }
     );
 
-    // Send a message to a user with Courier using title/body (no template)
+    // Send a message to a list with Courier using title/body (no template)
     this.mcp.tool(
       'send_message_to_list',
       'Send a message to a list with Courier using title and body (no template)',
@@ -113,7 +113,7 @@ export class SendTools extends CourierMcpTools {
       }
     );
 
-    // Send a message to a user with Courier using title/body (no template)
+    // Send a message to a list with Courier using a template
     this.mcp.tool(
       'send_message_to_list_template',
       'Send a message to a list with Courier using a template',
@@ -135,6 +135,10 @@ export class SendTools extends CourierMcpTools {
               list_id: list_id,
             },
             data: data,
+            routing: {
+              method: method,
+              channels: channels
+            },
             template: template
           },
         };
