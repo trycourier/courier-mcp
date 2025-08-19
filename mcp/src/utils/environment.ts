@@ -1,4 +1,5 @@
 import { CourierClientOptions } from "../client/courier-client.js";
+import { LogLevel, parseLogLevel } from "./types.js";
 import fs from "fs";
 import path from "path";
 
@@ -41,7 +42,7 @@ export class CourierMcpConfig {
 
   readonly apiKey: string;
   readonly baseUrl: string;
-  readonly showLogs: boolean;
+  readonly logLevel: LogLevel;
 
   constructor(headers?: Record<string, any>) {
     const fileConfig = loadMcpConfigFile();
@@ -58,19 +59,19 @@ export class CourierMcpConfig {
       fileConfig['BASE_URL'] ||
       fileConfig['base_url'] ||
       'https://api.courier.com';
-    this.showLogs =
-      headers?.['SHOW_LOGS'] ??
-      headers?.['show_logs'] ??
-      fileConfig['SHOW_LOGS'] ??
-      fileConfig['show_logs'] ??
-      false; // Off by default to keep costs down
+    this.logLevel = parseLogLevel(
+      headers?.['LOG_LEVEL'] ||
+      headers?.['log_level'] ||
+      fileConfig['LOG_LEVEL'] ||
+      fileConfig['log_level']
+    ); // Defaults to ERROR level for minimal logging in production
   }
 
   public toCourierClientOptions(): CourierClientOptions {
     return {
       apiKey: this.apiKey,
       baseUrl: this.baseUrl,
-      showLogs: this.showLogs,
+      logLevel: this.logLevel,
     };
   }
 

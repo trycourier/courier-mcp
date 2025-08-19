@@ -33,10 +33,10 @@ async function performRequest({
 
   const fullUrl = url ? url : `${options.baseUrl}${route ?? ''}`;
 
-  // Use CourierMcpLogger for logging if showLogs is enabled
+  // Use CourierMcpLogger for logging based on log level
   const logger = new CourierMcpLogger(options);
-  logger.log('Perform Request:');
-  logger.log(
+  logger.debug('Perform Request:');
+  logger.debug(
     JSON.stringify(
       {
         url: fullUrl,

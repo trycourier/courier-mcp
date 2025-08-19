@@ -1,4 +1,5 @@
 import { CourierMcpLogger } from "../utils/logger.js";
+import { LogLevel } from "../utils/types.js";
 import { AudiencesClient } from "./audience-client.js";
 import { ProfilesClient } from "./profiles-client.js";
 import { AuthTokensClient } from "./auth-tokens-client.js";
@@ -14,7 +15,7 @@ import { MessagesClient } from "./messages-client.js";
 import { UserTokensClient } from "./user-tokens-client.js";
 
 export type CourierClientOptions = {
-  showLogs: boolean;
+  logLevel: LogLevel;
   baseUrl: string;
   apiKey: string;
 }
