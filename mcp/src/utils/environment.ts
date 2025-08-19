@@ -52,7 +52,7 @@ export class CourierMcpConfig {
   readonly baseUrl: string;
   readonly logLevel: LogLevel;
 
-  constructor(headers?: Record<string, any>) {
+  constructor(headers?: Record<string, any>, logLevel: LogLevel = LogLevel.ERROR) {
     const fileConfig = loadMcpConfigFile();
 
     this.apiKey =
@@ -61,18 +61,15 @@ export class CourierMcpConfig {
       fileConfig['API_KEY'] ||
       fileConfig['api_key'] ||
       '';
+
     this.baseUrl =
       headers?.['BASE_URL'] ||
       headers?.['base_url'] ||
       fileConfig['BASE_URL'] ||
       fileConfig['base_url'] ||
       'https://api.courier.com';
-    this.logLevel = parseLogLevel(
-      headers?.['LOG_LEVEL'] ||
-      headers?.['log_level'] ||
-      fileConfig['LOG_LEVEL'] ||
-      fileConfig['log_level']
-    ); // Defaults to ERROR level for minimal logging in production
+
+    this.logLevel = logLevel;
   }
 
   public toCourierClientOptions(): CourierClientOptions {

@@ -1,6 +1,6 @@
 import express, { Request, Response, NextFunction } from 'express';
 import { statelessHandler } from 'express-mcp-handler';
-import CourierMcpServer from 'courier-mcp';
+import CourierMcpServer, { CourierMcpLogLevel } from 'courier-mcp';
 
 // Create Express app
 const app = express();
@@ -12,7 +12,7 @@ app.post('/', (req: Request, res: Response, next: NextFunction) => {
   // The statelessHandler expects a ServerFactory with at least one argument (the request)
   // So we pass a function that takes the request and returns the server
   const createServer = () => {
-    const mcpServer = new CourierMcpServer(req.headers);
+    const mcpServer = new CourierMcpServer(req.headers, CourierMcpLogLevel.DEBUG);
 
     // When the request is done, close the MCP server if it has a close method
     res.on('finish', () => {
