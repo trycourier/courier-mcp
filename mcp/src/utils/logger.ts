@@ -1,5 +1,5 @@
 import { CourierClientOptions } from "../client/courier-client.js";
-import { LogLevel } from "./types.js";
+import { CourierMcpLogLevel } from "./types.js";
 
 export class CourierMcpLogger {
 
@@ -9,7 +9,7 @@ export class CourierMcpLogger {
     this.options = options;
   }
 
-  private shouldLog(level: LogLevel): boolean {
+  private shouldLog(level: CourierMcpLogLevel): boolean {
     return level <= this.options.logLevel;
   }
 
@@ -19,25 +19,25 @@ export class CourierMcpLogger {
   }
 
   error(message: string) {
-    if (this.shouldLog(LogLevel.ERROR)) {
+    if (this.shouldLog(CourierMcpLogLevel.ERROR)) {
       console.error(this.formatMessage('ERROR', message));
     }
   }
 
   warn(message: string) {
-    if (this.shouldLog(LogLevel.WARN)) {
+    if (this.shouldLog(CourierMcpLogLevel.WARN)) {
       console.warn(this.formatMessage('WARN', message));
     }
   }
 
   info(message: string) {
-    if (this.shouldLog(LogLevel.INFO)) {
+    if (this.shouldLog(CourierMcpLogLevel.INFO)) {
       console.info(this.formatMessage('INFO', message));
     }
   }
 
   debug(message: string) {
-    if (this.shouldLog(LogLevel.DEBUG)) {
+    if (this.shouldLog(CourierMcpLogLevel.DEBUG)) {
       console.debug(this.formatMessage('DEBUG', message));
     }
   }

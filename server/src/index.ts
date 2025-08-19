@@ -1,12 +1,15 @@
 import express, { Request, Response, NextFunction } from 'express';
 import { statelessHandler } from 'express-mcp-handler';
-import CourierMcp, { CourierMcpLogLevel } from 'courier-mcp';
+import CourierMcp, { CourierMcpLogLevel, CourierMcpConfig } from 'courier-mcp';
 
 const app = express();
 app.use(express.json());
 
 app.post('/', (req: Request, res: Response, next: NextFunction) => {
-  const createServer = () => new CourierMcp(req.headers, CourierMcpLogLevel.DEBUG);
+  const createServer = () => {
+    const config = new CourierMcpConfig(req.headers, CourierMcpLogLevel.DEBUG);
+    return new CourierMcp(config);
+  };
   return statelessHandler(createServer)(req, res, next);
 });
 

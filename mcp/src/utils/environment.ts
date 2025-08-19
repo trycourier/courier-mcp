@@ -1,7 +1,7 @@
-import { CourierClientOptions } from "../client/courier-client.js";
-import { LogLevel, parseLogLevel } from "./types.js";
 import fs from "fs";
 import path from "path";
+import { CourierClientOptions } from "../client/courier-client.js";
+import { CourierMcpLogLevel } from "./types.js";
 
 function loadMcpConfigFile(): any {
   const possiblePaths = [
@@ -50,9 +50,9 @@ export class CourierMcpConfig {
 
   readonly apiKey: string;
   readonly baseUrl: string;
-  readonly logLevel: LogLevel;
+  readonly logLevel: CourierMcpLogLevel;
 
-  constructor(headers?: Record<string, any>, logLevel: LogLevel = LogLevel.ERROR) {
+  constructor(headers?: Record<string, any>, logLevel: CourierMcpLogLevel = CourierMcpLogLevel.ERROR) {
     const fileConfig = loadMcpConfigFile();
 
     this.apiKey =

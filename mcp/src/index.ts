@@ -17,20 +17,15 @@ import { CourierClient } from './client/courier-client.js';
 import { UserTokensTools } from './tools/user-tokens-tools.js';
 import { MessagesTools } from './tools/messages-tools.js';
 import { MCP_DETAILS } from './utils/version.js';
-import { LogLevel } from './utils/types.js';
 
 // Export the CourierMcp class for use in the server
 export default class CourierMcp extends McpServer {
 
   readonly client: CourierClient;
 
-  constructor(headers?: Record<string, any>, logLevel: LogLevel = LogLevel.ERROR) {
+  constructor(config: CourierMcpConfig) {
     super(MCP_DETAILS);
-
-    // Get the Courier config from mcp.json or headers
-    const config = new CourierMcpConfig(headers, logLevel);
     this.client = new CourierClient(config.toCourierClientOptions());
-
     this.registerTools();
   }
 
@@ -54,5 +49,5 @@ export default class CourierMcp extends McpServer {
 
 }
 
-// Export the LogLevel enum for use in the server
-export { LogLevel as CourierMcpLogLevel } from './utils/types.js';
+export { CourierMcpLogLevel } from './utils/types.js';
+export { CourierMcpConfig } from './utils/environment.js';
