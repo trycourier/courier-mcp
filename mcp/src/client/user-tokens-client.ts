@@ -14,7 +14,7 @@ export class UserTokensClient {
       options: this.options,
       route: `/users/${userId}/tokens/${token}`,
     });
-    return await toJson(res);
+    return await toJson(this.options, res);
   }
 
   // GET /users/{user_id}/tokens
@@ -23,7 +23,7 @@ export class UserTokensClient {
       options: this.options,
       route: `/users/${userId}/tokens`,
     });
-    return await toJson(res);
+    return await toJson(this.options, res);
   }
 
   // PUT /users/{user_id}/tokens/{token}
@@ -87,7 +87,7 @@ export class UserTokensClient {
         ...params,
       },
     });
-    return await toJson(res);
+    return await toJson(this.options, res);
   }
 
   // PUT /users/{user_id}/tokens
@@ -97,7 +97,7 @@ export class UserTokensClient {
       route: `/users/${userId}/tokens`,
       body,
     });
-    return await toJson(res);
+    return await toJson(this.options, res);
   }
 
   // PATCH /users/{user_id}/tokens/{token}
@@ -107,7 +107,7 @@ export class UserTokensClient {
       route: `/users/${userId}/tokens/${token}`,
       body,
     });
-    return await toJson(res);
+    return await toJson(this.options, res);
   }
 
   // DELETE /users/{user_id}/tokens/{token}
@@ -116,6 +116,6 @@ export class UserTokensClient {
       options: this.options,
       route: `/users/${userId}/tokens/${token}`,
     });
-    return await toJson(res);
+    return await toJson(this.options, res);
   }
 }

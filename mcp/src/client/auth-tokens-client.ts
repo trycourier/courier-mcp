@@ -15,6 +15,6 @@ export class AuthTokensClient {
       route: `/auth/issue-token`,
       body: request,
     });
-    return await toJson(res);
+    return await toJson(this.options, res);
   }
 } 

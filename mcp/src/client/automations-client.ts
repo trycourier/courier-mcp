@@ -15,7 +15,7 @@ export class AutomationsClient {
       route: `/automations/${templateId}/invoke`,
       body: request,
     });
-    return await toJson(res);
+    return await toJson(this.options, res);
   }
 
   async invokeAdHocAutomation(request: any) {
@@ -24,6 +24,6 @@ export class AutomationsClient {
       route: `/automations/invoke`,
       body: request,
     });
-    return await toJson(res);
+    return await toJson(this.options, res);
   }
 } 

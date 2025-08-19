@@ -23,7 +23,7 @@ export class MessagesClient {
       options: this.options,
       route,
     });
-    return await toJson(res);
+    return await toJson(this.options, res);
   }
 
   // GET /messages/{message_id}
@@ -32,7 +32,7 @@ export class MessagesClient {
       options: this.options,
       route: `/messages/${messageId}`,
     });
-    return await toJson(res);
+    return await toJson(this.options, res);
   }
 
   // POST /messages/{message_id}/cancel
@@ -41,7 +41,7 @@ export class MessagesClient {
       options: this.options,
       route: `/messages/${messageId}/cancel`,
     });
-    return await toJson(res);
+    return await toJson(this.options, res);
   }
 
   // GET /messages/{message_id}/history
@@ -50,7 +50,7 @@ export class MessagesClient {
       options: this.options,
       route: `/messages/${messageId}/history`,
     });
-    return await toJson(res);
+    return await toJson(this.options, res);
   }
 
   // GET /messages/{message_id}/output
@@ -59,7 +59,7 @@ export class MessagesClient {
       options: this.options,
       route: `/messages/${messageId}/output`,
     });
-    return await toJson(res);
+    return await toJson(this.options, res);
   }
 
   // PUT /requests/{request_id}/archive
@@ -68,6 +68,6 @@ export class MessagesClient {
       options: this.options,
       route: `/requests/${requestId}/archive`,
     });
-    return await toJson(res);
+    return await toJson(this.options, res);
   }
 }

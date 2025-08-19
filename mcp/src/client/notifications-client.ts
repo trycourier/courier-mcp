@@ -23,7 +23,7 @@ export class NotificationsClient {
       options: this.options,
       route,
     });
-    return await toJson(res);
+    return await toJson(this.options, res);
   }
 
   async getContent(notificationId: string) {
@@ -31,7 +31,7 @@ export class NotificationsClient {
       options: this.options,
       route: `/notifications/${notificationId}/content`,
     });
-    return await toJson(res);
+    return await toJson(this.options, res);
   }
 
   async getDraftContent(notificationId: string) {
@@ -39,7 +39,7 @@ export class NotificationsClient {
       options: this.options,
       route: `/notifications/${notificationId}/draft/content`,
     });
-    return await toJson(res);
+    return await toJson(this.options, res);
   }
 
   async getSubmissionChecks(notificationId: string, submissionId: string) {
@@ -47,6 +47,6 @@ export class NotificationsClient {
       options: this.options,
       route: `/notifications/${notificationId}/${submissionId}/checks`,
     });
-    return await toJson(res);
+    return await toJson(this.options, res);
   }
 } 

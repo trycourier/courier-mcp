@@ -14,7 +14,7 @@ export class AuditEventsClient {
       options: this.options,
       route: `/audit-events/${auditEventId}`,
     });
-    return await toJson(res);
+    return await toJson(this.options, res);
   }
 
   async list(request?: { cursor?: string, limit?: number }) {
@@ -30,6 +30,6 @@ export class AuditEventsClient {
       options: this.options,
       route,
     });
-    return await toJson(res);
+    return await toJson(this.options, res);
   }
 } 

@@ -15,7 +15,7 @@ export class BrandsClient {
       route: `/brands`,
       body: request,
     });
-    return await toJson(res);
+    return await toJson(this.options, res);
   }
 
   async get(brandId: string) {
@@ -23,7 +23,7 @@ export class BrandsClient {
       options: this.options,
       route: `/brands/${brandId}`,
     });
-    return await toJson(res);
+    return await toJson(this.options, res);
   }
 
   async list(request?: { cursor?: string, limit?: number }) {
@@ -39,6 +39,6 @@ export class BrandsClient {
       options: this.options,
       route,
     });
-    return await toJson(res);
+    return await toJson(this.options, res);
   }
 } 
