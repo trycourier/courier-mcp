@@ -15,7 +15,7 @@ export class BulkClient {
       route: `/bulk`,
       body: request,
     });
-    return await toJson(res);
+    return await toJson(this.options, res);
   }
 
   async ingestUsers(jobId: string, request: any) {
@@ -24,7 +24,7 @@ export class BulkClient {
       route: `/bulk/${jobId}`,
       body: request,
     });
-    return await toJson(res);
+    return await toJson(this.options, res);
   }
 
   async runJob(jobId: string) {
@@ -32,7 +32,7 @@ export class BulkClient {
       options: this.options,
       route: `/bulk/${jobId}/run`,
     });
-    return await toJson(res);
+    return await toJson(this.options, res);
   }
 
   async getJob(jobId: string) {
@@ -40,7 +40,7 @@ export class BulkClient {
       options: this.options,
       route: `/bulk/${jobId}`,
     });
-    return await toJson(res);
+    return await toJson(this.options, res);
   }
 
   async getUsers(jobId: string, request?: { cursor?: string, limit?: number }) {
@@ -57,6 +57,6 @@ export class BulkClient {
       options: this.options,
       route,
     });
-    return await toJson(res);
+    return await toJson(this.options, res);
   }
 } 

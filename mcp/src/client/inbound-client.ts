@@ -15,6 +15,6 @@ export class InboundClient {
       route: `/inbound/track`,
       body: request,
     });
-    return await toJson(res);
+    return await toJson(this.options, res);
   }
 } 

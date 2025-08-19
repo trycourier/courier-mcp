@@ -36,7 +36,7 @@ export class DocsTools extends CourierMcpTools {
       }),
       this.getJwt(user_id)
     ]);
-    const text = await toText(res);
+    const text = await toText(this.mcp.client.options, res);
     return this.appendJwtToResponse(user_id, jwt, text);
   }
 
@@ -45,7 +45,7 @@ export class DocsTools extends CourierMcpTools {
       options: this.mcp.client.options,
       url: url,
     });
-    return await toText(res);
+    return await toText(this.mcp.client.options, res);
   }
 
   public register() {

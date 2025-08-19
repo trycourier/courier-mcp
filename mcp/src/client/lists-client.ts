@@ -23,7 +23,7 @@ export class ListsClient {
       options: this.options,
       route,
     });
-    return await toJson(res);
+    return await toJson(this.options, res);
   }
 
   async get(listId: string) {
@@ -31,7 +31,7 @@ export class ListsClient {
       options: this.options,
       route: `/lists/${listId}`,
     });
-    return await toJson(res);
+    return await toJson(this.options, res);
   }
 
   async update(listId: string, request: any) {
@@ -40,7 +40,7 @@ export class ListsClient {
       route: `/lists/${listId}`,
       body: request,
     });
-    return await toJson(res);
+    return await toJson(this.options, res);
   }
 
   async getSubscribers(listId: string, request?: { cursor?: string, limit?: number }) {
@@ -57,7 +57,7 @@ export class ListsClient {
       options: this.options,
       route,
     });
-    return await toJson(res);
+    return await toJson(this.options, res);
   }
 
   async subscribe(listId: string, userId: string, request?: any) {
@@ -66,7 +66,7 @@ export class ListsClient {
       route: `/lists/${listId}/subscriptions/${userId}`,
       body: request || {},
     });
-    return await toJson(res);
+    return await toJson(this.options, res);
   }
 
   async unsubscribe(listId: string, userId: string) {
@@ -74,6 +74,6 @@ export class ListsClient {
       options: this.options,
       route: `/lists/${listId}/subscriptions/${userId}`,
     });
-    return await toJson(res);
+    return await toJson(this.options, res);
   }
 } 

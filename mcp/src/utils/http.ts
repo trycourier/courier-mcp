@@ -1,4 +1,4 @@
-import { CourierClientOptions } from '../client/courier-client.js';
+import { CourierClient, CourierClientOptions } from '../client/courier-client.js';
 import { CourierMcpLogger } from './logger.js';
 import { TextContent } from './types.js';
 import { USER_AGENT } from './version.js';
@@ -66,7 +66,7 @@ async function performRequest({
 
 }
 
-export const toJson = async (res: Response): Promise<TextContent> => {
+export const toJson = async (options: CourierClientOptions, res: Response): Promise<TextContent> => {
   try {
     const data = await res.json();
     return {
@@ -78,6 +78,13 @@ export const toJson = async (res: Response): Promise<TextContent> => {
       ],
     };
   } catch (e) {
+
+    // Log the error
+    const logger = new CourierMcpLogger(options);
+    logger.error('Error parsing response to JSON');
+    logger.error(JSON.stringify(e, null, 2));
+
+    // Return an empty response
     return {
       content: [
         {
@@ -89,7 +96,7 @@ export const toJson = async (res: Response): Promise<TextContent> => {
   }
 }
 
-export const toText = async (res: Response): Promise<TextContent> => {
+export const toText = async (_options: CourierClientOptions, res: Response): Promise<TextContent> => {
   const text = await res.text();
   return {
     content: [

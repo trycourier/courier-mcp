@@ -14,7 +14,7 @@ export class ProfilesClient {
       options: this.options,
       route: `/profiles/${userId}`,
     });
-    return await toJson(res);
+    return await toJson(this.options, res);
   }
 
   async create(userId: string, request: any) {
@@ -25,7 +25,7 @@ export class ProfilesClient {
         profile: request,
       },
     });
-    return await toJson(res);
+    return await toJson(this.options, res);
   }
 
   async replace(userId: string, request: any) {
@@ -36,7 +36,7 @@ export class ProfilesClient {
         profile: request,
       },
     });
-    return await toJson(res);
+    return await toJson(this.options, res);
   }
 
   async mergeProfile(userId: string, request: any) {
@@ -47,7 +47,7 @@ export class ProfilesClient {
         profile: request,
       },
     });
-    return await toJson(res);
+    return await toJson(this.options, res);
   }
 
   async delete(userId: string) {
@@ -55,7 +55,7 @@ export class ProfilesClient {
       options: this.options,
       route: `/profiles/${userId}`,
     });
-    return await toJson(res);
+    return await toJson(this.options, res);
   }
 
   async getListSubscriptions(userId: string, request?: any) {
@@ -68,7 +68,7 @@ export class ProfilesClient {
       options: this.options,
       route,
     });
-    return await toJson(res);
+    return await toJson(this.options, res);
   }
 
   async subscribeToLists(userId: string, request: any) {
@@ -77,7 +77,7 @@ export class ProfilesClient {
       route: `/profiles/${userId}/lists`,
       body: request,
     });
-    return await toJson(res);
+    return await toJson(this.options, res);
   }
 
   async deleteListSubscription(userId: string) {
@@ -85,7 +85,7 @@ export class ProfilesClient {
       options: this.options,
       route: `/profiles/${userId}/lists`,
     });
-    return await toJson(res);
+    return await toJson(this.options, res);
   }
 
 }

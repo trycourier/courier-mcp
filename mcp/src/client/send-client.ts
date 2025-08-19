@@ -15,6 +15,6 @@ export class SendClient {
       route: `/send`,
       body: request,
     });
-    return await toJson(res);
+    return await toJson(this.options, res);
   }
 } 

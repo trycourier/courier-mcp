@@ -15,7 +15,7 @@ export class AudiencesClient {
       options: this.options,
       route: `/audiences/${audienceId}`,
     });
-    return await toJson(res);
+    return await toJson(this.options, res);
   }
 
   // Create or update an audience by its ID
@@ -25,7 +25,7 @@ export class AudiencesClient {
       route: `/audiences/${audienceId}`,
       body: request,
     });
-    return await toJson(res);
+    return await toJson(this.options, res);
   }
 
   // Delete an audience by its ID
@@ -34,7 +34,7 @@ export class AudiencesClient {
       options: this.options,
       route: `/audiences/${audienceId}`,
     });
-    return await toJson(res);
+    return await toJson(this.options, res);
   }
 
   // List members of an audience
@@ -48,7 +48,7 @@ export class AudiencesClient {
       ? `${this.options.baseUrl}/audiences/${audienceId}/members?${queryParams}`
       : `${this.options.baseUrl}/audiences/${audienceId}/members`;
     const res = await Http.get({ options: this.options, route });
-    return await toJson(res);
+    return await toJson(this.options, res);
   }
 
   // List all audiences
@@ -62,6 +62,6 @@ export class AudiencesClient {
       ? `${this.options.baseUrl}/audiences?${queryParams}`
       : `${this.options.baseUrl}/audiences`;
     const res = await Http.get({ options: this.options, route });
-    return await toJson(res);
+    return await toJson(this.options, res);
   }
 }
