@@ -13,7 +13,7 @@ app.post('/', (req: Request, res: Response, next: NextFunction) => {
   return statelessHandler(createServer)(req, res, next);
 });
 
-app.get('/healthz', (req, res) => {
+app.get('/health', (req, res) => {
   res.status(200).send('OK');
 });
 
