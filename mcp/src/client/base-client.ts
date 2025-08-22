@@ -1,14 +1,17 @@
 import Http, { HttpMethod } from "../utils/http.js";
+import { CourierMcpLogger } from "../utils/logger.js";
 import { TextContent } from "../utils/types.js";
 import { USER_AGENT } from "../utils/version.js";
-import { CourierClient } from "./courier-client.js";
+import { CourierClientOptions } from "./courier-client.js";
 
 export class BaseClient {
 
-  readonly client: CourierClient;
+  private readonly options: CourierClientOptions;
+  readonly logger: CourierMcpLogger;
 
-  constructor(client: CourierClient) {
-    this.client = client;
+  constructor(options: CourierClientOptions) {
+    this.options = options;
+    this.logger = new CourierMcpLogger(options);
   }
 
   protected request(
@@ -19,16 +22,16 @@ export class BaseClient {
 
     // Create the headers
     const headers = {
-      'Authorization': `Bearer ${this.client.options.apiKey}`,
+      'Authorization': `Bearer ${this.options.apiKey}`,
       'User-Agent': USER_AGENT,
     };
 
     // Create the full URL
-    const fullUrl = `${this.client.options.baseUrl}${url}`;
+    const fullUrl = `${this.options.baseUrl}${url}`;
 
     // Log the request
-    this.client.logger.debug(`Request: ${method} ${fullUrl}`);
-    this.client.logger.debug(`Body: ${JSON.stringify(body, null, 2)}`);
+    this.logger.debug(`Request: ${method} ${fullUrl}`);
+    this.logger.debug(`Body: ${JSON.stringify(body, null, 2)}`);
 
     // Perform the request
     switch (method) {
@@ -62,8 +65,8 @@ export class BaseClient {
     } catch (e) {
 
       // Log the error
-      this.client.logger.error('Error parsing response to JSON');
-      this.client.logger.error(JSON.stringify(e, null, 2));
+      this.logger.error('Error parsing response to JSON');
+      this.logger.error(JSON.stringify(e, null, 2));
 
       // Return an empty response
       return {

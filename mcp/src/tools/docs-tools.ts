@@ -2,12 +2,19 @@ import z from "zod";
 import { CourierMcpTools } from "./tools.js";
 import Http from "../utils/http.js";
 import { TextContent } from "../utils/types.js";
+import CourierMcp from "../index.js";
+import { CourierMcpLogger } from "../utils/logger.js";
 
 export class DocsTools extends CourierMcpTools {
 
-  // Default user ID for the installation guides
+  private readonly logger: CourierMcpLogger;
   private readonly DEFAULT_USER_ID = 'example_user';
   private readonly BASE_DOCS_URL = 'https://raw.githubusercontent.com/trycourier/courier-mcp/refs/heads/main/docs/';
+
+  constructor(mcp: CourierMcp) {
+    super(mcp);
+    this.logger = new CourierMcpLogger(mcp.client.options);
+  }
 
   // This grabs the docs from url and gets an example jwt, then it will combine them into a single response to the LLM
   private async getDocsWithJwt(url: string, user_id: string): Promise<TextContent> {
@@ -15,8 +22,6 @@ export class DocsTools extends CourierMcpTools {
       this.getDocs(url),
       this.getJwt(user_id)
     ]);
-    this.mcp.client.logger.debug(`Doc URL: ${url}`);
-    this.mcp.client.logger.debug(`Doc Text: ${docs}`);
     return this.combineJwtAndDocs(user_id, jwt, docs);
   }
 
@@ -24,8 +29,8 @@ export class DocsTools extends CourierMcpTools {
   private async getDocs(url: string): Promise<string> {
     const res = await Http.get({ url });
     const text = await res.text();
-    this.mcp.client.logger.debug(`Doc URL: ${url}`);
-    this.mcp.client.logger.debug(`Doc Text: ${text}`);
+    this.logger.debug(`Docs fetched from URL: ${url}`);
+    this.logger.debug(`Docs text: ${text}`);
     return text;
   }
 

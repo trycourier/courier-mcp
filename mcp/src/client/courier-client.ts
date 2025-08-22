@@ -22,7 +22,6 @@ export type CourierClientOptions = {
 
 export class CourierClient {
   readonly options: CourierClientOptions;
-  readonly logger: CourierMcpLogger;
   readonly profiles: ProfilesClient;
   readonly audiences: AudiencesClient;
   readonly authTokens: AuthTokensClient;
@@ -39,20 +38,19 @@ export class CourierClient {
 
   constructor(options: CourierClientOptions) {
     this.options = options;
-    this.logger = new CourierMcpLogger(options);
-    this.profiles = new ProfilesClient(this);
-    this.audiences = new AudiencesClient(this);
-    this.authTokens = new AuthTokensClient(this);
-    this.auditEvents = new AuditEventsClient(this);
-    this.automations = new AutomationsClient(this);
-    this.brands = new BrandsClient(this);
-    this.bulk = new BulkClient(this);
-    this.inbound = new InboundClient(this);
-    this.lists = new ListsClient(this);
-    this.notifications = new NotificationsClient(this);
-    this.send = new SendClient(this);
-    this.messages = new MessagesClient(this);
-    this.userTokens = new UserTokensClient(this);
+    this.profiles = new ProfilesClient(options);
+    this.audiences = new AudiencesClient(options);
+    this.authTokens = new AuthTokensClient(options);
+    this.auditEvents = new AuditEventsClient(options);
+    this.automations = new AutomationsClient(options);
+    this.brands = new BrandsClient(options);
+    this.bulk = new BulkClient(options);
+    this.inbound = new InboundClient(options);
+    this.lists = new ListsClient(options);
+    this.notifications = new NotificationsClient(options);
+    this.send = new SendClient(options);
+    this.messages = new MessagesClient(options);
+    this.userTokens = new UserTokensClient(options);
   }
 
 }
