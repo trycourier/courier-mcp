@@ -12,6 +12,7 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 
 // Tool imports: Each tool provides a set of API endpoints for a specific Courier feature.
+import { CourierMcpTools } from './tools/courier-mcp-tools.js';
 import { ConfigTools } from './tools/config-tools.js';
 import { SendTools } from './tools/send-tools.js';
 import { DocsTools } from './tools/docs-tools.js';
@@ -37,7 +38,6 @@ import { MCP_DETAILS } from './utils/version.js';
  * 
  * Usage:
  *   const mcp = new CourierMcp(new CourierMcpConfig({ ... }));
- *   mcp.listen(...);
  */
 export default class CourierMcp extends McpServer {
 
@@ -86,9 +86,8 @@ export default class CourierMcp extends McpServer {
 // Export core configuration, log level enum, and tools utility for external usage
 export { CourierMcpConfig };
 export { CourierMcpLogLevel } from './utils/types.js';
-export { CourierMcpTools } from './tools/tools.js';
 
-// Export all tool classes and the CourierClient for advanced/extensible usage
+// Export all tool classes for external usage
 export {
   SendTools,
   DocsTools,
@@ -107,3 +106,7 @@ export {
   UserTokensTools,
   MessagesTools
 };
+
+// Export the tools registry for external usage
+import { CourierMcpToolsRegistry } from './utils/courier-mcp-tools-registry.js';
+export { CourierMcpToolsRegistry as CourierMcpTools };

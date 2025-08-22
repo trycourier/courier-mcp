@@ -1,6 +1,6 @@
 import { ZodRawShape } from "zod";
-import CourierMcp, { AudienceTools, AuditEventsTools, AuthTokenTools, AutomationsTools, BrandsTools, BulkTools, ConfigTools, DocsTools, InboundTools, ListsTools, MessagesTools, NotificationsTools, ProfilesTools, SendTools, UserTokensTools } from "../index.js";
 import { ToolCallback } from "@modelcontextprotocol/sdk/server/mcp.js";
+import CourierMcp from "../index.js";
 
 export class CourierMcpTools {
 
@@ -38,29 +38,5 @@ export class CourierMcpTools {
     }
 
   }
-
-  // The default tools the MCP server will register
-  static readonly defaultTools: string[] = [
-    ...AudienceTools.tools,
-    ...AuditEventsTools.tools,
-    ...AuthTokenTools.tools,
-    ...AutomationsTools.tools,
-    ...BrandsTools.tools,
-    ...BulkTools.tools,
-    ...DocsTools.tools,
-    ...InboundTools.tools,
-    ...ListsTools.tools,
-    ...MessagesTools.tools,
-    ...NotificationsTools.tools,
-    ...ProfilesTools.tools,
-    ...SendTools.tools,
-    ...UserTokensTools.tools,
-  ];
-
-  // The tools that are available to the MCP server
-  static readonly allAvailableTools: string[] = [
-    ...this.defaultTools,
-    ...ConfigTools.tools,
-  ];
 
 }

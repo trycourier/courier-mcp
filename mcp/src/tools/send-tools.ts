@@ -1,5 +1,5 @@
 import z from "zod";
-import { CourierMcpTools } from "./tools.js";
+import { CourierMcpTools } from "./courier-mcp-tools.js";
 
 export class SendTools extends CourierMcpTools {
 

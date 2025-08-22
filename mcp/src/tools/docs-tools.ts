@@ -1,5 +1,5 @@
 import z from "zod";
-import { CourierMcpTools } from "./tools.js";
+import { CourierMcpTools } from "./courier-mcp-tools.js";
 import { performRequest } from "../utils/http.js";
 import { TextContent } from "../utils/types.js";
 import CourierMcp from "../index.js";

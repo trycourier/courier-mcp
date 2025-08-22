@@ -1,7 +1,6 @@
 import express, { Request, Response, NextFunction } from 'express';
 import { statelessHandler } from 'express-mcp-handler';
-import CourierMcp, { CourierMcpLogLevel, CourierMcpConfig, ConfigTools } from 'courier-mcp';
-import { CourierMcpTools } from 'courier-mcp/dist/tools/tools';
+import CourierMcp, { CourierMcpLogLevel, CourierMcpConfig, CourierMcpTools } from 'courier-mcp';
 
 const app = express();
 app.use(express.json());
