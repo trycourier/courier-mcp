@@ -4,12 +4,12 @@ export class BrandsClient extends BaseClient {
 
   async create(request: any) {
     const res = await this.request('POST', `/brands`, request);
-    return await this.toJson(res);
+    return await this.json(res);
   }
 
   async get(brandId: string) {
     const res = await this.request('GET', `/brands/${brandId}`);
-    return await this.toJson(res);
+    return await this.json(res);
   }
 
   async list(request?: { cursor?: string, limit?: number }) {
@@ -22,6 +22,6 @@ export class BrandsClient extends BaseClient {
       ? `/brands?${queryParams}`
       : `/brands`;
     const res = await this.request('GET', route);
-    return await this.toJson(res);
+    return await this.json(res);
   }
 } 

@@ -51,7 +51,7 @@ export class BaseClient {
 
   }
 
-  protected async toJson(res: Response): Promise<TextContent> {
+  protected async json(res: Response): Promise<TextContent> {
     try {
       const data = await res.json();
       return {

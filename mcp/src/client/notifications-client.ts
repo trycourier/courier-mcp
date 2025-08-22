@@ -13,21 +13,21 @@ export class NotificationsClient extends BaseClient {
       : `/notifications`;
 
     const res = await this.request('GET', route);
-    return await this.toJson(res);
+    return await this.json(res);
   }
 
   async getContent(notificationId: string) {
     const res = await this.request('GET', `/notifications/${notificationId}/content`);
-    return await this.toJson(res);
+    return await this.json(res);
   }
 
   async getDraftContent(notificationId: string) {
     const res = await this.request('GET', `/notifications/${notificationId}/draft/content`);
-    return await this.toJson(res);
+    return await this.json(res);
   }
 
   async getSubmissionChecks(notificationId: string, submissionId: string) {
     const res = await this.request('GET', `/notifications/${notificationId}/${submissionId}/checks`);
-    return await this.toJson(res);
+    return await this.json(res);
   }
 } 

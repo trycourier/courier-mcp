@@ -5,13 +5,13 @@ export class UserTokensClient extends BaseClient {
   // GET /users/{user_id}/tokens/{token}
   async getToken(userId: string, token: string) {
     const res = await this.request('GET', `/users/${userId}/tokens/${token}`);
-    return await this.toJson(res);
+    return await this.json(res);
   }
 
   // GET /users/{user_id}/tokens
   async listTokens(userId: string) {
     const res = await this.request('GET', `/users/${userId}/tokens`);
-    return await this.toJson(res);
+    return await this.json(res);
   }
 
   // PUT /users/{user_id}/tokens/{token}
@@ -71,24 +71,24 @@ export class UserTokensClient extends BaseClient {
       provider_key: provider_key,
       ...params,
     });
-    return await this.toJson(res);
+    return await this.json(res);
   }
 
   // PUT /users/{user_id}/tokens
   async putTokens(userId: string, body: any) {
     const res = await this.request('PUT', `/users/${userId}/tokens`, body);
-    return await this.toJson(res);
+    return await this.json(res);
   }
 
   // PATCH /users/{user_id}/tokens/{token}
   async patchToken(userId: string, token: string, body: any) {
     const res = await this.request('PATCH', `/users/${userId}/tokens/${token}`, body);
-    return await this.toJson(res);
+    return await this.json(res);
   }
 
   // DELETE /users/{user_id}/tokens/{token}
   async deleteToken(userId: string, token: string) {
     const res = await this.request('DELETE', `/users/${userId}/tokens/${token}`);
-    return await this.toJson(res);
+    return await this.json(res);
   }
 }

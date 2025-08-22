@@ -13,17 +13,17 @@ export class ListsClient extends BaseClient {
       : `/lists`;
 
     const res = await this.request('GET', route);
-    return await this.toJson(res);
+    return await this.json(res);
   }
 
   async get(listId: string) {
     const res = await this.request('GET', `/lists/${listId}`);
-    return await this.toJson(res);
+    return await this.json(res);
   }
 
   async update(listId: string, request: any) {
     const res = await this.request('PUT', `/lists/${listId}`, request);
-    return await this.toJson(res);
+    return await this.json(res);
   }
 
   async getSubscribers(listId: string, request?: { cursor?: string, limit?: number }) {
@@ -37,16 +37,16 @@ export class ListsClient extends BaseClient {
       : `/lists/${listId}/subscriptions`;
 
     const res = await this.request('GET', route);
-    return await this.toJson(res);
+    return await this.json(res);
   }
 
   async subscribe(listId: string, userId: string, request?: any) {
     const res = await this.request('PUT', `/lists/${listId}/subscriptions/${userId}`, request || {});
-    return await this.toJson(res);
+    return await this.json(res);
   }
 
   async unsubscribe(listId: string, userId: string) {
     const res = await this.request('DELETE', `/lists/${listId}/subscriptions/${userId}`);
-    return await this.toJson(res);
+    return await this.json(res);
   }
 } 

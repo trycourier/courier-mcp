@@ -5,19 +5,19 @@ export class AudiencesClient extends BaseClient {
   // Get an audience by its ID
   async get(audienceId: string) {
     const res = await this.request('GET', `/audiences/${audienceId}`);
-    return await this.toJson(res);
+    return await this.json(res);
   }
 
   // Create or update an audience by its ID
   async update(audienceId: string, request: any) {
     const res = await this.request('PUT', `/audiences/${audienceId}`, request);
-    return await this.toJson(res);
+    return await this.json(res);
   }
 
   // Delete an audience by its ID
   async delete(audienceId: string) {
     const res = await this.request('DELETE', `/audiences/${audienceId}`);
-    return await this.toJson(res);
+    return await this.json(res);
   }
 
   // List members of an audience
@@ -31,7 +31,7 @@ export class AudiencesClient extends BaseClient {
       ? `/audiences/${audienceId}/members?${queryParams}`
       : `/audiences/${audienceId}/members`;
     const res = await this.request('GET', route);
-    return await this.toJson(res);
+    return await this.json(res);
   }
 
   // List all audiences
@@ -45,6 +45,6 @@ export class AudiencesClient extends BaseClient {
       ? `/audiences?${queryParams}`
       : `/audiences`;
     const res = await this.request('GET', route);
-    return await this.toJson(res);
+    return await this.json(res);
   }
 }

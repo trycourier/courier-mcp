@@ -4,22 +4,22 @@ export class BulkClient extends BaseClient {
 
   async createJob(request: any) {
     const res = await this.request('POST', `/bulk`, request);
-    return await this.toJson(res);
+    return await this.json(res);
   }
 
   async ingestUsers(jobId: string, request: any) {
     const res = await this.request('POST', `/bulk/${jobId}`, request);
-    return await this.toJson(res);
+    return await this.json(res);
   }
 
   async runJob(jobId: string) {
     const res = await this.request('POST', `/bulk/${jobId}/run`);
-    return await this.toJson(res);
+    return await this.json(res);
   }
 
   async getJob(jobId: string) {
     const res = await this.request('GET', `/bulk/${jobId}`);
-    return await this.toJson(res);
+    return await this.json(res);
   }
 
   async getUsers(jobId: string, request?: { cursor?: string, limit?: number }) {
@@ -33,6 +33,6 @@ export class BulkClient extends BaseClient {
       : `/bulk/${jobId}/users`;
 
     const res = await this.request('GET', route);
-    return await this.toJson(res);
+    return await this.json(res);
   }
 } 
