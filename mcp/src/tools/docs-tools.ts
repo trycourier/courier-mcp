@@ -1,16 +1,15 @@
 import z from "zod";
 import { CourierMcpTools } from "./tools.js";
 import Http from "../utils/http.js";
-import { TextContent } from "../utils/types.js";
 
 export class DocsTools extends CourierMcpTools {
 
   // Default user ID for the installation guides
   private readonly DEFAULT_USER_ID = 'example_user';
-  private readonly BASE_DOCS_URL = 'https://raw.githubusercontent.com/trycourier/courier-mcp/refs/heads/main/docs/';
+  private readonly BASE_DOCS_URL = 'https://raw.githubusercontent.com/trycourier/courier-mcp/refs/heads/main/docs';
 
   // This grabs the docs from url and gets an example jwt, then it will combine them into a single response to the LLM
-  private async getDocsWithJwt(url: string, user_id: string): Promise<TextContent> {
+  private async getDocsAndSampleJwt(url: string, user_id: string): Promise<string> {
     const [docs, jwt] = await Promise.all([
       this.getDocs(url),
       this.getJwt(user_id)
@@ -39,103 +38,58 @@ export class DocsTools extends CourierMcpTools {
   };
 
   // Combines JWT and docs into a single response
-  private combineJwtAndDocs(user_id: string, jwt: string, docs: string): TextContent {
-    return {
-      content: [
-        {
-          type: 'text' as const,
-          text: `${user_id} JWT Access Token: ${jwt}\n\n${docs}`,
-        },
-      ],
-    }
+  private combineJwtAndDocs(user_id: string, jwt: string, docs: string): string {
+    return `${user_id} JWT Access Token: ${jwt}\n\n${docs}`;
   }
 
   public register() {
 
-    // Flutter installation guide
+    // Courier installation guide
     this.mcp.registerTool(
-      'flutter_installation_guide',
+      'courier_installation_guide',
       {
-        title: 'Courier Flutter SDK Installation Guide',
-        description: 'Example instructions to integrate Courier Inbox, Preferences, and Push Notifications into your Flutter application.',
+        title: 'Courier SDK Installation Guide',
+        description: 'Example instructions to integrate Courier Inbox, Preferences, and Push Notifications and more for many different languages and frameworks.',
         inputSchema: {
-          user_id: z.string().describe('The unique identifier for the user.').default(this.DEFAULT_USER_ID),
+          platform: z.enum([
+            'nodejs',
+            'python',
+            'react',
+            'ios',
+            'android',
+            'flutter',
+            'react native'
+          ]).describe('The platform you are using to integrate Courier. Supported values: nodejs, python, react, ios, android, flutter, react native.'),
+          user_id: z.string().describe('The unique identifier for the user.').optional(),
         },
       },
-      async ({ user_id }) => {
-        return await this.getDocsWithJwt(`${this.BASE_DOCS_URL}installation_guide_flutter.md`, user_id);
-      }
-    );
-
-    // React Native installation guide
-    this.mcp.registerTool(
-      'react_native_installation_guide',
-      {
-        title: 'Courier React Native SDK Installation Guide',
-        description: 'Instructions to integrate Courier into your React Native application.',
-        inputSchema: {
-          user_id: z.string().describe('The unique identifier for the user.').default(this.DEFAULT_USER_ID),
-        },
-      },
-      async ({ user_id }) => {
-        return await this.getDocsWithJwt(`${this.BASE_DOCS_URL}installation_guide_react_native.md`, user_id);
-      }
-    );
-
-    // Android installation guide
-    this.mcp.registerTool(
-      'android_installation_guide',
-      {
-        title: 'Courier Android SDK Installation Guide',
-        description: 'Instructions to integrate Courier into your native Android application.',
-        inputSchema: {
-          user_id: z.string().describe('The unique identifier for the user.').default(this.DEFAULT_USER_ID),
-        },
-      },
-      async ({ user_id }) => {
-        return await this.getDocsWithJwt(`${this.BASE_DOCS_URL}installation_guide_android.md`, user_id);
-      }
-    );
-
-    // iOS installation guide
-    this.mcp.registerTool(
-      'ios_installation_guide',
-      {
-        title: 'Courier iOS SDK Installation Guide',
-        description: 'Instructions to integrate Courier into your native iOS application.',
-        inputSchema: {
-          user_id: z.string().describe('The unique identifier for the user.').default(this.DEFAULT_USER_ID),
-        },
-      },
-      async ({ user_id }) => {
-        return await this.getDocsWithJwt(`${this.BASE_DOCS_URL}installation_guide_ios.md`, user_id);
-      }
-    );
-
-    // React (Web) installation guide
-    this.mcp.registerTool(
-      'react_installation_guide',
-      {
-        title: 'Courier React SDK Installation Guide',
-        description: 'Instructions to integrate Courier into your React web application.',
-        inputSchema: {
-          user_id: z.string().describe('The unique identifier for the user.').default(this.DEFAULT_USER_ID),
-        },
-      },
-      async ({ user_id }) => {
-        return await this.getDocsWithJwt(`${this.BASE_DOCS_URL}installation_guide_react.md`, user_id);
-      }
-    );
-
-    // Node.js installation guide
-    this.mcp.registerTool(
-      'node_installation_guide',
-      {
-        title: 'Courier Node.js SDK Installation Guide',
-        description: 'Instructions to send notifications using Courier from a Node.js backend.',
-      },
-      async () => {
-        const docs = await this.getDocs(`${this.BASE_DOCS_URL}installation_guide_node.md`);
+      async ({ platform, user_id }) => {
+        let docs: string;
+        switch (platform) {
+          case 'nodejs':
+            docs = await this.getDocs(`${this.BASE_DOCS_URL}/installation_guide_node.md`);
+            break;
+          case 'python':
+            docs = await this.getDocs(`${this.BASE_DOCS_URL}/installation_guide_python.md`);
+            break;
+          case 'react':
+            docs = await this.getDocsAndSampleJwt(`${this.BASE_DOCS_URL}/installation_guide_react.md`, user_id ?? this.DEFAULT_USER_ID);
+            break;
+          case 'ios':
+            docs = await this.getDocsAndSampleJwt(`${this.BASE_DOCS_URL}/installation_guide_ios.md`, user_id ?? this.DEFAULT_USER_ID);
+            break;
+          case 'android':
+            docs = await this.getDocsAndSampleJwt(`${this.BASE_DOCS_URL}/installation_guide_android.md`, user_id ?? this.DEFAULT_USER_ID);
+            break;
+          case 'flutter':
+            docs = await this.getDocsAndSampleJwt(`${this.BASE_DOCS_URL}/installation_guide_flutter.md`, user_id ?? this.DEFAULT_USER_ID);
+            break;
+          case 'react native':
+            docs = await this.getDocsAndSampleJwt(`${this.BASE_DOCS_URL}/installation_guide_react_native.md`, user_id ?? this.DEFAULT_USER_ID);
+            break;
+          default:
+            throw new Error(`Unsupported platform: ${platform}`);
+        }
         return {
           content: [
             {
@@ -143,27 +97,7 @@ export class DocsTools extends CourierMcpTools {
               text: docs,
             },
           ],
-        };
-      }
-    );
-
-    // Python installation guide
-    this.mcp.registerTool(
-      'python_installation_guide',
-      {
-        title: 'Courier Python SDK Installation Guide',
-        description: 'Instructions to send notifications using Courier from a Python backend.',
-      },
-      async () => {
-        const docs = await this.getDocs(`${this.BASE_DOCS_URL}installation_guide_python.md`);
-        return {
-          content: [
-            {
-              type: 'text' as const,
-              text: docs,
-            },
-          ],
-        };
+        }
       }
     );
   }
