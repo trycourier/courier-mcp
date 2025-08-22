@@ -5,8 +5,8 @@ export class AuthTokenTools extends CourierMcpTools {
 
   public register() {
     this.mcp.tool(
-      'issue_token',
-      'Generate a JWT authentication token for Courier.',
+      'generate_jwt_for_user',
+      'Generate a JWT authentication token for a user.',
       {
         user_id: z.string(),
         scopes: z.array(z.string()).default(['write:user-tokens', 'inbox:read:messages', 'inbox:write:events', 'read:preferences', 'write:preferences', 'read:brands']),

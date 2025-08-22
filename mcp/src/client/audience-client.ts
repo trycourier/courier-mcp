@@ -1,34 +1,23 @@
-import Http, { toJson } from "../utils/http.js";
 import { BaseClient } from "./base-client.js";
 
 export class AudiencesClient extends BaseClient {
 
   // Get an audience by its ID
   async get(audienceId: string) {
-    const res = await Http.get({
-      client: this.client,
-      route: `/audiences/${audienceId}`,
-    });
-    return await toJson(this.client, res);
+    const res = await this.request('GET', `/audiences/${audienceId}`);
+    return await this.toJson(res);
   }
 
   // Create or update an audience by its ID
   async update(audienceId: string, request: any) {
-    const res = await Http.put({
-      client: this.client,
-      route: `/audiences/${audienceId}`,
-      body: request,
-    });
-    return await toJson(this.client, res);
+    const res = await this.request('PUT', `/audiences/${audienceId}`, request);
+    return await this.toJson(res);
   }
 
   // Delete an audience by its ID
   async delete(audienceId: string) {
-    const res = await Http.delete({
-      client: this.client,
-      route: `/audiences/${audienceId}`,
-    });
-    return await toJson(this.client, res);
+    const res = await this.request('DELETE', `/audiences/${audienceId}`);
+    return await this.toJson(res);
   }
 
   // List members of an audience
@@ -41,8 +30,8 @@ export class AudiencesClient extends BaseClient {
     const route = queryParams
       ? `/audiences/${audienceId}/members?${queryParams}`
       : `/audiences/${audienceId}/members`;
-    const res = await Http.get({ client: this.client, route });
-    return await toJson(this.client, res);
+    const res = await this.request('GET', route);
+    return await this.toJson(res);
   }
 
   // List all audiences
@@ -55,7 +44,7 @@ export class AudiencesClient extends BaseClient {
     const route = queryParams
       ? `/audiences?${queryParams}`
       : `/audiences`;
-    const res = await Http.get({ client: this.client, route });
-    return await toJson(this.client, res);
+    const res = await this.request('GET', route);
+    return await this.toJson(res);
   }
 }

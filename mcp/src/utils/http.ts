@@ -1,149 +1,76 @@
-import { CourierClient, CourierClientOptions } from '../client/courier-client.js';
-import { CourierMcpLogger } from './logger.js';
-import { TextContent } from './types.js';
-import { USER_AGENT } from './version.js';
-
 type HttpRequestParams = {
-  client?: CourierClient;
-  route?: string;
-  url?: string;
+  headers?: Record<string, string>;
+  url: string;
   body?: any;
 };
 
-type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
+export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 
 async function performRequest({
-  client,
-  route,
+  headers,
   url,
   method,
   body,
 }: {
-  client?: CourierClient;
-  route?: string;
-  url?: string;
+  headers: Record<string, string>;
+  url: string;
   method: HttpMethod;
   body?: any;
 }): Promise<Response> {
 
-  // Validate the Courier Client
-  if (client && !client?.options?.apiKey) {
-    throw new Error('api_key is required in the Courier MCP config. Get your API key from https://app.courier.com/settings/api-keys.');
-  }
-
-  const fullUrl = url ? url : `${client?.options?.baseUrl}${route ?? ''}`;
-
-  // Use CourierMcpLogger for logging based on log level
-  client?.logger.debug('Perform Request:');
-  client?.logger.debug(
-    JSON.stringify(
-      {
-        url: fullUrl,
-        headers: {
-          'Authorization': `Bearer ${client?.options?.apiKey}`,
-          'Content-Type': 'application/json',
-          'User-Agent': USER_AGENT,
-        },
-        method,
-        body,
-      },
-      null,
-      2
-    )
-  );
-
-  // Perform the request
-  const headers: Record<string, string> = {
+  // Merge the headers with the default headers
+  const mergedHeaders = {
+    ...headers,
     'Content-Type': 'application/json',
-    'User-Agent': USER_AGENT,
   };
 
-  // Add the Authorization header if the API key is present
-  if (client?.options?.apiKey) {
-    headers['Authorization'] = `Bearer ${client?.options?.apiKey}`;
-  }
-
-  return fetch(fullUrl, {
-    headers,
+  return fetch(url, {
+    headers: mergedHeaders,
     method,
     body: JSON.stringify(body),
   });
 
 }
 
-export const toJson = async (client: CourierClient, res: Response): Promise<TextContent> => {
-  try {
-    const data = await res.json();
-    return {
-      content: [
-        {
-          type: 'text' as const,
-          text: JSON.stringify(data, null, 2),
-        },
-      ],
-    };
-  } catch (e) {
-
-    // Log the error
-    client.logger.error('Error parsing response to JSON');
-    client.logger.error(JSON.stringify(e, null, 2));
-
-    // Return an empty response
-    return {
-      content: [
-        {
-          type: 'text' as const,
-          text: JSON.stringify({}, null, 2),
-        },
-      ],
-    };
-  }
-}
-
 export default class Http {
-  static async get({ client, route, url }: HttpRequestParams): Promise<Response> {
+  static async get({ headers, url }: HttpRequestParams): Promise<Response> {
     return performRequest({
-      client,
-      route,
+      headers: headers || {},
       url,
       method: 'GET',
     });
   }
 
-  static async post({ client, route, url, body }: HttpRequestParams): Promise<Response> {
+  static async post({ headers, url, body }: HttpRequestParams): Promise<Response> {
     return performRequest({
-      client,
-      route,
+      headers: headers || {},
       url,
       method: 'POST',
       body,
     });
   }
 
-  static async put({ client, route, url, body }: HttpRequestParams): Promise<Response> {
+  static async put({ headers, url, body }: HttpRequestParams): Promise<Response> {
     return performRequest({
-      client,
-      route,
+      headers: headers || {},
       url,
       method: 'PUT',
       body,
     });
   }
 
-  static async patch({ client, route, url, body }: HttpRequestParams): Promise<Response> {
+  static async patch({ headers, url, body }: HttpRequestParams): Promise<Response> {
     return performRequest({
-      client,
-      route,
+      headers: headers || {},
       url,
       method: 'PATCH',
       body,
     });
   }
 
-  static async delete({ client, route, url }: HttpRequestParams): Promise<Response> {
+  static async delete({ headers, url }: HttpRequestParams): Promise<Response> {
     return performRequest({
-      client,
-      route,
+      headers: headers || {},
       url,
       method: 'DELETE',
     });

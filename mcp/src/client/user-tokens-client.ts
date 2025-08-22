@@ -1,24 +1,17 @@
-import Http, { toJson } from "../utils/http.js";
 import { BaseClient } from "./base-client.js";
 
 export class UserTokensClient extends BaseClient {
 
   // GET /users/{user_id}/tokens/{token}
   async getToken(userId: string, token: string) {
-    const res = await Http.get({
-      client: this.client,
-      route: `/users/${userId}/tokens/${token}`,
-    });
-    return await toJson(this.client, res);
+    const res = await this.request('GET', `/users/${userId}/tokens/${token}`);
+    return await this.toJson(res);
   }
 
   // GET /users/{user_id}/tokens
   async listTokens(userId: string) {
-    const res = await Http.get({
-      client: this.client,
-      route: `/users/${userId}/tokens`,
-    });
-    return await toJson(this.client, res);
+    const res = await this.request('GET', `/users/${userId}/tokens`);
+    return await this.toJson(res);
   }
 
   // PUT /users/{user_id}/tokens/{token}
@@ -73,44 +66,29 @@ export class UserTokensClient extends BaseClient {
       [key: string]: any;
     }
   ) {
-    const res = await Http.put({
-      client: this.client,
-      route: `/users/${userId}/tokens/${token}`,
-      body: {
-        token: token,
-        provider_key: provider_key,
-        ...params,
-      },
+    const res = await this.request('PUT', `/users/${userId}/tokens/${token}`, {
+      token: token,
+      provider_key: provider_key,
+      ...params,
     });
-    return await toJson(this.client, res);
+    return await this.toJson(res);
   }
 
   // PUT /users/{user_id}/tokens
   async putTokens(userId: string, body: any) {
-    const res = await Http.put({
-      client: this.client,
-      route: `/users/${userId}/tokens`,
-      body,
-    });
-    return await toJson(this.client, res);
+    const res = await this.request('PUT', `/users/${userId}/tokens`, body);
+    return await this.toJson(res);
   }
 
   // PATCH /users/{user_id}/tokens/{token}
   async patchToken(userId: string, token: string, body: any) {
-    const res = await Http.patch({
-      client: this.client,
-      route: `/users/${userId}/tokens/${token}`,
-      body,
-    });
-    return await toJson(this.client, res);
+    const res = await this.request('PATCH', `/users/${userId}/tokens/${token}`, body);
+    return await this.toJson(res);
   }
 
   // DELETE /users/{user_id}/tokens/{token}
   async deleteToken(userId: string, token: string) {
-    const res = await Http.delete({
-      client: this.client,
-      route: `/users/${userId}/tokens/${token}`,
-    });
-    return await toJson(this.client, res);
+    const res = await this.request('DELETE', `/users/${userId}/tokens/${token}`);
+    return await this.toJson(res);
   }
 }

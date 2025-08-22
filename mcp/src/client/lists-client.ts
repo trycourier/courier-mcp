@@ -1,4 +1,3 @@
-import Http, { toJson } from "../utils/http.js";
 import { BaseClient } from "./base-client.js";
 
 export class ListsClient extends BaseClient {
@@ -13,28 +12,18 @@ export class ListsClient extends BaseClient {
       ? `/lists?${queryParams}`
       : `/lists`;
 
-    const res = await Http.get({
-      client: this.client,
-      route,
-    });
-    return await toJson(this.client, res);
+    const res = await this.request('GET', route);
+    return await this.toJson(res);
   }
 
   async get(listId: string) {
-    const res = await Http.get({
-      client: this.client,
-      route: `/lists/${listId}`,
-    });
-    return await toJson(this.client, res);
+    const res = await this.request('GET', `/lists/${listId}`);
+    return await this.toJson(res);
   }
 
   async update(listId: string, request: any) {
-    const res = await Http.put({
-      client: this.client,
-      route: `/lists/${listId}`,
-      body: request,
-    });
-    return await toJson(this.client, res);
+    const res = await this.request('PUT', `/lists/${listId}`, request);
+    return await this.toJson(res);
   }
 
   async getSubscribers(listId: string, request?: { cursor?: string, limit?: number }) {
@@ -47,27 +36,17 @@ export class ListsClient extends BaseClient {
       ? `/lists/${listId}/subscriptions?${queryParams}`
       : `/lists/${listId}/subscriptions`;
 
-    const res = await Http.get({
-      client: this.client,
-      route,
-    });
-    return await toJson(this.client, res);
+    const res = await this.request('GET', route);
+    return await this.toJson(res);
   }
 
   async subscribe(listId: string, userId: string, request?: any) {
-    const res = await Http.put({
-      client: this.client,
-      route: `/lists/${listId}/subscriptions/${userId}`,
-      body: request || {},
-    });
-    return await toJson(this.client, res);
+    const res = await this.request('PUT', `/lists/${listId}/subscriptions/${userId}`, request || {});
+    return await this.toJson(res);
   }
 
   async unsubscribe(listId: string, userId: string) {
-    const res = await Http.delete({
-      client: this.client,
-      route: `/lists/${listId}/subscriptions/${userId}`,
-    });
-    return await toJson(this.client, res);
+    const res = await this.request('DELETE', `/lists/${listId}/subscriptions/${userId}`);
+    return await this.toJson(res);
   }
 } 

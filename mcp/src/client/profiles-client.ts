@@ -1,55 +1,36 @@
-import Http, { toJson } from "../utils/http.js";
 import { BaseClient } from "./base-client.js";
 
 export class ProfilesClient extends BaseClient {
 
   async getProfile(userId: string) {
-    const res = await Http.get({
-      client: this.client,
-      route: `/profiles/${userId}`,
-    });
-    return await toJson(this.client, res);
+    const res = await this.request('GET', `/profiles/${userId}`);
+    return await this.toJson(res);
   }
 
   async create(userId: string, request: any) {
-    const res = await Http.post({
-      client: this.client,
-      route: `/profiles/${userId}`,
-      body: {
-        profile: request,
-      },
+    const res = await this.request('POST', `/profiles/${userId}`, {
+      profile: request,
     });
-    return await toJson(this.client, res);
+    return await this.toJson(res);
   }
 
   async replace(userId: string, request: any) {
-    const res = await Http.put({
-      client: this.client,
-      route: `/profiles/${userId}`,
-      body: {
-        profile: request,
-      },
+    const res = await this.request('PUT', `/profiles/${userId}`, {
+      profile: request,
     });
-    return await toJson(this.client, res);
+    return await this.toJson(res);
   }
 
   async mergeProfile(userId: string, request: any) {
-    const res = await Http.patch({
-      client: this.client,
-      route: `/profiles/${userId}`,
-      body: {
-        profile: request,
-      },
+    const res = await this.request('PATCH', `/profiles/${userId}`, {
+      profile: request,
     });
-    return await toJson(this.client, res);
+    return await this.toJson(res);
   }
 
   async delete(userId: string) {
-    const res = await Http.delete({
-      client: this.client,
-      route: `/profiles/${userId}`,
-    });
-    return await toJson(this.client, res);
+    const res = await this.request('DELETE', `/profiles/${userId}`);
+    return await this.toJson(res);
   }
 
   async getListSubscriptions(userId: string, request?: Record<string, any>) {
@@ -64,28 +45,18 @@ export class ProfilesClient extends BaseClient {
       ? `/profiles/${userId}/lists?${queryParams}`
       : `/profiles/${userId}/lists`;
 
-    const res = await Http.get({
-      client: this.client,
-      route,
-    });
-    return await toJson(this.client, res);
+    const res = await this.request('GET', route);
+    return await this.toJson(res);
   }
 
   async subscribeToLists(userId: string, request: any) {
-    const res = await Http.post({
-      client: this.client,
-      route: `/profiles/${userId}/lists`,
-      body: request,
-    });
-    return await toJson(this.client, res);
+    const res = await this.request('POST', `/profiles/${userId}/lists`, request);
+    return await this.toJson(res);
   }
 
   async deleteListSubscription(userId: string) {
-    const res = await Http.delete({
-      client: this.client,
-      route: `/profiles/${userId}/lists`,
-    });
-    return await toJson(this.client, res);
+    const res = await this.request('DELETE', `/profiles/${userId}/lists`);
+    return await this.toJson(res);
   }
 
 }

@@ -1,23 +1,14 @@
-import Http, { toJson } from "../utils/http.js";
 import { BaseClient } from "./base-client.js";
 
 export class AutomationsClient extends BaseClient {
 
   async invokeAutomationTemplate(templateId: string, request: any) {
-    const res = await Http.post({
-      client: this.client,
-      route: `/automations/${templateId}/invoke`,
-      body: request,
-    });
-    return await toJson(this.client, res);
+    const res = await this.request('POST', `/automations/${templateId}/invoke`, request);
+    return await this.toJson(res);
   }
 
   async invokeAdHocAutomation(request: any) {
-    const res = await Http.post({
-      client: this.client,
-      route: `/automations/invoke`,
-      body: request,
-    });
-    return await toJson(this.client, res);
+    const res = await this.request('POST', `/automations/invoke`, request);
+    return await this.toJson(res);
   }
 } 

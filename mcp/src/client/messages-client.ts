@@ -1,4 +1,3 @@
-import Http, { toJson } from "../utils/http.js";
 import { BaseClient } from "./base-client.js";
 
 export class MessagesClient extends BaseClient {
@@ -14,55 +13,37 @@ export class MessagesClient extends BaseClient {
       ? `/messages?${queryParams}`
       : `/messages`;
 
-    const res = await Http.get({
-      client: this.client,
-      route,
-    });
-    return await toJson(this.client, res);
+    const res = await this.request('GET', route);
+    return await this.toJson(res);
   }
 
   // GET /messages/{message_id}
   async get(messageId: string) {
-    const res = await Http.get({
-      client: this.client,
-      route: `/messages/${messageId}`,
-    });
-    return await toJson(this.client, res);
+    const res = await this.request('GET', `/messages/${messageId}`);
+    return await this.toJson(res);
   }
 
   // POST /messages/{message_id}/cancel
   async cancel(messageId: string) {
-    const res = await Http.post({
-      client: this.client,
-      route: `/messages/${messageId}/cancel`,
-    });
-    return await toJson(this.client, res);
+    const res = await this.request('POST', `/messages/${messageId}/cancel`);
+    return await this.toJson(res);
   }
 
   // GET /messages/{message_id}/history
   async getHistory(messageId: string) {
-    const res = await Http.get({
-      client: this.client,
-      route: `/messages/${messageId}/history`,
-    });
-    return await toJson(this.client, res);
+    const res = await this.request('GET', `/messages/${messageId}/history`);
+    return await this.toJson(res);
   }
 
   // GET /messages/{message_id}/output
   async getContent(messageId: string) {
-    const res = await Http.get({
-      client: this.client,
-      route: `/messages/${messageId}/output`,
-    });
-    return await toJson(this.client, res);
+    const res = await this.request('GET', `/messages/${messageId}/output`);
+    return await this.toJson(res);
   }
 
   // PUT /requests/{request_id}/archive
   async archive(requestId: string) {
-    const res = await Http.put({
-      client: this.client,
-      route: `/requests/${requestId}/archive`,
-    });
-    return await toJson(this.client, res);
+    const res = await this.request('PUT', `/requests/${requestId}/archive`);
+    return await this.toJson(res);
   }
 }

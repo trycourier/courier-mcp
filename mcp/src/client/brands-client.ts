@@ -1,23 +1,15 @@
-import Http, { toJson } from "../utils/http.js";
 import { BaseClient } from "./base-client.js";
 
 export class BrandsClient extends BaseClient {
 
   async create(request: any) {
-    const res = await Http.post({
-      client: this.client,
-      route: `/brands`,
-      body: request,
-    });
-    return await toJson(this.client, res);
+    const res = await this.request('POST', `/brands`, request);
+    return await this.toJson(res);
   }
 
   async get(brandId: string) {
-    const res = await Http.get({
-      client: this.client,
-      route: `/brands/${brandId}`,
-    });
-    return await toJson(this.client, res);
+    const res = await this.request('GET', `/brands/${brandId}`);
+    return await this.toJson(res);
   }
 
   async list(request?: { cursor?: string, limit?: number }) {
@@ -29,10 +21,7 @@ export class BrandsClient extends BaseClient {
     const route = queryParams
       ? `/brands?${queryParams}`
       : `/brands`;
-    const res = await Http.get({
-      client: this.client,
-      route,
-    });
-    return await toJson(this.client, res);
+    const res = await this.request('GET', route);
+    return await this.toJson(res);
   }
 } 

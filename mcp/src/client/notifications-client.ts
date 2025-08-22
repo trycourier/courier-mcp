@@ -1,4 +1,3 @@
-import Http, { toJson } from "../utils/http.js";
 import { BaseClient } from "./base-client.js";
 
 export class NotificationsClient extends BaseClient {
@@ -13,34 +12,22 @@ export class NotificationsClient extends BaseClient {
       ? `/notifications?${queryParams}`
       : `/notifications`;
 
-    const res = await Http.get({
-      client: this.client,
-      route,
-    });
-    return await toJson(this.client, res);
+    const res = await this.request('GET', route);
+    return await this.toJson(res);
   }
 
   async getContent(notificationId: string) {
-    const res = await Http.get({
-      client: this.client,
-      route: `/notifications/${notificationId}/content`,
-    });
-    return await toJson(this.client, res);
+    const res = await this.request('GET', `/notifications/${notificationId}/content`);
+    return await this.toJson(res);
   }
 
   async getDraftContent(notificationId: string) {
-    const res = await Http.get({
-      client: this.client,
-      route: `/notifications/${notificationId}/draft/content`,
-    });
-    return await toJson(this.client, res);
+    const res = await this.request('GET', `/notifications/${notificationId}/draft/content`);
+    return await this.toJson(res);
   }
 
   async getSubmissionChecks(notificationId: string, submissionId: string) {
-    const res = await Http.get({
-      client: this.client,
-      route: `/notifications/${notificationId}/${submissionId}/checks`,
-    });
-    return await toJson(this.client, res);
+    const res = await this.request('GET', `/notifications/${notificationId}/${submissionId}/checks`);
+    return await this.toJson(res);
   }
 } 

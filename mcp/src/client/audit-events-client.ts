@@ -1,14 +1,10 @@
-import Http, { toJson } from "../utils/http.js";
 import { BaseClient } from "./base-client.js";
 
 export class AuditEventsClient extends BaseClient {
 
   async get(auditEventId: string) {
-    const res = await Http.get({
-      client: this.client,
-      route: `/audit-events/${auditEventId}`,
-    });
-    return await toJson(this.client, res);
+    const res = await this.request('GET', `/audit-events/${auditEventId}`);
+    return await this.toJson(res);
   }
 
   async list(request?: { cursor?: string, limit?: number }) {
@@ -20,10 +16,7 @@ export class AuditEventsClient extends BaseClient {
     const route = queryParams
       ? `/audit-events?${queryParams}`
       : `/audit-events`;
-    const res = await Http.get({
-      client: this.client,
-      route,
-    });
-    return await toJson(this.client, res);
+    const res = await this.request('GET', route);
+    return await this.toJson(res);
   }
 } 
