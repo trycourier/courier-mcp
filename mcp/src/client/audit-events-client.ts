@@ -1,20 +1,14 @@
 import Http, { toJson } from "../utils/http.js";
-import { CourierClientOptions } from "./courier-client.js";
+import { BaseClient } from "./base-client.js";
 
-export class AuditEventsClient {
-
-  private readonly options: CourierClientOptions;
-
-  constructor(options: CourierClientOptions) {
-    this.options = options;
-  }
+export class AuditEventsClient extends BaseClient {
 
   async get(auditEventId: string) {
     const res = await Http.get({
-      options: this.options,
+      client: this.client,
       route: `/audit-events/${auditEventId}`,
     });
-    return await toJson(this.options, res);
+    return await toJson(this.client, res);
   }
 
   async list(request?: { cursor?: string, limit?: number }) {
@@ -24,12 +18,12 @@ export class AuditEventsClient {
         .map(([k, v]) => [k, String(v)])
     ).toString() : '';
     const route = queryParams
-      ? `${this.options.baseUrl}/audit-events?${queryParams}`
-      : `${this.options.baseUrl}/audit-events`;
+      ? `/audit-events?${queryParams}`
+      : `/audit-events`;
     const res = await Http.get({
-      options: this.options,
+      client: this.client,
       route,
     });
-    return await toJson(this.options, res);
+    return await toJson(this.client, res);
   }
 } 

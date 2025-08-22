@@ -1,13 +1,7 @@
 import Http, { toJson } from "../utils/http.js";
-import { CourierClientOptions } from "./courier-client.js";
+import { BaseClient } from "./base-client.js";
 
-export class ListsClient {
-
-  private readonly options: CourierClientOptions;
-
-  constructor(options: CourierClientOptions) {
-    this.options = options;
-  }
+export class ListsClient extends BaseClient {
 
   async list(request?: { pattern?: string, cursor?: string, limit?: number }) {
     const queryParams = request ? new URLSearchParams(
@@ -20,27 +14,27 @@ export class ListsClient {
       : `/lists`;
 
     const res = await Http.get({
-      options: this.options,
+      client: this.client,
       route,
     });
-    return await toJson(this.options, res);
+    return await toJson(this.client, res);
   }
 
   async get(listId: string) {
     const res = await Http.get({
-      options: this.options,
+      client: this.client,
       route: `/lists/${listId}`,
     });
-    return await toJson(this.options, res);
+    return await toJson(this.client, res);
   }
 
   async update(listId: string, request: any) {
     const res = await Http.put({
-      options: this.options,
+      client: this.client,
       route: `/lists/${listId}`,
       body: request,
     });
-    return await toJson(this.options, res);
+    return await toJson(this.client, res);
   }
 
   async getSubscribers(listId: string, request?: { cursor?: string, limit?: number }) {
@@ -54,26 +48,26 @@ export class ListsClient {
       : `/lists/${listId}/subscriptions`;
 
     const res = await Http.get({
-      options: this.options,
+      client: this.client,
       route,
     });
-    return await toJson(this.options, res);
+    return await toJson(this.client, res);
   }
 
   async subscribe(listId: string, userId: string, request?: any) {
     const res = await Http.put({
-      options: this.options,
+      client: this.client,
       route: `/lists/${listId}/subscriptions/${userId}`,
       body: request || {},
     });
-    return await toJson(this.options, res);
+    return await toJson(this.client, res);
   }
 
   async unsubscribe(listId: string, userId: string) {
     const res = await Http.delete({
-      options: this.options,
+      client: this.client,
       route: `/lists/${listId}/subscriptions/${userId}`,
     });
-    return await toJson(this.options, res);
+    return await toJson(this.client, res);
   }
 } 

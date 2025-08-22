@@ -1,20 +1,14 @@
 import Http, { toJson } from "../utils/http.js";
-import { CourierClientOptions } from "./courier-client.js";
+import { BaseClient } from "./base-client.js";
 
-export class InboundClient {
-
-  private readonly options: CourierClientOptions;
-
-  constructor(options: CourierClientOptions) {
-    this.options = options;
-  }
+export class InboundClient extends BaseClient {
 
   async track(request: any) {
     const res = await Http.post({
-      options: this.options,
+      client: this.client,
       route: `/inbound/track`,
       body: request,
     });
-    return await toJson(this.options, res);
+    return await toJson(this.client, res);
   }
 } 

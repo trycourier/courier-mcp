@@ -1,12 +1,7 @@
 import Http, { toJson } from "../utils/http.js";
-import { CourierClientOptions } from "./courier-client.js";
+import { BaseClient } from "./base-client.js";
 
-export class MessagesClient {
-  private readonly options: CourierClientOptions;
-
-  constructor(options: CourierClientOptions) {
-    this.options = options;
-  }
+export class MessagesClient extends BaseClient {
 
   // GET /messages
   async list(request?: Record<string, any>) {
@@ -20,54 +15,54 @@ export class MessagesClient {
       : `/messages`;
 
     const res = await Http.get({
-      options: this.options,
+      client: this.client,
       route,
     });
-    return await toJson(this.options, res);
+    return await toJson(this.client, res);
   }
 
   // GET /messages/{message_id}
   async get(messageId: string) {
     const res = await Http.get({
-      options: this.options,
+      client: this.client,
       route: `/messages/${messageId}`,
     });
-    return await toJson(this.options, res);
+    return await toJson(this.client, res);
   }
 
   // POST /messages/{message_id}/cancel
   async cancel(messageId: string) {
     const res = await Http.post({
-      options: this.options,
+      client: this.client,
       route: `/messages/${messageId}/cancel`,
     });
-    return await toJson(this.options, res);
+    return await toJson(this.client, res);
   }
 
   // GET /messages/{message_id}/history
   async getHistory(messageId: string) {
     const res = await Http.get({
-      options: this.options,
+      client: this.client,
       route: `/messages/${messageId}/history`,
     });
-    return await toJson(this.options, res);
+    return await toJson(this.client, res);
   }
 
   // GET /messages/{message_id}/output
   async getContent(messageId: string) {
     const res = await Http.get({
-      options: this.options,
+      client: this.client,
       route: `/messages/${messageId}/output`,
     });
-    return await toJson(this.options, res);
+    return await toJson(this.client, res);
   }
 
   // PUT /requests/{request_id}/archive
   async archive(requestId: string) {
     const res = await Http.put({
-      options: this.options,
+      client: this.client,
       route: `/requests/${requestId}/archive`,
     });
-    return await toJson(this.options, res);
+    return await toJson(this.client, res);
   }
 }

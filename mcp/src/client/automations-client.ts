@@ -1,29 +1,23 @@
 import Http, { toJson } from "../utils/http.js";
-import { CourierClientOptions } from "./courier-client.js";
+import { BaseClient } from "./base-client.js";
 
-export class AutomationsClient {
-
-  private readonly options: CourierClientOptions;
-
-  constructor(options: CourierClientOptions) {
-    this.options = options;
-  }
+export class AutomationsClient extends BaseClient {
 
   async invokeAutomationTemplate(templateId: string, request: any) {
     const res = await Http.post({
-      options: this.options,
+      client: this.client,
       route: `/automations/${templateId}/invoke`,
       body: request,
     });
-    return await toJson(this.options, res);
+    return await toJson(this.client, res);
   }
 
   async invokeAdHocAutomation(request: any) {
     const res = await Http.post({
-      options: this.options,
+      client: this.client,
       route: `/automations/invoke`,
       body: request,
     });
-    return await toJson(this.options, res);
+    return await toJson(this.client, res);
   }
 } 

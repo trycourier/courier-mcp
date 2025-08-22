@@ -1,29 +1,23 @@
 import Http, { toJson } from "../utils/http.js";
-import { CourierClientOptions } from "./courier-client.js";
+import { BaseClient } from "./base-client.js";
 
-export class BrandsClient {
-
-  private readonly options: CourierClientOptions;
-
-  constructor(options: CourierClientOptions) {
-    this.options = options;
-  }
+export class BrandsClient extends BaseClient {
 
   async create(request: any) {
     const res = await Http.post({
-      options: this.options,
+      client: this.client,
       route: `/brands`,
       body: request,
     });
-    return await toJson(this.options, res);
+    return await toJson(this.client, res);
   }
 
   async get(brandId: string) {
     const res = await Http.get({
-      options: this.options,
+      client: this.client,
       route: `/brands/${brandId}`,
     });
-    return await toJson(this.options, res);
+    return await toJson(this.client, res);
   }
 
   async list(request?: { cursor?: string, limit?: number }) {
@@ -33,12 +27,12 @@ export class BrandsClient {
         .map(([k, v]) => [k, String(v)])
     ).toString() : '';
     const route = queryParams
-      ? `${this.options.baseUrl}/brands?${queryParams}`
-      : `${this.options.baseUrl}/brands`;
+      ? `/brands?${queryParams}`
+      : `/brands`;
     const res = await Http.get({
-      options: this.options,
+      client: this.client,
       route,
     });
-    return await toJson(this.options, res);
+    return await toJson(this.client, res);
   }
 } 

@@ -1,20 +1,14 @@
 import Http, { toJson } from "../utils/http.js";
-import { CourierClientOptions } from "./courier-client.js";
+import { BaseClient } from "./base-client.js";
 
-export class AuthTokensClient {
-
-  private readonly options: CourierClientOptions;
-
-  constructor(options: CourierClientOptions) {
-    this.options = options;
-  }
+export class AuthTokensClient extends BaseClient {
 
   async issueToken(request: any) {
     const res = await Http.post({
-      options: this.options,
+      client: this.client,
       route: `/auth/issue-token`,
       body: request,
     });
-    return await toJson(this.options, res);
+    return await toJson(this.client, res);
   }
 } 

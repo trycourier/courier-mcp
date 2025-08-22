@@ -7,16 +7,26 @@ export class DocsTools extends CourierMcpTools {
 
   // Default user ID for the installation guides
   private readonly DEFAULT_USER_ID = 'example_user';
+  private readonly BASE_DOCS_URL = 'https://raw.githubusercontent.com/trycourier/courier-mcp/refs/heads/main/docs/';
 
-  private appendJwtToResponse(user_id: string, jwt: string, docs: string): TextContent {
-    return {
-      content: [
-        {
-          type: 'text' as const,
-          text: `${user_id} JWT Access Token: ${jwt}\n\n${docs}`,
-        },
-      ],
-    }
+  // This grabs the docs from url and gets an example jwt, then it will combine them into a single response to the LLM
+  private async getDocsWithJwt(url: string, user_id: string): Promise<TextContent> {
+    const [docs, jwt] = await Promise.all([
+      this.getDocs(url),
+      this.getJwt(user_id)
+    ]);
+    this.mcp.client.logger.debug(`Doc URL: ${url}`);
+    this.mcp.client.logger.debug(`Doc Text: ${docs}`);
+    return this.combineJwtAndDocs(user_id, jwt, docs);
+  }
+
+  // Gets the docs from the url
+  private async getDocs(url: string): Promise<string> {
+    const res = await Http.get({ url });
+    const text = await res.text();
+    this.mcp.client.logger.debug(`Doc URL: ${url}`);
+    this.mcp.client.logger.debug(`Doc Text: ${text}`);
+    return text;
   }
 
   // Helper to generate JWT
@@ -28,22 +38,16 @@ export class DocsTools extends CourierMcpTools {
     return res.content[0].text;
   };
 
-  private async getDocsWithJWT(url: string, user_id: string): Promise<TextContent> {
-    const [docs, jwt] = await Promise.all([
-      this.getDocs(url),
-      this.getJwt(user_id)
-    ]);
-    this.mcp.client.logger.debug(`Doc URL: ${url}`);
-    this.mcp.client.logger.debug(`Doc Text: ${docs}`);
-    return this.appendJwtToResponse(user_id, jwt, docs);
-  }
-
-  private async getDocs(url: string): Promise<string> {
-    const res = await Http.get({ options: undefined, url: url });
-    const text = await res.text();
-    this.mcp.client.logger.debug(`Doc URL: ${url}`);
-    this.mcp.client.logger.debug(`Doc Text: ${text}`);
-    return text;
+  // Combines JWT and docs into a single response
+  private combineJwtAndDocs(user_id: string, jwt: string, docs: string): TextContent {
+    return {
+      content: [
+        {
+          type: 'text' as const,
+          text: `${user_id} JWT Access Token: ${jwt}\n\n${docs}`,
+        },
+      ],
+    }
   }
 
   public register() {
@@ -59,7 +63,7 @@ export class DocsTools extends CourierMcpTools {
         },
       },
       async ({ user_id }) => {
-        return await this.getDocsWithJWT('https://raw.githubusercontent.com/trycourier/courier-mcp/refs/heads/main/docs/installation_guide_flutter.md', user_id);
+        return await this.getDocsWithJwt(`${this.BASE_DOCS_URL}installation_guide_flutter.md`, user_id);
       }
     );
 
@@ -74,7 +78,7 @@ export class DocsTools extends CourierMcpTools {
         },
       },
       async ({ user_id }) => {
-        return await this.getDocsWithJWT('https://raw.githubusercontent.com/trycourier/courier-mcp/refs/heads/main/docs/installation_guide_react_native.md', user_id);
+        return await this.getDocsWithJwt(`${this.BASE_DOCS_URL}installation_guide_react_native.md`, user_id);
       }
     );
 
@@ -89,7 +93,7 @@ export class DocsTools extends CourierMcpTools {
         },
       },
       async ({ user_id }) => {
-        return await this.getDocsWithJWT('https://raw.githubusercontent.com/trycourier/courier-mcp/refs/heads/main/docs/installation_guide_android.md', user_id);
+        return await this.getDocsWithJwt(`${this.BASE_DOCS_URL}installation_guide_android.md`, user_id);
       }
     );
 
@@ -104,7 +108,7 @@ export class DocsTools extends CourierMcpTools {
         },
       },
       async ({ user_id }) => {
-        return await this.getDocsWithJWT('https://raw.githubusercontent.com/trycourier/courier-mcp/refs/heads/main/docs/installation_guide_ios.md', user_id);
+        return await this.getDocsWithJwt(`${this.BASE_DOCS_URL}installation_guide_ios.md`, user_id);
       }
     );
 
@@ -119,7 +123,7 @@ export class DocsTools extends CourierMcpTools {
         },
       },
       async ({ user_id }) => {
-        return await this.getDocsWithJWT('https://raw.githubusercontent.com/trycourier/courier-mcp/refs/heads/main/docs/installation_guide_react.md', user_id);
+        return await this.getDocsWithJwt(`${this.BASE_DOCS_URL}installation_guide_react.md`, user_id);
       }
     );
 
@@ -131,7 +135,7 @@ export class DocsTools extends CourierMcpTools {
         description: 'Instructions to send notifications using Courier from a Node.js backend.',
       },
       async () => {
-        const docs = await this.getDocs('https://raw.githubusercontent.com/trycourier/courier-mcp/refs/heads/main/docs/installation_guide_node.md');
+        const docs = await this.getDocs(`${this.BASE_DOCS_URL}installation_guide_node.md`);
         return {
           content: [
             {
@@ -151,7 +155,7 @@ export class DocsTools extends CourierMcpTools {
         description: 'Instructions to send notifications using Courier from a Python backend.',
       },
       async () => {
-        const docs = await this.getDocs('https://raw.githubusercontent.com/trycourier/courier-mcp/refs/heads/main/docs/installation_guide_python.md');
+        const docs = await this.getDocs(`${this.BASE_DOCS_URL}installation_guide_python.md`);
         return {
           content: [
             {
