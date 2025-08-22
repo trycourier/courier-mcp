@@ -1,4 +1,4 @@
-import Http, { HttpMethod } from "../utils/http.js";
+import { HttpMethod, performRequest } from "../utils/http.js";
 import { CourierMcpLogger } from "../utils/logger.js";
 import { TextContent } from "../utils/types.js";
 import { USER_AGENT } from "../utils/version.js";
@@ -34,20 +34,12 @@ export class BaseClient {
     this.logger.debug(`Body: ${JSON.stringify(body, null, 2)}`);
 
     // Perform the request
-    switch (method) {
-      case 'GET':
-        return Http.get({ headers, url: fullUrl });
-      case 'POST':
-        return Http.post({ headers, url: fullUrl, body });
-      case 'PUT':
-        return Http.put({ headers, url: fullUrl, body });
-      case 'PATCH':
-        return Http.patch({ headers, url: fullUrl, body });
-      case 'DELETE':
-        return Http.delete({ headers, url: fullUrl });
-      default:
-        throw new Error(`Unsupported method: ${method}`);
-    }
+    return performRequest({
+      headers,
+      url: fullUrl,
+      method,
+      body,
+    });
 
   }
 

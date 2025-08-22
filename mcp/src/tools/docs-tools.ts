@@ -1,6 +1,6 @@
 import z from "zod";
 import { CourierMcpTools } from "./tools.js";
-import Http from "../utils/http.js";
+import { performRequest } from "../utils/http.js";
 import { TextContent } from "../utils/types.js";
 import CourierMcp from "../index.js";
 import { CourierMcpLogger } from "../utils/logger.js";
@@ -27,7 +27,7 @@ export class DocsTools extends CourierMcpTools {
 
   // Gets the docs from the url
   private async getDocs(url: string): Promise<string> {
-    const res = await Http.get({ url });
+    const res = await performRequest({ url, method: 'GET' });
     const text = await res.text();
     this.logger.debug(`Docs fetched from URL: ${url}`);
     this.logger.debug(`Docs text: ${text}`);
