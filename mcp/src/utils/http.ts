@@ -1,10 +1,10 @@
-import { CourierClient, CourierClientOptions } from '../client/courier-client.js';
+import { CourierClientOptions } from '../client/courier-client.js';
 import { CourierMcpLogger } from './logger.js';
 import { TextContent } from './types.js';
 import { USER_AGENT } from './version.js';
 
 type HttpRequestParams = {
-  options: CourierClientOptions;
+  options: CourierClientOptions | undefined;
   route?: string;
   url?: string;
   body?: any;
@@ -19,7 +19,7 @@ async function performRequest({
   method,
   body,
 }: {
-  options: CourierClientOptions;
+  options?: CourierClientOptions;
   route?: string;
   url?: string;
   method: HttpMethod;
@@ -27,39 +27,44 @@ async function performRequest({
 }): Promise<Response> {
 
   // Validate the options
-  if (!options.apiKey) {
+  if (options && !options?.apiKey) {
     throw new Error('api_key is required in the Courier MCP config. Get your API key from https://app.courier.com/settings/api-keys.');
   }
 
-  const fullUrl = url ? url : `${options.baseUrl}${route ?? ''}`;
+  const fullUrl = url ? url : `${options?.baseUrl}${route ?? ''}`;
 
   // Use CourierMcpLogger for logging based on log level
-  const logger = new CourierMcpLogger(options);
-  logger.debug('Perform Request:');
-  logger.debug(
-    JSON.stringify(
-      {
-        url: fullUrl,
-        headers: {
-          'Authorization': `Bearer ${options.apiKey}`,
-          'Content-Type': 'application/json',
-          'User-Agent': USER_AGENT,
+  if (options) {
+    const logger = new CourierMcpLogger(options);
+    logger.debug('Perform Request:');
+    logger.debug(
+      JSON.stringify(
+        {
+          url: fullUrl,
+          headers: {
+            'Authorization': `Bearer ${options.apiKey}`,
+            'Content-Type': 'application/json',
+            'User-Agent': USER_AGENT,
+          },
+          method,
+          body,
         },
-        method,
-        body,
-      },
-      null,
-      2
-    )
-  );
+        null,
+        2
+      )
+    );
+  }
 
   // Perform the request
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+    'User-Agent': USER_AGENT,
+  };
+  if (options?.apiKey) {
+    headers['Authorization'] = `Bearer ${options.apiKey}`;
+  }
   return fetch(fullUrl, {
-    headers: {
-      'Authorization': `Bearer ${options.apiKey}`,
-      'Content-Type': 'application/json',
-      'User-Agent': USER_AGENT,
-    },
+    headers,
     method,
     body: JSON.stringify(body),
   });
@@ -94,18 +99,6 @@ export const toJson = async (options: CourierClientOptions, res: Response): Prom
       ],
     };
   }
-}
-
-export const toText = async (_options: CourierClientOptions, res: Response): Promise<TextContent> => {
-  const text = await res.text();
-  return {
-    content: [
-      {
-        type: 'text' as const,
-        text,
-      },
-    ],
-  };
 }
 
 export default class Http {
