@@ -5,8 +5,7 @@ export class EnvironmentTools extends CourierMcpTools {
 
   public register() {
 
-    // Do not register the tool if the log level is not DEBUG
-    // This tool is simply unusable unless debug is set
+    // Do not register unless debug mode is set
     if (this.mcp.client.options.logLevel === CourierMcpLogLevel.DEBUG) {
       this.mcp.tool(
         'get_environment_config',
