@@ -1,12 +1,6 @@
-import Http, { toJson } from "../utils/http.js";
-import { CourierClientOptions } from "./courier-client.js";
+import { BaseClient } from "./base-client.js";
 
-export class MessagesClient {
-  private readonly options: CourierClientOptions;
-
-  constructor(options: CourierClientOptions) {
-    this.options = options;
-  }
+export class MessagesClient extends BaseClient {
 
   // GET /messages
   async list(request?: Record<string, any>) {
@@ -19,55 +13,37 @@ export class MessagesClient {
       ? `/messages?${queryParams}`
       : `/messages`;
 
-    const res = await Http.get({
-      options: this.options,
-      route,
-    });
-    return await toJson(this.options, res);
+    const res = await this.request('GET', route);
+    return await this.json(res);
   }
 
   // GET /messages/{message_id}
   async get(messageId: string) {
-    const res = await Http.get({
-      options: this.options,
-      route: `/messages/${messageId}`,
-    });
-    return await toJson(this.options, res);
+    const res = await this.request('GET', `/messages/${messageId}`);
+    return await this.json(res);
   }
 
   // POST /messages/{message_id}/cancel
   async cancel(messageId: string) {
-    const res = await Http.post({
-      options: this.options,
-      route: `/messages/${messageId}/cancel`,
-    });
-    return await toJson(this.options, res);
+    const res = await this.request('POST', `/messages/${messageId}/cancel`);
+    return await this.json(res);
   }
 
   // GET /messages/{message_id}/history
   async getHistory(messageId: string) {
-    const res = await Http.get({
-      options: this.options,
-      route: `/messages/${messageId}/history`,
-    });
-    return await toJson(this.options, res);
+    const res = await this.request('GET', `/messages/${messageId}/history`);
+    return await this.json(res);
   }
 
   // GET /messages/{message_id}/output
   async getContent(messageId: string) {
-    const res = await Http.get({
-      options: this.options,
-      route: `/messages/${messageId}/output`,
-    });
-    return await toJson(this.options, res);
+    const res = await this.request('GET', `/messages/${messageId}/output`);
+    return await this.json(res);
   }
 
   // PUT /requests/{request_id}/archive
   async archive(requestId: string) {
-    const res = await Http.put({
-      options: this.options,
-      route: `/requests/${requestId}/archive`,
-    });
-    return await toJson(this.options, res);
+    const res = await this.request('PUT', `/requests/${requestId}/archive`);
+    return await this.json(res);
   }
 }

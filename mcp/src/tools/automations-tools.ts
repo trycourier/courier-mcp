@@ -1,12 +1,16 @@
 import z from "zod";
-import { CourierMcpTools } from "./tools.js";
+import { CourierMcpTools } from "./courier-mcp-tools.js";
 
 export class AutomationsTools extends CourierMcpTools {
 
+  static readonly tools: string[] = [
+    'invoke_automation_template',
+  ];
+
   public register() {
     // Invoke an automation run from an automation template
-    this.mcp.tool(
-      'invoke_automation_template',
+    this.registerToolIfNeeded(
+      AutomationsTools.tools[0],
       'Invoke an automation run from an automation template.',
       {
         template_id: z.string(),
@@ -30,32 +34,5 @@ export class AutomationsTools extends CourierMcpTools {
         );
       }
     );
-
-    // // Invoke an ad hoc automation run
-    // this.mcp.tool(
-    //   'invoke_ad_hoc_automation',
-    //   'Invoke an ad hoc automation run.',
-    //   {
-    //     data: z.record(z.any()).optional(),
-    //     profile: z.record(z.any()).optional(),
-    //     recipient: z.string().optional(),
-    //     automation: z.object({
-    //       cancelation_token: z.string().optional(),
-    //       steps: z.array(z.record(z.any())),
-    //     }),
-    //   },
-    //   async ({ data, profile, recipient, automation }) => {
-    //     const request: any = {
-    //       automation,
-    //     };
-    //     if (data !== undefined) request.data = data;
-    //     if (profile !== undefined) request.profile = profile;
-    //     if (recipient !== undefined) request.recipient = recipient;
-
-    //     return await this.mcp.client.automations.invokeAdHocAutomation(
-    //       request,
-    //     );
-    //   }
-    // );
   }
 }

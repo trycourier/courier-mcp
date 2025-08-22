@@ -1,12 +1,16 @@
 import z from "zod";
-import { CourierMcpTools } from "./tools.js";
+import { CourierMcpTools } from "./courier-mcp-tools.js";
 
 export class AuthTokenTools extends CourierMcpTools {
 
+  static readonly tools: string[] = [
+    'generate_jwt_for_user',
+  ];
+
   public register() {
-    this.mcp.tool(
-      'issue_token',
-      'Generate a JWT authentication token for Courier.',
+    this.registerToolIfNeeded(
+      AuthTokenTools.tools[0],
+      'Generate a JWT authentication token for a user.',
       {
         user_id: z.string(),
         scopes: z.array(z.string()).default(['write:user-tokens', 'inbox:read:messages', 'inbox:write:events', 'read:preferences', 'write:preferences', 'read:brands']),

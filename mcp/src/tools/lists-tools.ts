@@ -1,11 +1,22 @@
 import z from "zod";
-import { CourierMcpTools } from "./tools.js";
+import { CourierMcpTools } from "./courier-mcp-tools.js";
 
 export class ListsTools extends CourierMcpTools {
+
+  static readonly tools: string[] = [
+    'list_lists',
+    'get_list',
+    'get_list_subscribers',
+    'create_list',
+    'subscribe_user_to_list',
+    'unsubscribe_user_from_list',
+  ];
+
   public register() {
+
     // List all lists
-    this.mcp.tool(
-      "list_lists",
+    this.registerToolIfNeeded(
+      ListsTools.tools[0],
       "Returns all of the lists, with the ability to filter based on a pattern.",
       {
         pattern: z.string().optional(),
@@ -23,8 +34,8 @@ export class ListsTools extends CourierMcpTools {
     );
 
     // Get a list by ID
-    this.mcp.tool(
-      "get_list",
+    this.registerToolIfNeeded(
+      ListsTools.tools[1],
       "Returns a list based on the list ID provided.",
       {
         list_id: z.string(),
@@ -37,8 +48,8 @@ export class ListsTools extends CourierMcpTools {
     );
 
     // Get list subscribers
-    this.mcp.tool(
-      "get_list_subscribers",
+    this.registerToolIfNeeded(
+      ListsTools.tools[2],
       "Get the list's subscriptions.",
       {
         list_id: z.string(),
@@ -55,8 +66,8 @@ export class ListsTools extends CourierMcpTools {
     );
 
     // Create a new list or update an existing one
-    this.mcp.tool(
-      "create_list",
+    this.registerToolIfNeeded(
+      ListsTools.tools[3],
       "Upsert a list by list ID.",
       {
         list_id: z.string(),
@@ -69,8 +80,8 @@ export class ListsTools extends CourierMcpTools {
     );
 
     // Subscribe a user to a list
-    this.mcp.tool(
-      "subscribe_user_to_list",
+    this.registerToolIfNeeded(
+      ListsTools.tools[4],
       "Subscribe a user to an existing list (note: if the List does not exist, it will be automatically created).",
       {
         list_id: z.string(),
@@ -93,8 +104,8 @@ export class ListsTools extends CourierMcpTools {
     );
 
     // Unsubscribe a user from a list
-    this.mcp.tool(
-      "unsubscribe_user_from_list",
+    this.registerToolIfNeeded(
+      ListsTools.tools[5],
       "Delete a subscription to a list by list ID and user ID.",
       {
         list_id: z.string(),

@@ -1,17 +1,20 @@
 import z from "zod";
-import { CourierMcpTools } from "./tools.js";
+import { CourierMcpTools } from "./courier-mcp-tools.js";
 
-/**
- * Tool class for sending a message using CourierMcpServer.
- * This class can be instantiated with a CourierMcpServer instance and exposes a `run` method.
- */
 export class SendTools extends CourierMcpTools {
+
+  static readonly tools: string[] = [
+    'send_message',
+    'send_message_template',
+    'send_message_to_list',
+    'send_message_to_list_template',
+  ];
 
   public register() {
 
     // Send a message to a user with Courier using title/body (no template)
-    this.mcp.tool(
-      'send_message',
+    this.registerToolIfNeeded(
+      SendTools.tools[0],
       'Send a message to a user with Courier using title and body (no template)',
       {
         user_id: z.string(),
@@ -48,8 +51,8 @@ export class SendTools extends CourierMcpTools {
     );
 
     // Send a message to a user with Courier using a template
-    this.mcp.tool(
-      'send_message_template',
+    this.registerToolIfNeeded(
+      SendTools.tools[1],
       'Send a message to a user with Courier using a template',
       {
         user_id: z.string(),
@@ -76,8 +79,8 @@ export class SendTools extends CourierMcpTools {
     );
 
     // Send a message to a list with Courier using title/body (no template)
-    this.mcp.tool(
-      'send_message_to_list',
+    this.registerToolIfNeeded(
+      SendTools.tools[2],
       'Send a message to a list with Courier using title and body (no template)',
       {
         list_id: z.string(),

@@ -2,6 +2,7 @@ import fs from "fs";
 import path from "path";
 import { CourierClientOptions } from "../client/courier-client.js";
 import { CourierMcpLogLevel } from "./types.js";
+import { CourierMcpToolsRegistry } from "./courier-mcp-tools-registry.js";
 
 function loadMcpConfigFile(): any {
   const possiblePaths = [
@@ -51,8 +52,11 @@ export class CourierMcpConfig {
   readonly apiKey: string;
   readonly baseUrl: string;
   readonly logLevel: CourierMcpLogLevel;
+  readonly availableTools: string[];
 
-  constructor(headers?: Record<string, any>, logLevel: CourierMcpLogLevel = CourierMcpLogLevel.ERROR) {
+  constructor(props: { headers?: Record<string, any>, logLevel?: CourierMcpLogLevel, availableTools?: string[] }) {
+    const { headers, logLevel, availableTools } = props;
+
     const fileConfig = loadMcpConfigFile();
 
     this.apiKey =
@@ -69,7 +73,9 @@ export class CourierMcpConfig {
       fileConfig['base_url'] ||
       'https://api.courier.com';
 
-    this.logLevel = logLevel;
+    this.logLevel = logLevel || CourierMcpLogLevel.ERROR;
+
+    this.availableTools = availableTools || CourierMcpToolsRegistry.defaultTools;
   }
 
   public toCourierClientOptions(): CourierClientOptions {

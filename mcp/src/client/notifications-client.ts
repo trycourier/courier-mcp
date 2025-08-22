@@ -1,13 +1,6 @@
-import Http, { toJson } from "../utils/http.js";
-import { CourierClientOptions } from "./courier-client.js";
+import { BaseClient } from "./base-client.js";
 
-export class NotificationsClient {
-
-  private readonly options: CourierClientOptions;
-
-  constructor(options: CourierClientOptions) {
-    this.options = options;
-  }
+export class NotificationsClient extends BaseClient {
 
   async list(request?: { cursor?: string, limit?: number, draft?: boolean }) {
     const queryParams = request ? new URLSearchParams(
@@ -19,34 +12,22 @@ export class NotificationsClient {
       ? `/notifications?${queryParams}`
       : `/notifications`;
 
-    const res = await Http.get({
-      options: this.options,
-      route,
-    });
-    return await toJson(this.options, res);
+    const res = await this.request('GET', route);
+    return await this.json(res);
   }
 
   async getContent(notificationId: string) {
-    const res = await Http.get({
-      options: this.options,
-      route: `/notifications/${notificationId}/content`,
-    });
-    return await toJson(this.options, res);
+    const res = await this.request('GET', `/notifications/${notificationId}/content`);
+    return await this.json(res);
   }
 
   async getDraftContent(notificationId: string) {
-    const res = await Http.get({
-      options: this.options,
-      route: `/notifications/${notificationId}/draft/content`,
-    });
-    return await toJson(this.options, res);
+    const res = await this.request('GET', `/notifications/${notificationId}/draft/content`);
+    return await this.json(res);
   }
 
   async getSubmissionChecks(notificationId: string, submissionId: string) {
-    const res = await Http.get({
-      options: this.options,
-      route: `/notifications/${notificationId}/${submissionId}/checks`,
-    });
-    return await toJson(this.options, res);
+    const res = await this.request('GET', `/notifications/${notificationId}/${submissionId}/checks`);
+    return await this.json(res);
   }
 } 

@@ -1,12 +1,18 @@
 import z from "zod";
-import { CourierMcpTools } from "./tools.js";
+import { CourierMcpTools } from "./courier-mcp-tools.js";
 
 export class BrandsTools extends CourierMcpTools {
 
+  static readonly tools: string[] = [
+    'create_brand',
+    'get_brand',
+    'list_brands',
+  ];
+
   public register() {
     // Create a brand
-    this.mcp.tool(
-      'create_brand',
+    this.registerToolIfNeeded(
+      BrandsTools.tools[0],
       'Create a new brand.',
       {
         id: z.string().optional(),
@@ -29,8 +35,8 @@ export class BrandsTools extends CourierMcpTools {
     );
 
     // Get a brand by ID
-    this.mcp.tool(
-      'get_brand',
+    this.registerToolIfNeeded(
+      BrandsTools.tools[1],
       'Fetch a specific brand by brand ID.',
       {
         brand_id: z.string(),
@@ -41,8 +47,8 @@ export class BrandsTools extends CourierMcpTools {
     );
 
     // List brands
-    this.mcp.tool(
-      'list_brands',
+    this.registerToolIfNeeded(
+      BrandsTools.tools[2],
       'Get the list of brands.',
       {
         cursor: z.string().optional(),

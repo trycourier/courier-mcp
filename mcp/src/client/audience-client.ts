@@ -1,40 +1,23 @@
-import Http, { toJson } from "../utils/http.js";
-import { CourierClientOptions } from "./courier-client.js";
+import { BaseClient } from "./base-client.js";
 
-export class AudiencesClient {
-
-  private readonly options: CourierClientOptions;
-
-  constructor(options: CourierClientOptions) {
-    this.options = options;
-  }
+export class AudiencesClient extends BaseClient {
 
   // Get an audience by its ID
   async get(audienceId: string) {
-    const res = await Http.get({
-      options: this.options,
-      route: `/audiences/${audienceId}`,
-    });
-    return await toJson(this.options, res);
+    const res = await this.request('GET', `/audiences/${audienceId}`);
+    return await this.json(res);
   }
 
   // Create or update an audience by its ID
   async update(audienceId: string, request: any) {
-    const res = await Http.put({
-      options: this.options,
-      route: `/audiences/${audienceId}`,
-      body: request,
-    });
-    return await toJson(this.options, res);
+    const res = await this.request('PUT', `/audiences/${audienceId}`, request);
+    return await this.json(res);
   }
 
   // Delete an audience by its ID
   async delete(audienceId: string) {
-    const res = await Http.delete({
-      options: this.options,
-      route: `/audiences/${audienceId}`,
-    });
-    return await toJson(this.options, res);
+    const res = await this.request('DELETE', `/audiences/${audienceId}`);
+    return await this.json(res);
   }
 
   // List members of an audience
@@ -45,10 +28,10 @@ export class AudiencesClient {
         .map(([k, v]) => [k, String(v)])
     ).toString() : '';
     const route = queryParams
-      ? `${this.options.baseUrl}/audiences/${audienceId}/members?${queryParams}`
-      : `${this.options.baseUrl}/audiences/${audienceId}/members`;
-    const res = await Http.get({ options: this.options, route });
-    return await toJson(this.options, res);
+      ? `/audiences/${audienceId}/members?${queryParams}`
+      : `/audiences/${audienceId}/members`;
+    const res = await this.request('GET', route);
+    return await this.json(res);
   }
 
   // List all audiences
@@ -59,9 +42,9 @@ export class AudiencesClient {
         .map(([k, v]) => [k, String(v)])
     ).toString() : '';
     const route = queryParams
-      ? `${this.options.baseUrl}/audiences?${queryParams}`
-      : `${this.options.baseUrl}/audiences`;
-    const res = await Http.get({ options: this.options, route });
-    return await toJson(this.options, res);
+      ? `/audiences?${queryParams}`
+      : `/audiences`;
+    const res = await this.request('GET', route);
+    return await this.json(res);
   }
 }

@@ -1,20 +1,9 @@
-import Http, { toJson } from "../utils/http.js";
-import { CourierClientOptions } from "./courier-client.js";
+import { BaseClient } from "./base-client.js";
 
-export class SendClient {
-
-  private readonly options: CourierClientOptions;
-
-  constructor(options: CourierClientOptions) {
-    this.options = options;
-  }
+export class SendClient extends BaseClient {
 
   async send(request: any) {
-    const res = await Http.post({
-      options: this.options,
-      route: `/send`,
-      body: request,
-    });
-    return await toJson(this.options, res);
+    const res = await this.request('POST', `/send`, request);
+    return await this.json(res);
   }
 } 

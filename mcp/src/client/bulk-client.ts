@@ -1,46 +1,25 @@
-import Http, { toJson } from "../utils/http.js";
-import { CourierClientOptions } from "./courier-client.js";
+import { BaseClient } from "./base-client.js";
 
-export class BulkClient {
-
-  private readonly options: CourierClientOptions;
-
-  constructor(options: CourierClientOptions) {
-    this.options = options;
-  }
+export class BulkClient extends BaseClient {
 
   async createJob(request: any) {
-    const res = await Http.post({
-      options: this.options,
-      route: `/bulk`,
-      body: request,
-    });
-    return await toJson(this.options, res);
+    const res = await this.request('POST', `/bulk`, request);
+    return await this.json(res);
   }
 
   async ingestUsers(jobId: string, request: any) {
-    const res = await Http.post({
-      options: this.options,
-      route: `/bulk/${jobId}`,
-      body: request,
-    });
-    return await toJson(this.options, res);
+    const res = await this.request('POST', `/bulk/${jobId}`, request);
+    return await this.json(res);
   }
 
   async runJob(jobId: string) {
-    const res = await Http.post({
-      options: this.options,
-      route: `/bulk/${jobId}/run`,
-    });
-    return await toJson(this.options, res);
+    const res = await this.request('POST', `/bulk/${jobId}/run`);
+    return await this.json(res);
   }
 
   async getJob(jobId: string) {
-    const res = await Http.get({
-      options: this.options,
-      route: `/bulk/${jobId}`,
-    });
-    return await toJson(this.options, res);
+    const res = await this.request('GET', `/bulk/${jobId}`);
+    return await this.json(res);
   }
 
   async getUsers(jobId: string, request?: { cursor?: string, limit?: number }) {
@@ -53,10 +32,7 @@ export class BulkClient {
       ? `/bulk/${jobId}/users?${queryParams}`
       : `/bulk/${jobId}/users`;
 
-    const res = await Http.get({
-      options: this.options,
-      route,
-    });
-    return await toJson(this.options, res);
+    const res = await this.request('GET', route);
+    return await this.json(res);
   }
 } 
