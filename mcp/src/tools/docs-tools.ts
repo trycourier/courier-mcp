@@ -7,6 +7,16 @@ import { CourierMcpLogger } from "../utils/logger.js";
 
 export class DocsTools extends CourierMcpTools {
 
+  static readonly tools: string[] = [
+    'flutter_installation_guide',
+    'react_native_installation_guide',
+    'android_installation_guide',
+    'ios_installation_guide',
+    'react_installation_guide',
+    'node_installation_guide',
+    'python_installation_guide',
+  ];
+
   private readonly logger: CourierMcpLogger;
   private readonly DEFAULT_USER_ID = 'example_user';
   private readonly BASE_DOCS_URL = 'https://raw.githubusercontent.com/trycourier/courier-mcp/refs/heads/main/docs/';
@@ -56,16 +66,12 @@ export class DocsTools extends CourierMcpTools {
   }
 
   public register() {
-
     // Flutter installation guide
-    this.mcp.registerTool(
-      'flutter_installation_guide',
+    this.registerToolIfNeeded(
+      DocsTools.tools[0],
+      'Example instructions to integrate Courier Inbox, Preferences, and Push Notifications into your Flutter application.',
       {
-        title: 'Courier Flutter SDK Installation Guide',
-        description: 'Example instructions to integrate Courier Inbox, Preferences, and Push Notifications into your Flutter application.',
-        inputSchema: {
-          user_id: z.string().describe('The unique identifier for the user.').default(this.DEFAULT_USER_ID),
-        },
+        user_id: z.string().describe('The unique identifier for the user.').default(this.DEFAULT_USER_ID),
       },
       async ({ user_id }) => {
         return await this.getDocsWithJwt(`${this.BASE_DOCS_URL}installation_guide_flutter.md`, user_id);
@@ -73,14 +79,11 @@ export class DocsTools extends CourierMcpTools {
     );
 
     // React Native installation guide
-    this.mcp.registerTool(
-      'react_native_installation_guide',
+    this.registerToolIfNeeded(
+      DocsTools.tools[1],
+      'Instructions to integrate Courier into your React Native application.',
       {
-        title: 'Courier React Native SDK Installation Guide',
-        description: 'Instructions to integrate Courier into your React Native application.',
-        inputSchema: {
-          user_id: z.string().describe('The unique identifier for the user.').default(this.DEFAULT_USER_ID),
-        },
+        user_id: z.string().describe('The unique identifier for the user.').default(this.DEFAULT_USER_ID),
       },
       async ({ user_id }) => {
         return await this.getDocsWithJwt(`${this.BASE_DOCS_URL}installation_guide_react_native.md`, user_id);
@@ -88,14 +91,11 @@ export class DocsTools extends CourierMcpTools {
     );
 
     // Android installation guide
-    this.mcp.registerTool(
-      'android_installation_guide',
+    this.registerToolIfNeeded(
+      DocsTools.tools[2],
+      'Instructions to integrate Courier into your native Android application.',
       {
-        title: 'Courier Android SDK Installation Guide',
-        description: 'Instructions to integrate Courier into your native Android application.',
-        inputSchema: {
-          user_id: z.string().describe('The unique identifier for the user.').default(this.DEFAULT_USER_ID),
-        },
+        user_id: z.string().describe('The unique identifier for the user.').default(this.DEFAULT_USER_ID),
       },
       async ({ user_id }) => {
         return await this.getDocsWithJwt(`${this.BASE_DOCS_URL}installation_guide_android.md`, user_id);
@@ -103,14 +103,11 @@ export class DocsTools extends CourierMcpTools {
     );
 
     // iOS installation guide
-    this.mcp.registerTool(
-      'ios_installation_guide',
+    this.registerToolIfNeeded(
+      DocsTools.tools[3],
+      'Instructions to integrate Courier into your native iOS application.',
       {
-        title: 'Courier iOS SDK Installation Guide',
-        description: 'Instructions to integrate Courier into your native iOS application.',
-        inputSchema: {
-          user_id: z.string().describe('The unique identifier for the user.').default(this.DEFAULT_USER_ID),
-        },
+        user_id: z.string().describe('The unique identifier for the user.').default(this.DEFAULT_USER_ID),
       },
       async ({ user_id }) => {
         return await this.getDocsWithJwt(`${this.BASE_DOCS_URL}installation_guide_ios.md`, user_id);
@@ -118,14 +115,11 @@ export class DocsTools extends CourierMcpTools {
     );
 
     // React (Web) installation guide
-    this.mcp.registerTool(
-      'react_installation_guide',
+    this.registerToolIfNeeded(
+      DocsTools.tools[4],
+      'Instructions to integrate Courier into your React web application.',
       {
-        title: 'Courier React SDK Installation Guide',
-        description: 'Instructions to integrate Courier into your React web application.',
-        inputSchema: {
-          user_id: z.string().describe('The unique identifier for the user.').default(this.DEFAULT_USER_ID),
-        },
+        user_id: z.string().describe('The unique identifier for the user.').default(this.DEFAULT_USER_ID),
       },
       async ({ user_id }) => {
         return await this.getDocsWithJwt(`${this.BASE_DOCS_URL}installation_guide_react.md`, user_id);
@@ -133,11 +127,11 @@ export class DocsTools extends CourierMcpTools {
     );
 
     // Node.js installation guide
-    this.mcp.registerTool(
-      'node_installation_guide',
+    this.registerToolIfNeeded(
+      DocsTools.tools[5],
+      'Instructions to send notifications using Courier from a Node.js backend.',
       {
-        title: 'Courier Node.js SDK Installation Guide',
-        description: 'Instructions to send notifications using Courier from a Node.js backend.',
+        user_id: z.string().describe('The unique identifier for the user.').default(this.DEFAULT_USER_ID),
       },
       async () => {
         const docs = await this.getDocs(`${this.BASE_DOCS_URL}installation_guide_node.md`);
@@ -153,11 +147,11 @@ export class DocsTools extends CourierMcpTools {
     );
 
     // Python installation guide
-    this.mcp.registerTool(
-      'python_installation_guide',
+    this.registerToolIfNeeded(
+      DocsTools.tools[6],
+      'Instructions to send notifications using Courier from a Python backend.',
       {
-        title: 'Courier Python SDK Installation Guide',
-        description: 'Instructions to send notifications using Courier from a Python backend.',
+        user_id: z.string().describe('The unique identifier for the user.').default(this.DEFAULT_USER_ID),
       },
       async () => {
         const docs = await this.getDocs(`${this.BASE_DOCS_URL}installation_guide_python.md`);

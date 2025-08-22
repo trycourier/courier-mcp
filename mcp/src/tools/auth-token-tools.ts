@@ -3,9 +3,13 @@ import { CourierMcpTools } from "./tools.js";
 
 export class AuthTokenTools extends CourierMcpTools {
 
+  static readonly tools: string[] = [
+    'generate_jwt_for_user',
+  ];
+
   public register() {
-    this.mcp.tool(
-      'generate_jwt_for_user',
+    this.registerToolIfNeeded(
+      AuthTokenTools.tools[0],
       'Generate a JWT authentication token for a user.',
       {
         user_id: z.string(),

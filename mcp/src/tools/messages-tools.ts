@@ -2,10 +2,18 @@ import { z } from "zod";
 import { CourierMcpTools } from "./tools.js";
 
 export class MessagesTools extends CourierMcpTools {
+
+  static readonly tools: string[] = [
+    'list_messages',
+    'get_message',
+    'get_message_content',
+  ];
+
   public register() {
+
     // List messages
-    this.mcp.tool(
-      "list_messages",
+    this.registerToolIfNeeded(
+      MessagesTools.tools[0],
       "Fetch the statuses of messages you've previously sent.",
       {
         archived: z.boolean().optional(),
@@ -39,8 +47,8 @@ export class MessagesTools extends CourierMcpTools {
     );
 
     // Get message details
-    this.mcp.tool(
-      "get_message",
+    this.registerToolIfNeeded(
+      MessagesTools.tools[1],
       "Fetch the status of a message you've previously sent.",
       {
         message_id: z.string(),
@@ -50,33 +58,9 @@ export class MessagesTools extends CourierMcpTools {
       }
     );
 
-    // // Cancel a message
-    // this.mcp.tool(
-    //   "cancel_message",
-    //   "Cancel a message that is currently in the process of being delivered.",
-    //   {
-    //     message_id: z.string(),
-    //   },
-    //   async ({ message_id }) => {
-    //     return await this.mcp.client.messages.cancel(message_id);
-    //   }
-    // );
-
-    // // Get message history
-    // this.mcp.tool(
-    //   "get_message_history",
-    //   "Fetch the array of events of a message you've previously sent.",
-    //   {
-    //     message_id: z.string(),
-    //   },
-    //   async ({ message_id }) => {
-    //     return await this.mcp.client.messages.getHistory(message_id);
-    //   }
-    // );
-
     // Get message content
-    this.mcp.tool(
-      "get_message_content",
+    this.registerToolIfNeeded(
+      MessagesTools.tools[2],
       "Fetch the rendered content of a message you've previously sent.",
       {
         message_id: z.string(),
@@ -85,17 +69,5 @@ export class MessagesTools extends CourierMcpTools {
         return await this.mcp.client.messages.getContent(message_id);
       }
     );
-
-    // // Archive a message request
-    // this.mcp.tool(
-    //   "archive_message_request",
-    //   "Archive a message request by request ID.",
-    //   {
-    //     request_id: z.string(),
-    //   },
-    //   async ({ request_id }) => {
-    //     return await this.mcp.client.messages.archive(request_id);
-    //   }
-    // );
   }
 }

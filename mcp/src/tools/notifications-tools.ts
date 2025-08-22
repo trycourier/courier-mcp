@@ -2,10 +2,18 @@ import z from "zod";
 import { CourierMcpTools } from "./tools.js";
 
 export class NotificationsTools extends CourierMcpTools {
+
+  static readonly tools: string[] = [
+    'list_notifications',
+    'get_notification_content',
+    'get_notification_draft_content',
+  ];
+
   public register() {
+
     // List notifications
-    this.mcp.tool(
-      "list_notifications",
+    this.registerToolIfNeeded(
+      NotificationsTools.tools[0],
       "List notifications. Optionally filter by cursor, limit, or draft status.",
       {
         cursor: z.string().optional(),
@@ -25,8 +33,8 @@ export class NotificationsTools extends CourierMcpTools {
     );
 
     // Get notification content by ID
-    this.mcp.tool(
-      "get_notification_content",
+    this.registerToolIfNeeded(
+      NotificationsTools.tools[1],
       "Get the content of a notification by its ID.",
       {
         notification_id: z.string(),
@@ -39,8 +47,8 @@ export class NotificationsTools extends CourierMcpTools {
     );
 
     // Get draft content of a notification by ID
-    this.mcp.tool(
-      "get_notification_draft_content",
+    this.registerToolIfNeeded(
+      NotificationsTools.tools[2],
       "Get the draft content of a notification by its ID.",
       {
         notification_id: z.string(),
@@ -52,22 +60,5 @@ export class NotificationsTools extends CourierMcpTools {
       }
     );
 
-    // // Get submission checks for a notification
-    // this.mcp.tool(
-    //   "get_notification_submission_checks",
-    //   "Get submission checks for a notification by notification ID and submission ID.",
-    //   {
-    //     notification_id: z.string(),
-    //     submission_id: z.string(),
-    //     timeout_in_seconds: z.number().optional(),
-    //     max_retries: z.number().optional(),
-    //   },
-    //   async ({ notification_id, submission_id }) => {
-    //     return await this.mcp.client.notifications.getSubmissionChecks(
-    //       notification_id,
-    //       submission_id
-    //     );
-    //   }
-    // );
   }
 }

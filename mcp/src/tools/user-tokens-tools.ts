@@ -2,10 +2,18 @@ import { z } from "zod";
 import { CourierMcpTools } from "./tools.js";
 
 export class UserTokensTools extends CourierMcpTools {
+
+  static readonly tools: string[] = [
+    'list_user_push_tokens',
+    'get_user_push_token',
+    'create_or_replace_user_push_token',
+  ];
+
   public register() {
+
     // List tokens for a user
-    this.mcp.tool(
-      "list_user_push_tokens",
+    this.registerToolIfNeeded(
+      UserTokensTools.tools[0],
       "List all push tokens for a given user.",
       {
         user_id: z.string(),
@@ -16,8 +24,8 @@ export class UserTokensTools extends CourierMcpTools {
     );
 
     // Get a specific token for a user
-    this.mcp.tool(
-      "get_user_push_token",
+    this.registerToolIfNeeded(
+      UserTokensTools.tools[1],
       "Get a specific push token for a given user.",
       {
         user_id: z.string(),
@@ -29,8 +37,8 @@ export class UserTokensTools extends CourierMcpTools {
     );
 
     // Create or replace a specific token for a user
-    this.mcp.tool(
-      "create_or_replace_user_push_token",
+    this.registerToolIfNeeded(
+      UserTokensTools.tools[2],
       "Create or replace a specific push token for a given user.",
       {
         user_id: z.string(),
