@@ -17,9 +17,10 @@ Or run the launcher action "Start Development"
 {
   "mcpServers": {
     "courier": {
-      "url": "http://localhost:3000",
+      "url": "http://localhost:3000", // The url where this is hosted
       "headers": {
-        "api_key": "XXXX" // Your API Key. Get yours from: https://app.courier.com/settings/api-keys
+        "api_key": "XXXX", // Your API Key. Get yours from: https://app.courier.com/settings/api-keys (Required)
+        "base_url": "XXXX", // The url the underlying api client uses to make requests. (Optional) If not set, Courier Production API will be used.
       }
     }
   }
