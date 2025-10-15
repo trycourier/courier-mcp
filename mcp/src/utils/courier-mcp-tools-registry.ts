@@ -13,6 +13,7 @@ import { NotificationsTools } from "../tools/notifications-tools.js";
 import { ProfilesTools } from "../tools/profiles-tools.js";
 import { SendTools } from "../tools/send-tools.js";
 import { UserTokensTools } from "../tools/user-tokens-tools.js";
+import { SdkContextTools } from "../tools/sdk-context-tools.js";
 
 export class CourierMcpToolsRegistry {
 
@@ -33,6 +34,7 @@ export class CourierMcpToolsRegistry {
       ...ProfilesTools.tools,
       ...SendTools.tools,
       ...UserTokensTools.tools,
+      ...SdkContextTools.tools,
     ];
   }
 
