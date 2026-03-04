@@ -1,17 +1,6 @@
-/**
- * CourierMcp - Main entry point for the Courier MCP (Model Context Protocol) server.
- * This class extends the generic MCP server and registers all Courier-specific tools.
- * 
- * Exports:
- *   - CourierMcp (default): The main server class.
- *   - CourierMcpLogLevel: Enum for log levels.
- *   - CourierMcpConfig: Configuration class for Courier MCP.
- *   - All tool classes and the CourierClient for advanced usage.
- */
-
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+import Courier from '@trycourier/courier';
 
-// Tool imports: Each tool provides a set of API endpoints for a specific Courier feature.
 import { CourierMcpTools } from './tools/courier-mcp-tools.js';
 import { ConfigTools } from './tools/config-tools.js';
 import { SendTools } from './tools/send-tools.js';
@@ -28,42 +17,29 @@ import { NotificationsTools } from './tools/notifications-tools.js';
 import { ProfilesTools } from './tools/profiles-tools.js';
 import { UserTokensTools } from './tools/user-tokens-tools.js';
 import { MessagesTools } from './tools/messages-tools.js';
+import { TenantsTools } from './tools/tenants-tools.js';
+import { TranslationsTools } from './tools/translations-tools.js';
+import { UsersTools } from './tools/users-tools.js';
 
 import { CourierMcpConfig } from './utils/config.js';
-import { CourierClient } from './client/courier-client.js';
 import { MCP_DETAILS } from './utils/version.js';
 
-/**
- * The main Courier MCP server class.
- * 
- * Usage:
- *   const mcp = new CourierMcp(new CourierMcpConfig({ ... }));
- */
 export default class CourierMcp extends McpServer {
 
-  /** Courier API client instance, configured for this MCP server */
-  readonly client: CourierClient;
-
-  /** Configuration for this MCP server instance */
+  readonly courier: Courier;
   readonly config: CourierMcpConfig;
 
-  /**
-   * Construct a new CourierMcp server.
-   * @param config - The configuration object for Courier MCP.
-   */
   constructor(config: CourierMcpConfig) {
-    super(MCP_DETAILS); // Pass version and metadata to the base MCP server
-    this.client = new CourierClient(config.toCourierClientOptions());
+    super(MCP_DETAILS);
+    this.courier = new Courier({
+      apiKey: config.apiKey,
+      baseURL: config.baseUrl,
+    });
     this.config = config;
     this.registerTools();
   }
 
-  /**
-   * Register all available Courier tools with the MCP server.
-   * Tools are only registered if enabled in the config.
-   */
   private registerTools() {
-    // Each tool encapsulates a set of related API endpoints.
     new AudienceTools(this).register();
     new AuditEventsTools(this).register();
     new AuthTokenTools(this).register();
@@ -78,16 +54,16 @@ export default class CourierMcp extends McpServer {
     new NotificationsTools(this).register();
     new ProfilesTools(this).register();
     new SendTools(this).register();
+    new TenantsTools(this).register();
+    new TranslationsTools(this).register();
     new UserTokensTools(this).register();
+    new UsersTools(this).register();
   }
-
 }
 
-// Export core configuration, log level enum, and tools utility for external usage
 export { CourierMcpConfig };
 export { CourierMcpLogLevel } from './utils/types.js';
 
-// Export all tool classes for external usage
 export {
   SendTools,
   DocsTools,
@@ -102,11 +78,12 @@ export {
   ListsTools,
   NotificationsTools,
   ProfilesTools,
-  CourierClient,
   UserTokensTools,
-  MessagesTools
+  MessagesTools,
+  TenantsTools,
+  TranslationsTools,
+  UsersTools,
 };
 
-// Export the tools registry for external usage
 import { CourierMcpToolsRegistry } from './utils/courier-mcp-tools-registry.js';
 export { CourierMcpToolsRegistry as CourierMcpTools };

@@ -30,6 +30,7 @@
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.17.0",
+    "@trycourier/courier": "^7.3.0",
     "zod": "^3.24.2"
   }
 }

@@ -1,5 +1,6 @@
-import z from "zod";
+import { z } from "zod";
 import { CourierMcpTools } from "./courier-mcp-tools.js";
+import { handleToolCall } from "../utils/error-handler.js";
 
 export class ListsTools extends CourierMcpTools {
 
@@ -14,105 +15,99 @@ export class ListsTools extends CourierMcpTools {
 
   public register() {
 
-    // List all lists
     this.registerToolIfNeeded(
       ListsTools.tools[0],
-      "Returns all of the lists, with the ability to filter based on a pattern.",
+      "Get all lists. Optionally filter by pattern (e.g. 'example.list.*').",
       {
-        pattern: z.string().optional(),
-        cursor: z.string().optional(),
-        limit: z.number().optional(),
+        pattern: z.string().optional().describe("Filter pattern (e.g. 'example.list.*')"),
+        cursor: z.string().optional().describe('Pagination cursor'),
       },
-      async ({ pattern, cursor, limit }) => {
-        const request: any = {};
-        if (pattern !== undefined) request.pattern = pattern;
-        if (cursor !== undefined) request.cursor = cursor;
-        if (limit !== undefined) request.limit = limit;
-
-        return await this.mcp.client.lists.list(request);
+      async ({ pattern, cursor }) => {
+        return handleToolCall(() => {
+          const query: Record<string, any> = {};
+          if (pattern) query.pattern = pattern;
+          if (cursor) query.cursor = cursor;
+          return this.mcp.courier.lists.list(query);
+        });
       }
     );
 
-    // Get a list by ID
     this.registerToolIfNeeded(
       ListsTools.tools[1],
-      "Returns a list based on the list ID provided.",
+      "Get a list by its ID.",
       {
-        list_id: z.string(),
-        timeout_in_seconds: z.number().optional(),
-        max_retries: z.number().optional(),
+        list_id: z.string().describe('The list ID'),
       },
       async ({ list_id }) => {
-        return await this.mcp.client.lists.get(list_id);
+        return handleToolCall(() => this.mcp.courier.lists.retrieve(list_id));
       }
     );
 
-    // Get list subscribers
     this.registerToolIfNeeded(
       ListsTools.tools[2],
-      "Get the list's subscriptions.",
+      "Get all subscribers of a list.",
       {
-        list_id: z.string(),
-        cursor: z.string().optional(),
-        limit: z.number().optional(),
+        list_id: z.string().describe('The list ID'),
+        cursor: z.string().optional().describe('Pagination cursor'),
       },
-      async ({ list_id, cursor, limit }) => {
-        const request: any = {};
-        if (cursor !== undefined) request.cursor = cursor;
-        if (limit !== undefined) request.limit = limit;
-
-        return await this.mcp.client.lists.getSubscribers(list_id, request);
+      async ({ list_id, cursor }) => {
+        return handleToolCall(() => this.mcp.courier.lists.subscriptions.list(list_id, cursor ? { cursor } : {}));
       }
     );
 
-    // Create a new list or update an existing one
     this.registerToolIfNeeded(
       ListsTools.tools[3],
-      "Upsert a list by list ID.",
+      "Create or update a list by list ID.",
       {
-        list_id: z.string(),
-        name: z.string(),
+        list_id: z.string().describe('The list ID'),
+        name: z.string().describe('Display name for the list'),
       },
       async ({ list_id, name }) => {
-        const request: any = { name };
-        return await this.mcp.client.lists.update(list_id, request);
+        return handleToolCall(async () => {
+          await this.mcp.courier.lists.update(list_id, { name });
+          return { success: true, list_id, name };
+        });
       }
     );
 
-    // Subscribe a user to a list
     this.registerToolIfNeeded(
       ListsTools.tools[4],
-      "Subscribe a user to an existing list (note: if the List does not exist, it will be automatically created).",
+      "Subscribe a user to a list. Creates the list if it doesn't exist.",
       {
-        list_id: z.string(),
-        user_id: z.string(),
+        list_id: z.string().describe('The list ID'),
+        user_id: z.string().describe('The user ID to subscribe'),
         preferences: z.object({
           categories: z.record(z.any()).optional(),
           notifications: z.record(z.any()).optional(),
-        }).optional(),
+        }).optional().describe('Optional notification preferences'),
       },
       async ({ list_id, user_id, preferences }) => {
-        // Ensure preferences always has categories and notifications as objects (default to empty if missing)
-        const request: any = {
-          preferences: {
-            categories: preferences?.categories ?? {},
-            notifications: preferences?.notifications ?? {},
+        return handleToolCall(async () => {
+          const params: Record<string, any> = { list_id };
+          if (preferences) {
+            params.preferences = {
+              categories: preferences.categories ?? {},
+              notifications: preferences.notifications ?? {},
+            };
           }
-        };
-        return await this.mcp.client.lists.subscribe(list_id, user_id, request);
+          await this.mcp.courier.lists.subscriptions.subscribeUser(user_id, params as any);
+          return { success: true, list_id, user_id };
+        });
       }
     );
 
-    // Unsubscribe a user from a list
     this.registerToolIfNeeded(
       ListsTools.tools[5],
-      "Delete a subscription to a list by list ID and user ID.",
+      "Unsubscribe a user from a list.",
       {
-        list_id: z.string(),
-        user_id: z.string(),
+        list_id: z.string().describe('The list ID'),
+        user_id: z.string().describe('The user ID to unsubscribe'),
       },
       async ({ list_id, user_id }) => {
-        return await this.mcp.client.lists.unsubscribe(list_id, user_id);
+        return handleToolCall(async () => {
+          await this.mcp.courier.lists.subscriptions.unsubscribeUser(user_id, { list_id });
+          return { success: true, message: `${user_id} unsubscribed from ${list_id}` };
+        });
       }
     );
   }

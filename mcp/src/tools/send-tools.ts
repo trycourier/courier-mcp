@@ -1,5 +1,6 @@
-import z from "zod";
+import { z } from "zod";
 import { CourierMcpTools } from "./courier-mcp-tools.js";
+import { handleToolCall } from "../utils/error-handler.js";
 
 export class SendTools extends CourierMcpTools {
 
@@ -12,143 +13,106 @@ export class SendTools extends CourierMcpTools {
 
   public register() {
 
-    // Send a message to a user with Courier using title/body (no template)
     this.registerToolIfNeeded(
       SendTools.tools[0],
-      'Send a message to a user with Courier using title and body (no template)',
+      'Send a message to a user using inline title and body content (no template). Optionally specify routing channels.',
       {
-        user_id: z.string(),
-        title: z.string(),
-        body: z.string(),
-        data: z.record(z.string(), z.string()).optional(),
-        method: z.enum(['all', 'single']).default('all'),
-        channels: z.array(z.string()),
+        user_id: z.string().describe('The recipient user ID'),
+        title: z.string().describe('Message title'),
+        body: z.string().describe('Message body'),
+        data: z.record(z.string(), z.any()).optional().describe('Key-value data to include with the message'),
+        method: z.enum(['all', 'single']).default('all').describe('Routing method: deliver to all channels or stop after first success'),
+        channels: z.array(z.string()).optional().describe('Channel names to route through (e.g. email, sms, push). Omit to use default routing.'),
       },
       async ({ user_id, title, body, data, method, channels }) => {
-        if (!title || !body) {
-          throw new Error('Both title and body must be provided.');
-        }
-
-        let request: any = {
-          message: {
-            to: {
-              user_id: user_id,
-            },
-            data: data,
-            routing: {
-              method: method,
-              channels: channels
-            },
-            content: {
-              title: title,
-              body: body,
-            }
-          },
-        };
-
-        return await this.mcp.client.send.send(request);
+        return handleToolCall(() => {
+          const message: Record<string, any> = {
+            to: { user_id },
+            content: { title, body },
+          };
+          if (data) message.data = data;
+          if (channels && channels.length > 0) {
+            message.routing = { method, channels };
+          }
+          return this.mcp.courier.send.message({ message });
+        });
       }
     );
 
-    // Send a message to a user with Courier using a template
     this.registerToolIfNeeded(
       SendTools.tools[1],
-      'Send a message to a user with Courier using a template',
+      'Send a message to a user using a pre-configured notification template. Optionally pass data and routing.',
       {
-        user_id: z.string(),
-        template: z.string(),
-        data: z.record(z.string(), z.string()).optional(),
+        user_id: z.string().describe('The recipient user ID'),
+        template: z.string().describe('Template ID or notification slug'),
+        data: z.record(z.string(), z.any()).optional().describe('Key-value data for template variables'),
+        method: z.enum(['all', 'single']).default('all').optional().describe('Routing method'),
+        channels: z.array(z.string()).optional().describe('Channel names to route through. Omit to use template routing config.'),
       },
-      async ({ user_id, template, data }) => {
-        if (!template) {
-          throw new Error('Template must be provided.');
-        }
-
-        let request: any = {
-          message: {
-            to: {
-              user_id: user_id,
-            },
-            data: data,
-            template: template
-          },
-        };
-
-        return await this.mcp.client.send.send(request);
+      async ({ user_id, template, data, method, channels }) => {
+        return handleToolCall(() => {
+          const message: Record<string, any> = {
+            to: { user_id },
+            template,
+          };
+          if (data) message.data = data;
+          if (channels && channels.length > 0) {
+            message.routing = { method: method || 'all', channels };
+          }
+          return this.mcp.courier.send.message({ message });
+        });
       }
     );
 
-    // Send a message to a list with Courier using title/body (no template)
     this.registerToolIfNeeded(
       SendTools.tools[2],
-      'Send a message to a list with Courier using title and body (no template)',
+      'Send a message to all subscribers of a list using inline title and body content.',
       {
-        list_id: z.string(),
-        title: z.string(),
-        body: z.string(),
-        data: z.record(z.string(), z.string()).optional(),
-        method: z.enum(['all', 'single']).default('all'),
-        channels: z.array(z.string()),
+        list_id: z.string().describe('The list ID to send to'),
+        title: z.string().describe('Message title'),
+        body: z.string().describe('Message body'),
+        data: z.record(z.string(), z.any()).optional().describe('Key-value data to include'),
+        method: z.enum(['all', 'single']).default('all').describe('Routing method'),
+        channels: z.array(z.string()).optional().describe('Channel names to route through. Omit to use default routing.'),
       },
       async ({ list_id, title, body, data, method, channels }) => {
-        if (!title || !body) {
-          throw new Error('Both title and body must be provided.');
-        }
-
-        let request: any = {
-          message: {
-            to: {
-              list_id: list_id,
-            },
-            data: data,
-            routing: {
-              method: method,
-              channels: channels
-            },
-            content: {
-              title: title,
-              body: body,
-            }
-          },
-        };
-
-        return await this.mcp.client.send.send(request);
+        return handleToolCall(() => {
+          const message: Record<string, any> = {
+            to: { list_id },
+            content: { title, body },
+          };
+          if (data) message.data = data;
+          if (channels && channels.length > 0) {
+            message.routing = { method, channels };
+          }
+          return this.mcp.courier.send.message({ message });
+        });
       }
     );
 
-    // Send a message to a list with Courier using a template
-    this.mcp.tool(
-      'send_message_to_list_template',
-      'Send a message to a list with Courier using a template',
+    this.registerToolIfNeeded(
+      SendTools.tools[3],
+      'Send a message to all subscribers of a list using a notification template.',
       {
-        list_id: z.string(),
-        template: z.string(),
-        data: z.record(z.string(), z.string()).optional(),
-        method: z.enum(['all', 'single']).default('all'),
-        channels: z.array(z.string()),
+        list_id: z.string().describe('The list ID to send to'),
+        template: z.string().describe('Template ID or notification slug'),
+        data: z.record(z.string(), z.any()).optional().describe('Key-value data for template variables'),
+        method: z.enum(['all', 'single']).default('all').optional().describe('Routing method'),
+        channels: z.array(z.string()).optional().describe('Channel names to route through. Omit to use template routing config.'),
       },
       async ({ list_id, template, data, method, channels }) => {
-        if (!template) {
-          throw new Error('Template must be provided.');
-        }
-
-        let request: any = {
-          message: {
-            to: {
-              list_id: list_id,
-            },
-            data: data,
-            routing: {
-              method: method,
-              channels: channels
-            },
-            template: template
-          },
-        };
-
-        return await this.mcp.client.send.send(request);
+        return handleToolCall(() => {
+          const message: Record<string, any> = {
+            to: { list_id },
+            template,
+          };
+          if (data) message.data = data;
+          if (channels && channels.length > 0) {
+            message.routing = { method: method || 'all', channels };
+          }
+          return this.mcp.courier.send.message({ message });
+        });
       }
     );
-
   }
 }
