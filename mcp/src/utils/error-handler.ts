@@ -13,6 +13,18 @@ export function formatSuccess(data: unknown): McpToolResult {
 }
 
 export function formatError(err: unknown): McpToolResult {
+  if (err instanceof APIConnectionError) {
+    return {
+      content: [
+        {
+          type: 'text' as const,
+          text: JSON.stringify({ error: true, message: `Connection error: ${err.message}` }, null, 2),
+        },
+      ],
+      isError: true,
+    };
+  }
+
   if (err instanceof APIError) {
     const status = err.status;
     const body = err.error;
@@ -23,18 +35,6 @@ export function formatError(err: unknown): McpToolResult {
 
     return {
       content: [{ type: 'text' as const, text: JSON.stringify({ error: true, status, message }, null, 2) }],
-      isError: true,
-    };
-  }
-
-  if (err instanceof APIConnectionError) {
-    return {
-      content: [
-        {
-          type: 'text' as const,
-          text: JSON.stringify({ error: true, message: `Connection error: ${err.message}` }, null, 2),
-        },
-      ],
       isError: true,
     };
   }
