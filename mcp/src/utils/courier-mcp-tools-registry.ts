@@ -14,36 +14,48 @@ import { ProfilesTools } from "../tools/profiles-tools.js";
 import { SendTools } from "../tools/send-tools.js";
 import { UserTokensTools } from "../tools/user-tokens-tools.js";
 import { SdkContextTools } from "../tools/sdk-context-tools.js";
+import { TenantsTools } from "../tools/tenants-tools.js";
+import { TranslationsTools } from "../tools/translations-tools.js";
+import { UsersTools } from "../tools/users-tools.js";
 
 export class CourierMcpToolsRegistry {
 
-  // The default tools the MCP server will register
+  /**
+   * Core tools registered by default. These cover the most common
+   * agent workflows: sending, message debugging, profiles, lists,
+   * audiences, notifications, brands, auth, user tokens, and docs.
+   */
   static get defaultTools(): string[] {
     return [
-      ...AudienceTools.tools,
-      ...AuditEventsTools.tools,
-      ...AuthTokenTools.tools,
-      ...AutomationsTools.tools,
-      ...BrandsTools.tools,
-      ...BulkTools.tools,
-      ...DocsTools.tools,
-      ...InboundTools.tools,
-      ...ListsTools.tools,
-      ...MessagesTools.tools,
-      ...NotificationsTools.tools,
-      ...ProfilesTools.tools,
       ...SendTools.tools,
+      ...MessagesTools.tools,
+      ...ProfilesTools.tools,
+      ...ListsTools.tools,
+      ...AudienceTools.tools,
+      ...NotificationsTools.tools,
+      ...BrandsTools.tools,
+      ...AuthTokenTools.tools,
       ...UserTokensTools.tools,
-      ...SdkContextTools.tools,
+      ...DocsTools.tools,
     ];
   }
 
-  // The tools that are available to the MCP server
+  /**
+   * All available tools including advanced/niche operations.
+   * The hosted server (mcp.courier.com) registers these.
+   */
   static get allAvailableTools(): string[] {
     return [
       ...this.defaultTools,
+      ...AutomationsTools.tools,
+      ...BulkTools.tools,
+      ...AuditEventsTools.tools,
+      ...InboundTools.tools,
+      ...TenantsTools.tools,
+      ...TranslationsTools.tools,
+      ...UsersTools.tools,
       ...ConfigTools.tools,
+      ...SdkContextTools.tools,
     ];
   }
-
 }

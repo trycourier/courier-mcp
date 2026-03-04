@@ -1,5 +1,6 @@
-import z from "zod";
+import { z } from "zod";
 import { CourierMcpTools } from "./courier-mcp-tools.js";
+import { handleToolCall } from "../utils/error-handler.js";
 
 export class NotificationsTools extends CourierMcpTools {
 
@@ -11,54 +12,37 @@ export class NotificationsTools extends CourierMcpTools {
 
   public register() {
 
-    // List notifications
     this.registerToolIfNeeded(
       NotificationsTools.tools[0],
-      "List notifications. Optionally filter by cursor, limit, or draft status.",
+      "List notification templates. Optionally filter by cursor.",
       {
-        cursor: z.string().optional(),
-        limit: z.number().optional(),
-        draft: z.boolean().optional(),
-        timeout_in_seconds: z.number().optional(),
-        max_retries: z.number().optional(),
+        cursor: z.string().optional().describe('Pagination cursor'),
       },
-      async ({ cursor, limit, draft }) => {
-        const request: any = {};
-        if (cursor !== undefined) request.cursor = cursor;
-        if (limit !== undefined) request.limit = limit;
-        if (draft !== undefined) request.draft = draft;
-
-        return await this.mcp.client.notifications.list(request);
+      async ({ cursor }) => {
+        return handleToolCall(() => this.mcp.courier.notifications.list(cursor ? { cursor } : {}));
       }
     );
 
-    // Get notification content by ID
     this.registerToolIfNeeded(
       NotificationsTools.tools[1],
-      "Get the content of a notification by its ID.",
+      "Get the published content blocks of a notification template.",
       {
-        notification_id: z.string(),
-        timeout_in_seconds: z.number().optional(),
-        max_retries: z.number().optional(),
+        notification_id: z.string().describe('The notification template ID'),
       },
       async ({ notification_id }) => {
-        return await this.mcp.client.notifications.getContent(notification_id);
+        return handleToolCall(() => this.mcp.courier.notifications.retrieveContent(notification_id));
       }
     );
 
-    // Get draft content of a notification by ID
     this.registerToolIfNeeded(
       NotificationsTools.tools[2],
-      "Get the draft content of a notification by its ID.",
+      "Get the draft (unpublished) content blocks of a notification template.",
       {
-        notification_id: z.string(),
-        timeout_in_seconds: z.number().optional(),
-        max_retries: z.number().optional(),
+        notification_id: z.string().describe('The notification template ID'),
       },
       async ({ notification_id }) => {
-        return await this.mcp.client.notifications.getDraftContent(notification_id);
+        return handleToolCall(() => this.mcp.courier.notifications.draft.retrieveContent(notification_id));
       }
     );
-
   }
 }

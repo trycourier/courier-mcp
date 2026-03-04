@@ -1,9 +1,8 @@
 import fs from "fs";
 import path from "path";
-import z from "zod";
+import { z } from "zod";
 import CourierMcp from "../index.js";
 import { CourierMcpTools } from "./courier-mcp-tools.js";
-import { CourierMcpLogger } from "../utils/logger.js";
 
 /**
  * Courier SDK Context Guardrail & Migration Helper
@@ -16,11 +15,8 @@ export class SdkContextTools extends CourierMcpTools {
     "get_courier_sdk_component_map",
   ];
 
-  private readonly logger: CourierMcpLogger;
-
   constructor(mcp: CourierMcp) {
     super(mcp);
-    this.logger = new CourierMcpLogger(mcp.client.options);
   }
 
   public register() {
@@ -138,7 +134,7 @@ import { Inbox } from "@trycourier/react-inbox";
       };
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : String(err);
-      this.logger.error(`Error detecting SDK version: ${message}`);
+      console.error(`Error detecting SDK version: ${message}`);
       return {
         version: "unknown",
         rules: "Failed to read package.json for SDK detection.",

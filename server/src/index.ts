@@ -17,7 +17,17 @@ app.post('/', (req: Request, res: Response, next: NextFunction) => {
   return statelessHandler(createServer)(req, res, next);
 });
 
-app.get('/health', (req, res) => {
+// Stateless mode doesn't support SSE streaming. Return 405 so MCP clients
+// know this endpoint exists but doesn't accept GET (instead of a confusing 404).
+app.get('/', (_req: Request, res: Response) => {
+  res.status(405).set('Allow', 'POST').send('SSE not supported on stateless server');
+});
+
+app.delete('/', (_req: Request, res: Response) => {
+  res.status(405).set('Allow', 'POST').send('Sessions not supported on stateless server');
+});
+
+app.get('/health', (_req, res) => {
   res.status(200).send('OK');
 });
 

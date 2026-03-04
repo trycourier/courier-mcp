@@ -1,37 +1,63 @@
-import z from "zod";
+import { z } from "zod";
 import { CourierMcpTools } from "./courier-mcp-tools.js";
+import { handleToolCall } from "../utils/error-handler.js";
 
 export class AutomationsTools extends CourierMcpTools {
 
   static readonly tools: string[] = [
     'invoke_automation_template',
+    'invoke_ad_hoc_automation',
   ];
 
   public register() {
-    // Invoke an automation run from an automation template
+
     this.registerToolIfNeeded(
       AutomationsTools.tools[0],
-      'Invoke an automation run from an automation template.',
+      'Invoke an automation run from an existing automation template.',
       {
-        template_id: z.string(),
+        template_id: z.string().describe('The automation template ID'),
+        recipient: z.string().describe('Recipient user ID'),
+        brand: z.string().optional().describe('Brand ID override'),
+        data: z.record(z.any()).optional().describe('Data to pass to the automation'),
+        profile: z.record(z.any()).optional().describe('Profile data for the recipient'),
+        template: z.string().optional().describe('Notification template override'),
+      },
+      async ({ template_id, recipient, brand, data, profile, template }) => {
+        return handleToolCall(() => {
+          const body: Record<string, any> = { recipient };
+          if (brand) body.brand = brand;
+          if (data) body.data = data;
+          if (profile) body.profile = profile;
+          if (template) body.template = template;
+          return this.mcp.courier.automations.invoke.invokeByTemplate(template_id, body as any);
+        });
+      }
+    );
+
+    this.registerToolIfNeeded(
+      AutomationsTools.tools[1],
+      'Invoke an ad-hoc automation with inline steps (no template needed).',
+      {
+        automation: z.object({
+          steps: z.array(z.any()).describe('Array of automation step objects'),
+          cancelation_token: z.string().optional().describe('Token for cancelling the automation'),
+        }).describe('The automation definition'),
         brand: z.string().optional(),
         data: z.record(z.any()).optional(),
         profile: z.record(z.any()).optional(),
         recipient: z.string().optional(),
         template: z.string().optional(),
       },
-      async ({ template_id, brand, data, profile, recipient, template }) => {
-        const request: any = {};
-        if (brand !== undefined) request.brand = brand;
-        if (data !== undefined) request.data = data;
-        if (profile !== undefined) request.profile = profile;
-        if (recipient !== undefined) request.recipient = recipient;
-        if (template !== undefined) request.template = template;
-
-        return await this.mcp.client.automations.invokeAutomationTemplate(
-          template_id,
-          request,
-        );
+      async ({ automation, brand, data, profile, recipient, template }) => {
+        return handleToolCall(() => {
+          const body: Record<string, any> = { automation };
+          if (brand) body.brand = brand;
+          if (data) body.data = data;
+          if (profile) body.profile = profile;
+          if (recipient) body.recipient = recipient;
+          if (template) body.template = template;
+          return this.mcp.courier.automations.invoke.invokeAdHoc(body as any);
+        });
       }
     );
   }

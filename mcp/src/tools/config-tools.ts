@@ -1,3 +1,4 @@
+import { z } from "zod";
 import { CourierMcpTools } from "./courier-mcp-tools.js";
 
 export class ConfigTools extends CourierMcpTools {
@@ -9,14 +10,17 @@ export class ConfigTools extends CourierMcpTools {
   public register() {
     this.registerToolIfNeeded(
       ConfigTools.tools[0],
-      'Get the Courier environment configuration',
+      'Get the current Courier MCP environment configuration (base URL, available tools). Does not expose the API key.',
       {},
       async () => {
         return {
           content: [
             {
-              type: 'text',
-              text: JSON.stringify(this.mcp.client.options, null, 2),
+              type: 'text' as const,
+              text: JSON.stringify({
+                baseUrl: this.mcp.config.baseUrl,
+                availableTools: this.mcp.config.availableTools,
+              }, null, 2),
             },
           ],
         };
