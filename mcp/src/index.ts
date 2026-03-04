@@ -20,6 +20,7 @@ import { MessagesTools } from './tools/messages-tools.js';
 import { TenantsTools } from './tools/tenants-tools.js';
 import { TranslationsTools } from './tools/translations-tools.js';
 import { UsersTools } from './tools/users-tools.js';
+import { SdkContextTools } from './tools/sdk-context-tools.js';
 
 import { CourierMcpConfig } from './utils/config.js';
 import { MCP_DETAILS } from './utils/version.js';
@@ -58,6 +59,7 @@ export default class CourierMcp extends McpServer {
     new TranslationsTools(this).register();
     new UserTokensTools(this).register();
     new UsersTools(this).register();
+    new SdkContextTools(this).register();
   }
 }
 
@@ -83,6 +85,7 @@ export {
   TenantsTools,
   TranslationsTools,
   UsersTools,
+  SdkContextTools,
 };
 
 import { CourierMcpToolsRegistry } from './utils/courier-mcp-tools-registry.js';
