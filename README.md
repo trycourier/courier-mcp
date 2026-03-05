@@ -1,6 +1,6 @@
 # Courier MCP Server
 
-The official [Model Context Protocol](https://modelcontextprotocol.io/) (MCP) server for the [Courier](https://www.courier.com) notification API. It gives AI agents full access to the Courier API — send messages, manage profiles, debug deliveries, configure lists, and more — through 63 tools backed by the [`@trycourier/courier`](https://www.npmjs.com/package/@trycourier/courier) Node SDK.
+The official [Model Context Protocol](https://modelcontextprotocol.io/) (MCP) server for the [Courier](https://www.courier.com) notification API. It gives AI agents full access to the Courier API — send messages, manage profiles, debug deliveries, configure lists, and more — through 60 tools backed by the [`@trycourier/courier`](https://www.npmjs.com/package/@trycourier/courier) Node SDK.
 
 ## Install
 
@@ -58,9 +58,9 @@ Then point your IDE at `http://localhost:3000` with the same config format above
 
 ## Tools
 
-63 tools organized by API resource. The hosted server registers all tools; local installs use a default subset (36 core tools) unless configured otherwise.
+59 default tools organized by API resource, plus 1 diagnostic tool available in local installs.
 
-### Core tools (default)
+### Default tools
 
 | Category | Tools |
 |----------|-------|
@@ -74,11 +74,6 @@ Then point your IDE at `http://localhost:3000` with the same config format above
 | **Auth** | `generate_jwt_for_user` |
 | **User Tokens** | `list_user_push_tokens`, `get_user_push_token`, `create_or_replace_user_push_token` |
 | **Docs** | `courier_installation_guide` |
-
-### Advanced tools (hosted server only)
-
-| Category | Tools |
-|----------|-------|
 | **Automations** | `invoke_automation_template`, `invoke_ad_hoc_automation` |
 | **Bulk** | `create_bulk_job`, `add_bulk_users`, `run_bulk_job`, `get_bulk_job`, `list_bulk_users` |
 | **Audit Events** | `get_audit_event`, `list_audit_events` |
@@ -86,8 +81,12 @@ Then point your IDE at `http://localhost:3000` with the same config format above
 | **Tenants** | `get_tenant`, `create_or_update_tenant`, `list_tenants`, `delete_tenant` |
 | **Users** | `get_user_preferences`, `update_user_preference_topic`, `list_user_tenants`, `add_user_to_tenant`, `remove_user_from_tenant` |
 | **Translations** | `get_translation`, `update_translation` |
-| **Config** | `get_environment_config` |
-| **SDK Context** | `get_courier_sdk_context`, `scan_courier_imports`, `get_courier_sdk_component_map` |
+
+### Diagnostic tools (local only)
+
+| Category | Tools |
+|----------|-------|
+| **Config** | `get_environment_config` — check which API key, base URL, and package version the MCP session is using |
 
 ## Architecture
 
