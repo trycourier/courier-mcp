@@ -1,9 +1,15 @@
-# Triggered when a GitHub release is created.
-# Can also be run manually to re-publish in case of failure.
-# https://www.github.com/trycourier/courier-mcp/actions/workflows/publish-npm.yml
+# Publishes to npm when the version in mcp/package.json differs from
+# the latest published version. Runs on every push to main, on GitHub
+# release, or via manual dispatch.
 name: Publish NPM
 on:
   workflow_dispatch:
+
+  push:
+    branches:
+      - main
+    paths:
+      - 'mcp/**'
 
   release:
     types: [published]
@@ -17,15 +23,18 @@ jobs:
         working-directory: mcp
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v4
 
       - name: Set up Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
 
       - name: Install dependencies
         run: npm install
+
+      - name: Run tests
+        run: npm test
 
       - name: Build
         run: npm run build
