@@ -136,12 +136,4 @@ describe('Tool coverage - one call per tool group', () => {
     await client.callTool({ name: 'subscribe_user_to_list', arguments: { list_id: 'list-1', user_id: 'user-1' } });
     expect(mockCourier.lists.subscriptions.subscribeUser).toHaveBeenCalledWith('user-1', expect.objectContaining({ list_id: 'list-1' }));
   });
-
-  it('get_environment_config returns config without API key', async () => {
-    const result = await client.callTool({ name: 'get_environment_config', arguments: {} });
-    const parsed = JSON.parse((result.content as any)[0].text);
-    expect(parsed.baseUrl).toBeDefined();
-    expect(parsed.availableTools).toBeDefined();
-    expect(parsed.apiKey).toBeUndefined();
-  });
 });

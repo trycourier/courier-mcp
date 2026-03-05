@@ -1,9 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { CourierMcpToolsRegistry } from '../utils/courier-mcp-tools-registry.js';
-import { SdkContextTools } from '../tools/sdk-context-tools.js';
 import { SendTools } from '../tools/send-tools.js';
 import { MessagesTools } from '../tools/messages-tools.js';
-import { ConfigTools } from '../tools/config-tools.js';
 import { BulkTools } from '../tools/bulk-tools.js';
 import { TenantsTools } from '../tools/tenants-tools.js';
 import { UsersTools } from '../tools/users-tools.js';
@@ -24,18 +22,6 @@ describe('CourierMcpToolsRegistry', () => {
       }
     });
 
-    it('includes SdkContextTools', () => {
-      for (const tool of SdkContextTools.tools) {
-        expect(defaults).toContain(tool);
-      }
-    });
-
-    it('includes ConfigTools', () => {
-      for (const tool of ConfigTools.tools) {
-        expect(defaults).toContain(tool);
-      }
-    });
-
     it('includes Bulk tools', () => {
       for (const tool of BulkTools.tools) {
         expect(defaults).toContain(tool);
@@ -52,6 +38,13 @@ describe('CourierMcpToolsRegistry', () => {
       for (const tool of UsersTools.tools) {
         expect(defaults).toContain(tool);
       }
+    });
+
+    it('does not include removed tools', () => {
+      expect(defaults).not.toContain('get_environment_config');
+      expect(defaults).not.toContain('get_courier_sdk_context');
+      expect(defaults).not.toContain('scan_courier_imports');
+      expect(defaults).not.toContain('get_courier_sdk_component_map');
     });
 
     it('has no duplicate entries', () => {

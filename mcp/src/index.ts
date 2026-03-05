@@ -2,7 +2,6 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import Courier from '@trycourier/courier';
 
 import { CourierMcpTools } from './tools/courier-mcp-tools.js';
-import { ConfigTools } from './tools/config-tools.js';
 import { SendTools } from './tools/send-tools.js';
 import { DocsTools } from './tools/docs-tools.js';
 import { AuthTokenTools } from './tools/auth-token-tools.js';
@@ -20,7 +19,6 @@ import { MessagesTools } from './tools/messages-tools.js';
 import { TenantsTools } from './tools/tenants-tools.js';
 import { TranslationsTools } from './tools/translations-tools.js';
 import { UsersTools } from './tools/users-tools.js';
-import { SdkContextTools } from './tools/sdk-context-tools.js';
 
 import { CourierMcpConfig } from './utils/config.js';
 import { MCP_DETAILS } from './utils/version.js';
@@ -48,7 +46,6 @@ export default class CourierMcp extends McpServer {
     new BrandsTools(this).register();
     new BulkTools(this).register();
     new DocsTools(this).register();
-    new ConfigTools(this).register();
     new InboundTools(this).register();
     new ListsTools(this).register();
     new MessagesTools(this).register();
@@ -59,7 +56,6 @@ export default class CourierMcp extends McpServer {
     new TranslationsTools(this).register();
     new UserTokensTools(this).register();
     new UsersTools(this).register();
-    new SdkContextTools(this).register();
   }
 }
 
@@ -75,7 +71,6 @@ export {
   AutomationsTools,
   BrandsTools,
   BulkTools,
-  ConfigTools,
   InboundTools,
   ListsTools,
   NotificationsTools,
@@ -85,7 +80,6 @@ export {
   TenantsTools,
   TranslationsTools,
   UsersTools,
-  SdkContextTools,
 };
 
 import { CourierMcpToolsRegistry } from './utils/courier-mcp-tools-registry.js';
