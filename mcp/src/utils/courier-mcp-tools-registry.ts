@@ -21,9 +21,8 @@ import { UsersTools } from "../tools/users-tools.js";
 export class CourierMcpToolsRegistry {
 
   /**
-   * Core tools registered by default. These cover the most common
-   * agent workflows: sending, message debugging, profiles, lists,
-   * audiences, notifications, brands, auth, user tokens, and docs.
+   * All available tools. Registered by default when no explicit
+   * availableTools list is provided to CourierMcpConfig.
    */
   static get defaultTools(): string[] {
     return [
@@ -37,16 +36,6 @@ export class CourierMcpToolsRegistry {
       ...AuthTokenTools.tools,
       ...UserTokensTools.tools,
       ...DocsTools.tools,
-    ];
-  }
-
-  /**
-   * All available tools including advanced/niche operations.
-   * The hosted server (mcp.courier.com) registers these.
-   */
-  static get allAvailableTools(): string[] {
-    return [
-      ...this.defaultTools,
       ...AutomationsTools.tools,
       ...BulkTools.tools,
       ...AuditEventsTools.tools,
@@ -57,5 +46,10 @@ export class CourierMcpToolsRegistry {
       ...ConfigTools.tools,
       ...SdkContextTools.tools,
     ];
+  }
+
+  /** @deprecated Use defaultTools instead. Kept for backward compatibility. */
+  static get allAvailableTools(): string[] {
+    return this.defaultTools;
   }
 }

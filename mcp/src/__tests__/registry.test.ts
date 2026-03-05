@@ -24,77 +24,47 @@ describe('CourierMcpToolsRegistry', () => {
       }
     });
 
-    it('does NOT include SdkContextTools', () => {
-      for (const tool of SdkContextTools.tools) {
-        expect(defaults).not.toContain(tool);
-      }
-    });
-
-    it('does NOT include ConfigTools in defaults', () => {
-      for (const tool of ConfigTools.tools) {
-        expect(defaults).not.toContain(tool);
-      }
-    });
-
-    it('does NOT include Bulk tools in defaults', () => {
-      for (const tool of BulkTools.tools) {
-        expect(defaults).not.toContain(tool);
-      }
-    });
-
-    it('does NOT include Tenants tools in defaults', () => {
-      for (const tool of TenantsTools.tools) {
-        expect(defaults).not.toContain(tool);
-      }
-    });
-
-    it('does NOT include Users tools in defaults', () => {
-      for (const tool of UsersTools.tools) {
-        expect(defaults).not.toContain(tool);
-      }
-    });
-  });
-
-  describe('allAvailableTools', () => {
-    const all = CourierMcpToolsRegistry.allAvailableTools;
-
-    it('is a superset of defaultTools', () => {
-      for (const tool of CourierMcpToolsRegistry.defaultTools) {
-        expect(all).toContain(tool);
-      }
-    });
-
     it('includes SdkContextTools', () => {
       for (const tool of SdkContextTools.tools) {
-        expect(all).toContain(tool);
+        expect(defaults).toContain(tool);
+      }
+    });
+
+    it('includes ConfigTools', () => {
+      for (const tool of ConfigTools.tools) {
+        expect(defaults).toContain(tool);
       }
     });
 
     it('includes Bulk tools', () => {
       for (const tool of BulkTools.tools) {
-        expect(all).toContain(tool);
+        expect(defaults).toContain(tool);
       }
     });
 
     it('includes Tenants tools', () => {
       for (const tool of TenantsTools.tools) {
-        expect(all).toContain(tool);
+        expect(defaults).toContain(tool);
       }
     });
 
     it('includes Users tools', () => {
       for (const tool of UsersTools.tools) {
-        expect(all).toContain(tool);
+        expect(defaults).toContain(tool);
       }
     });
 
     it('has no duplicate entries', () => {
-      const unique = new Set(all);
-      expect(unique.size).toBe(all.length);
+      const unique = new Set(defaults);
+      expect(unique.size).toBe(defaults.length);
     });
+  });
 
-    it('has more tools than defaults', () => {
-      expect(all.length).toBeGreaterThan(CourierMcpToolsRegistry.defaultTools.length);
+  describe('allAvailableTools (deprecated alias)', () => {
+    it('returns the same tools as defaultTools', () => {
+      expect(CourierMcpToolsRegistry.allAvailableTools).toEqual(
+        CourierMcpToolsRegistry.defaultTools
+      );
     });
   });
 });
