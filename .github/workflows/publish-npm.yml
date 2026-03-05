@@ -1,0 +1,49 @@
+# Triggered when a GitHub release is created.
+# Can also be run manually to re-publish in case of failure.
+# https://www.github.com/trycourier/courier-mcp/actions/workflows/publish-npm.yml
+name: Publish NPM
+on:
+  workflow_dispatch:
+
+  release:
+    types: [published]
+
+jobs:
+  publish:
+    name: publish
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: mcp
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build
+        run: npm run build
+
+      - name: Publish to NPM
+        run: |
+          npm config set '//registry.npmjs.org/:_authToken' "$NPM_TOKEN"
+
+          PACKAGE_NAME="$(jq -r '.name' package.json)"
+          VERSION="$(jq -r '.version' package.json)"
+          PUBLISHED="$(npm view "$PACKAGE_NAME" version 2>/dev/null || echo "")"
+
+          if [ "$VERSION" = "$PUBLISHED" ]; then
+            echo "$PACKAGE_NAME@$VERSION is already published, skipping."
+            exit 0
+          fi
+
+          echo "Publishing $PACKAGE_NAME@$VERSION (current npm: ${PUBLISHED:-none})"
+          npm publish --access public
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
