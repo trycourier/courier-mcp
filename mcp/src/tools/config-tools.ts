@@ -1,5 +1,5 @@
-import { z } from "zod";
 import { CourierMcpTools } from "./courier-mcp-tools.js";
+import { PACKAGE_VERSION } from "../utils/version.js";
 
 export class ConfigTools extends CourierMcpTools {
 
@@ -10,7 +10,7 @@ export class ConfigTools extends CourierMcpTools {
   public register() {
     this.registerToolIfNeeded(
       ConfigTools.tools[0],
-      'Get the current Courier MCP environment configuration (base URL, available tools). Does not expose the API key.',
+      'Check which Courier API key, base URL, and package version this MCP session is using. Useful for debugging environment issues without leaving the agent.',
       {},
       async () => {
         return {
@@ -18,8 +18,10 @@ export class ConfigTools extends CourierMcpTools {
             {
               type: 'text' as const,
               text: JSON.stringify({
+                apiKey: this.mcp.config.apiKey,
                 baseUrl: this.mcp.config.baseUrl,
-                availableTools: this.mcp.config.availableTools,
+                version: PACKAGE_VERSION,
+                toolCount: this.mcp.config.availableTools.length,
               }, null, 2),
             },
           ],

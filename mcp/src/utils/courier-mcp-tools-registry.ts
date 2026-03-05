@@ -20,8 +20,8 @@ import { UsersTools } from "../tools/users-tools.js";
 export class CourierMcpToolsRegistry {
 
   /**
-   * All available tools. Registered by default when no explicit
-   * availableTools list is provided to CourierMcpConfig.
+   * Core Courier API tools. Used by the hosted MCP server and as the
+   * default when no explicit availableTools list is provided.
    */
   static get defaultTools(): string[] {
     return [
@@ -42,12 +42,17 @@ export class CourierMcpToolsRegistry {
       ...TenantsTools.tools,
       ...TranslationsTools.tools,
       ...UsersTools.tools,
-      ...ConfigTools.tools,
     ];
   }
 
-  /** @deprecated Use defaultTools instead. Kept for backward compatibility. */
+  /**
+   * Every registered tool, including diagnostic/meta tools that are
+   * not part of the default set (e.g. get_environment_config).
+   */
   static get allAvailableTools(): string[] {
-    return this.defaultTools;
+    return [
+      ...this.defaultTools,
+      ...ConfigTools.tools,
+    ];
   }
 }

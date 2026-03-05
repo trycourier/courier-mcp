@@ -41,9 +41,9 @@ describe('CourierMcpToolsRegistry', () => {
       }
     });
 
-    it('includes ConfigTools', () => {
+    it('does not include diagnostic tools', () => {
       for (const tool of ConfigTools.tools) {
-        expect(defaults).toContain(tool);
+        expect(defaults).not.toContain(tool);
       }
     });
 
@@ -59,11 +59,28 @@ describe('CourierMcpToolsRegistry', () => {
     });
   });
 
-  describe('allAvailableTools (deprecated alias)', () => {
-    it('returns the same tools as defaultTools', () => {
-      expect(CourierMcpToolsRegistry.allAvailableTools).toEqual(
-        CourierMcpToolsRegistry.defaultTools
-      );
+  describe('allAvailableTools', () => {
+    const all = CourierMcpToolsRegistry.allAvailableTools;
+
+    it('includes everything in defaultTools', () => {
+      for (const tool of CourierMcpToolsRegistry.defaultTools) {
+        expect(all).toContain(tool);
+      }
+    });
+
+    it('includes ConfigTools', () => {
+      for (const tool of ConfigTools.tools) {
+        expect(all).toContain(tool);
+      }
+    });
+
+    it('has more tools than defaultTools', () => {
+      expect(all.length).toBeGreaterThan(CourierMcpToolsRegistry.defaultTools.length);
+    });
+
+    it('has no duplicate entries', () => {
+      const unique = new Set(all);
+      expect(unique.size).toBe(all.length);
     });
   });
 });
