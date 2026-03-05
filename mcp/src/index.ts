@@ -10,6 +10,7 @@ import { AuditEventsTools } from './tools/audit-events.js';
 import { AutomationsTools } from './tools/automations-tools.js';
 import { BrandsTools } from './tools/brands-tools.js';
 import { BulkTools } from './tools/bulk-tools.js';
+import { ConfigTools } from './tools/config-tools.js';
 import { InboundTools } from './tools/inbound-tools.js';
 import { ListsTools } from './tools/lists-tools.js';
 import { NotificationsTools } from './tools/notifications-tools.js';
@@ -45,6 +46,7 @@ export default class CourierMcp extends McpServer {
     new AutomationsTools(this).register();
     new BrandsTools(this).register();
     new BulkTools(this).register();
+    new ConfigTools(this).register();
     new DocsTools(this).register();
     new InboundTools(this).register();
     new ListsTools(this).register();
@@ -71,6 +73,7 @@ export {
   AutomationsTools,
   BrandsTools,
   BulkTools,
+  ConfigTools,
   InboundTools,
   ListsTools,
   NotificationsTools,

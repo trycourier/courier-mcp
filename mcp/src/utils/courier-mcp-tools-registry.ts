@@ -4,6 +4,7 @@ import { AuthTokenTools } from "../tools/auth-token-tools.js";
 import { AutomationsTools } from "../tools/automations-tools.js";
 import { BrandsTools } from "../tools/brands-tools.js";
 import { BulkTools } from "../tools/bulk-tools.js";
+import { ConfigTools } from "../tools/config-tools.js";
 import { DocsTools } from "../tools/docs-tools.js";
 import { InboundTools } from "../tools/inbound-tools.js";
 import { ListsTools } from "../tools/lists-tools.js";
@@ -41,6 +42,7 @@ export class CourierMcpToolsRegistry {
       ...TenantsTools.tools,
       ...TranslationsTools.tools,
       ...UsersTools.tools,
+      ...ConfigTools.tools,
     ];
   }
 

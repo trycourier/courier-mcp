@@ -3,6 +3,7 @@ import { CourierMcpToolsRegistry } from '../utils/courier-mcp-tools-registry.js'
 import { SendTools } from '../tools/send-tools.js';
 import { MessagesTools } from '../tools/messages-tools.js';
 import { BulkTools } from '../tools/bulk-tools.js';
+import { ConfigTools } from '../tools/config-tools.js';
 import { TenantsTools } from '../tools/tenants-tools.js';
 import { UsersTools } from '../tools/users-tools.js';
 
@@ -40,8 +41,13 @@ describe('CourierMcpToolsRegistry', () => {
       }
     });
 
-    it('does not include removed tools', () => {
-      expect(defaults).not.toContain('get_environment_config');
+    it('includes ConfigTools', () => {
+      for (const tool of ConfigTools.tools) {
+        expect(defaults).toContain(tool);
+      }
+    });
+
+    it('does not include removed SDK context tools', () => {
       expect(defaults).not.toContain('get_courier_sdk_context');
       expect(defaults).not.toContain('scan_courier_imports');
       expect(defaults).not.toContain('get_courier_sdk_component_map');
