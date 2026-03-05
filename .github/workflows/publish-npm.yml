@@ -2,6 +2,10 @@
 # Can also be run manually to re-publish in case of failure.
 # https://www.github.com/trycourier/courier-mcp/actions/workflows/publish-npm.yml
 name: Publish NPM
+permissions:
+  contents: read
+  id-token: write
+
 on:
   workflow_dispatch:
 
@@ -12,9 +16,6 @@ jobs:
   publish:
     name: publish
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      id-token: write
     defaults:
       run:
         working-directory: mcp
