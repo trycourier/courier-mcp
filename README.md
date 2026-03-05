@@ -8,7 +8,7 @@ The official [Model Context Protocol](https://modelcontextprotocol.io/) (MCP) se
 
 Courier runs a hosted MCP server at `https://mcp.courier.com`. No local setup required.
 
-<a href="https://cursor.com/install-mcp?name=courier&config=eyJ1cmwiOiAiaHR0cHM6Ly9tY3AuY291cmllci5jb20iLCAiaGVhZGVycyI6IHsiYXBpX2tleSI6ICJZb3VyIEFQSSBLZXkifX0="><img src="https://cursor.com/deeplink/mcp-install-dark.svg" alt="Install in Cursor" height="32" /></a>
+<a href="https://cursor.com/en/install-mcp?name=courier&config=eyJ1cmwiOiAiaHR0cHM6Ly9tY3AuY291cmllci5jb20iLCAiaGVhZGVycyI6IHsiYXBpX2tleSI6ICJZb3VyIEFQSSBLZXkifX0="><img src="https://cursor.com/deeplink/mcp-install-dark.svg" alt="Install in Cursor" height="32" /></a>
 
 **Cursor** — add to `.cursor/mcp.json`:
 
