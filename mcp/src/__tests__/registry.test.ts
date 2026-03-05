@@ -3,6 +3,7 @@ import { CourierMcpToolsRegistry } from '../utils/courier-mcp-tools-registry.js'
 import { SendTools } from '../tools/send-tools.js';
 import { MessagesTools } from '../tools/messages-tools.js';
 import { BulkTools } from '../tools/bulk-tools.js';
+import { ConfigTools } from '../tools/config-tools.js';
 import { TenantsTools } from '../tools/tenants-tools.js';
 import { UsersTools } from '../tools/users-tools.js';
 
@@ -40,8 +41,13 @@ describe('CourierMcpToolsRegistry', () => {
       }
     });
 
-    it('does not include removed tools', () => {
-      expect(defaults).not.toContain('get_environment_config');
+    it('does not include diagnostic tools', () => {
+      for (const tool of ConfigTools.tools) {
+        expect(defaults).not.toContain(tool);
+      }
+    });
+
+    it('does not include removed SDK context tools', () => {
       expect(defaults).not.toContain('get_courier_sdk_context');
       expect(defaults).not.toContain('scan_courier_imports');
       expect(defaults).not.toContain('get_courier_sdk_component_map');
@@ -53,11 +59,28 @@ describe('CourierMcpToolsRegistry', () => {
     });
   });
 
-  describe('allAvailableTools (deprecated alias)', () => {
-    it('returns the same tools as defaultTools', () => {
-      expect(CourierMcpToolsRegistry.allAvailableTools).toEqual(
-        CourierMcpToolsRegistry.defaultTools
-      );
+  describe('allAvailableTools', () => {
+    const all = CourierMcpToolsRegistry.allAvailableTools;
+
+    it('includes everything in defaultTools', () => {
+      for (const tool of CourierMcpToolsRegistry.defaultTools) {
+        expect(all).toContain(tool);
+      }
+    });
+
+    it('includes ConfigTools', () => {
+      for (const tool of ConfigTools.tools) {
+        expect(all).toContain(tool);
+      }
+    });
+
+    it('has more tools than defaultTools', () => {
+      expect(all.length).toBeGreaterThan(CourierMcpToolsRegistry.defaultTools.length);
+    });
+
+    it('has no duplicate entries', () => {
+      const unique = new Set(all);
+      expect(unique.size).toBe(all.length);
     });
   });
 });

@@ -16,7 +16,7 @@ export class BulkTools extends CourierMcpTools {
 
     this.registerToolIfNeeded(
       BulkTools.tools[0],
-      'Create a new bulk job for sending messages to multiple recipients.',
+      'Create a new bulk job for sending messages to multiple recipients. Workflow: create_bulk_job → add_bulk_users → run_bulk_job.',
       {
         message: z.record(z.any()).describe('Bulk message definition with event/template and content'),
       },

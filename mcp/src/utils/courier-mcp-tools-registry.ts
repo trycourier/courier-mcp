@@ -4,6 +4,7 @@ import { AuthTokenTools } from "../tools/auth-token-tools.js";
 import { AutomationsTools } from "../tools/automations-tools.js";
 import { BrandsTools } from "../tools/brands-tools.js";
 import { BulkTools } from "../tools/bulk-tools.js";
+import { ConfigTools } from "../tools/config-tools.js";
 import { DocsTools } from "../tools/docs-tools.js";
 import { InboundTools } from "../tools/inbound-tools.js";
 import { ListsTools } from "../tools/lists-tools.js";
@@ -19,8 +20,8 @@ import { UsersTools } from "../tools/users-tools.js";
 export class CourierMcpToolsRegistry {
 
   /**
-   * All available tools. Registered by default when no explicit
-   * availableTools list is provided to CourierMcpConfig.
+   * Core Courier API tools. Used by the hosted MCP server and as the
+   * default when no explicit availableTools list is provided.
    */
   static get defaultTools(): string[] {
     return [
@@ -44,8 +45,14 @@ export class CourierMcpToolsRegistry {
     ];
   }
 
-  /** @deprecated Use defaultTools instead. Kept for backward compatibility. */
+  /**
+   * Every registered tool, including diagnostic/meta tools that are
+   * not part of the default set (e.g. get_environment_config).
+   */
   static get allAvailableTools(): string[] {
-    return this.defaultTools;
+    return [
+      ...this.defaultTools,
+      ...ConfigTools.tools,
+    ];
   }
 }
