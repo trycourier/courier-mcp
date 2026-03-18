@@ -53,7 +53,7 @@ export class UserTokensTools extends CourierMcpTools {
       },
       async ({ user_id, token, provider_key, device }) => {
         return handleToolCall(async () => {
-          const params: any = { user_id, body_token: token, provider_key };
+          const params: any = { user_id, token, provider_key };
           if (device) params.device = device;
           await this.mcp.courier.users.tokens.addSingle(token, params);
           return { success: true, user_id, token };
