@@ -102,7 +102,7 @@ describe('MCP protocol', () => {
     for (const tool of tools) {
       expect(tool.name).toBeTruthy();
       expect(tool.description).toBeTruthy();
-      expect(tool.description.length).toBeGreaterThan(10);
+      expect(tool.description!.length).toBeGreaterThan(10);
     }
   });
 
