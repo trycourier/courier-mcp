@@ -134,3 +134,8 @@ cd mcp && npm run build
 - [AI developer tools overview](https://www.courier.com/docs/tools/ai-onboarding/)
 - [Courier Node SDK](https://github.com/trycourier/courier-node)
 - [MCP protocol spec](https://modelcontextprotocol.io/)
+
+## Hosted deployment
+
+A hosted deployment is available on [Fronteir AI](https://fronteir.ai/mcp/trycourier-courier-mcp).
+
