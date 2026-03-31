@@ -1,0 +1,25 @@
+{
+  "name": "courier",
+  "displayName": "Courier",
+  "version": "1.0.0",
+  "description": "Send notifications, manage users, and orchestrate messaging workflows. 60 tools for the full Courier API across email, SMS, push, chat, and in-app.",
+  "author": {
+    "name": "Courier",
+    "email": "support@courier.com",
+    "url": "https://www.courier.com"
+  },
+  "homepage": "https://www.courier.com/docs/tools/mcp/",
+  "repository": "https://github.com/trycourier/courier-mcp",
+  "license": "MIT",
+  "logo": "assets/logo.png",
+  "keywords": [
+    "courier",
+    "notifications",
+    "mcp",
+    "email",
+    "sms",
+    "push",
+    "messaging",
+    "in-app"
+  ]
+}

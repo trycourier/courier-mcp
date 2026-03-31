@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "courier": {
+      "url": "https://mcp.courier.com",
+      "headers": {
+        "api_key": "${COURIER_API_KEY}"
+      }
+    }
+  }
+}
