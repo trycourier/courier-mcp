@@ -4,6 +4,9 @@ on:
   push:
     paths:
       - 'mcp/**'
+  pull_request:
+    paths:
+      - 'mcp/**'
 
 jobs:
   test:

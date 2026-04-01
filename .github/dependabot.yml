@@ -1,0 +1,14 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/mcp"
+    schedule:
+      interval: "daily"
+    open-pull-requests-limit: 5
+    allow:
+      - dependency-name: "@trycourier/courier"
+    commit-message:
+      prefix: "chore"
+    labels:
+      - "dependencies"
+      - "sdk"

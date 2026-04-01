@@ -127,6 +127,15 @@ cd mcp && npm test
 cd mcp && npm run build
 ```
 
+## SDK dependency updates
+
+The `@trycourier/courier` SDK dependency in `mcp/` is updated automatically via [Dependabot](https://docs.github.com/en/code-security/dependabot). Dependabot checks npm daily and opens a PR when a new SDK version is available.
+
+- **Patch/minor bumps**: review CI status, then merge.
+- **Major bumps** (labeled `breaking-review`): check whether any tool input schemas or error handling need updates before merging.
+
+After merging a bump PR, the normal publish flow (`publish-npm.yml` → `bump-services.yml`) handles the rest.
+
 ## Links
 
 - [Courier docs](https://www.courier.com/docs/)
