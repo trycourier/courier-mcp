@@ -134,7 +134,17 @@ The `@trycourier/courier` SDK dependency in `mcp/` is updated automatically via 
 - **Patch/minor bumps**: review CI status, then merge.
 - **Major bumps** (labeled `breaking-review`): check whether any tool input schemas or error handling need updates before merging.
 
-After merging a bump PR, the normal publish flow (`publish-npm.yml` → `bump-services.yml`) handles the rest.
+After merging a Dependabot PR, the full pipeline runs automatically:
+
+1. `auto-version-bump.yml` bumps the MCP package patch version and pushes to main.
+2. `publish-npm.yml` publishes the new version to npm.
+3. `bump-services.yml` opens a PR in `trycourier/services` to update the hosted MCP server.
+
+**Secrets required** (set in repo Settings > Secrets and variables > Actions):
+
+- `REPO_TOKEN` — PAT with `Contents: Read and write` on this repo. Used by `auto-version-bump.yml` to push to main and trigger downstream workflows.
+- `SERVICES_REPO_TOKEN` — PAT with `Contents: Read and write` + `Pull requests: Read and write` on `trycourier/services`. Used by `bump-services.yml` to open dependency bump PRs.
+- `NPM_TOKEN` — npm publish token. Used by `publish-npm.yml`.
 
 ## Links
 
