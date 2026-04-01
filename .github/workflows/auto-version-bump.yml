@@ -1,0 +1,41 @@
+# Automatically bumps the patch version of @trycourier/courier-mcp after
+# a Dependabot PR merges. The push (via REPO_TOKEN) triggers publish-npm.yml,
+# which publishes the new version, which triggers bump-services.yml.
+name: Auto Version Bump
+
+on:
+  pull_request:
+    types: [closed]
+    paths:
+      - 'mcp/package.json'
+
+jobs:
+  bump:
+    name: Bump patch version
+    if: >-
+      github.event.pull_request.merged == true &&
+      github.event.pull_request.user.login == 'dependabot[bot]'
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.REPO_TOKEN }}
+          ref: main
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Bump patch version
+        working-directory: mcp
+        run: npm version patch --no-git-tag-version
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          VERSION=$(jq -r '.version' mcp/package.json)
+          git add mcp/package.json mcp/package-lock.json
+          git commit -m "chore: bump @trycourier/courier-mcp to $VERSION [auto]"
+          git push
