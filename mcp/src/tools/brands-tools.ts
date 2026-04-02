@@ -33,7 +33,8 @@ export class BrandsTools extends CourierMcpTools {
           if (snippets) body.snippets = snippets;
           return this.mcp.courier.brands.create(body);
         });
-      }
+      },
+      { readOnlyHint: false, idempotentHint: false }
     );
 
     this.registerToolIfNeeded(
@@ -44,7 +45,8 @@ export class BrandsTools extends CourierMcpTools {
       },
       async ({ brand_id }) => {
         return handleToolCall(() => this.mcp.courier.brands.retrieve(brand_id));
-      }
+      },
+      { readOnlyHint: true }
     );
 
     this.registerToolIfNeeded(
@@ -55,7 +57,8 @@ export class BrandsTools extends CourierMcpTools {
       },
       async ({ cursor }) => {
         return handleToolCall(() => this.mcp.courier.brands.list(cursor ? { cursor } : {}));
-      }
+      },
+      { readOnlyHint: true }
     );
   }
 }

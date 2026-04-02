@@ -25,7 +25,8 @@ export class InboundTools extends CourierMcpTools {
           if (userId) body.userId = userId;
           return this.mcp.courier.inbound.trackEvent(body as any);
         });
-      }
+      },
+      { readOnlyHint: false, idempotentHint: true }
     );
   }
 }

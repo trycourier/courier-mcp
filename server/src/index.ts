@@ -1,6 +1,6 @@
 import express, { Request, Response, NextFunction } from 'express';
 import { statelessHandler } from 'express-mcp-handler';
-import CourierMcp, { CourierMcpLogLevel, CourierMcpConfig, CourierMcpTools } from 'courier-mcp';
+import CourierMcp, { CourierMcpLogLevel, CourierMcpConfig, CourierMcpTools, PACKAGE_NAME, PACKAGE_VERSION } from 'courier-mcp';
 
 const app = express();
 app.use(express.json());
@@ -25,6 +25,36 @@ app.get('/', (_req: Request, res: Response) => {
 
 app.delete('/', (_req: Request, res: Response) => {
   res.status(405).set('Allow', 'POST').send('Sessions not supported on stateless server');
+});
+
+app.get('/.well-known/mcp/server-card.json', (_req: Request, res: Response) => {
+  res.json({
+    serverInfo: {
+      name: PACKAGE_NAME,
+      version: PACKAGE_VERSION,
+    },
+    authentication: {
+      required: true,
+      schemes: ['apiKey'],
+    },
+    configSchema: {
+      type: 'object',
+      properties: {
+        api_key: {
+          type: 'string',
+          title: 'Courier API Key',
+          description: 'Your Courier API key (from app.courier.com/settings/api-keys)',
+        },
+        base_url: {
+          type: 'string',
+          title: 'Base URL',
+          description: 'Courier API base URL (defaults to https://api.courier.com)',
+          default: 'https://api.courier.com',
+        },
+      },
+      required: ['api_key'],
+    },
+  });
 });
 
 app.get('/health', (_req, res) => {

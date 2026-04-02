@@ -31,7 +31,8 @@ export class AutomationsTools extends CourierMcpTools {
           if (template) body.template = template;
           return this.mcp.courier.automations.invoke.invokeByTemplate(template_id, body as any);
         });
-      }
+      },
+      { readOnlyHint: false, idempotentHint: false }
     );
 
     this.registerToolIfNeeded(
@@ -58,7 +59,8 @@ export class AutomationsTools extends CourierMcpTools {
           if (template) body.template = template;
           return this.mcp.courier.automations.invoke.invokeAdHoc(body as any);
         });
-      }
+      },
+      { readOnlyHint: false, idempotentHint: false }
     );
   }
 }

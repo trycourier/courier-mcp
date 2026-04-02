@@ -19,7 +19,8 @@ export class AuditEventsTools extends CourierMcpTools {
       },
       async ({ audit_event_id }) => {
         return handleToolCall(() => this.mcp.courier.auditEvents.retrieve(audit_event_id));
-      }
+      },
+      { readOnlyHint: true }
     );
 
     this.registerToolIfNeeded(
@@ -30,7 +31,8 @@ export class AuditEventsTools extends CourierMcpTools {
       },
       async ({ cursor }) => {
         return handleToolCall(() => this.mcp.courier.auditEvents.list(cursor ? { cursor } : {}));
-      }
+      },
+      { readOnlyHint: true }
     );
   }
 }

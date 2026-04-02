@@ -20,7 +20,8 @@ export class UserTokensTools extends CourierMcpTools {
       },
       async ({ user_id }) => {
         return handleToolCall(() => this.mcp.courier.users.tokens.list(user_id));
-      }
+      },
+      { readOnlyHint: true }
     );
 
     this.registerToolIfNeeded(
@@ -32,7 +33,8 @@ export class UserTokensTools extends CourierMcpTools {
       },
       async ({ user_id, token }) => {
         return handleToolCall(() => this.mcp.courier.users.tokens.retrieve(token, { user_id }));
-      }
+      },
+      { readOnlyHint: true }
     );
 
     this.registerToolIfNeeded(
@@ -58,7 +60,8 @@ export class UserTokensTools extends CourierMcpTools {
           await this.mcp.courier.users.tokens.addSingle(token, params);
           return { success: true, user_id, token };
         });
-      }
+      },
+      { readOnlyHint: false, idempotentHint: true }
     );
   }
 }

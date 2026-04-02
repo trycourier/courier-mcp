@@ -1,5 +1,6 @@
 import { ZodRawShape } from "zod";
 import { ToolCallback } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { ToolAnnotations } from "@modelcontextprotocol/sdk/types.js";
 import CourierMcp from "../index.js";
 
 export class CourierMcpTools {
@@ -17,10 +18,15 @@ export class CourierMcpTools {
     tool: string,
     description: string,
     paramsSchema: Args,
-    cb: ToolCallback<Args>
+    cb: ToolCallback<Args>,
+    annotations?: ToolAnnotations
   ) {
     if (this.mcp.config.availableTools.includes(tool)) {
-      this.mcp.tool(tool, description, paramsSchema, cb);
+      if (annotations) {
+        this.mcp.tool(tool, description, paramsSchema, annotations, cb);
+      } else {
+        this.mcp.tool(tool, description, paramsSchema, cb);
+      }
     }
   }
 }

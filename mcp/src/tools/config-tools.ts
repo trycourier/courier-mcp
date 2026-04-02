@@ -30,7 +30,8 @@ export class ConfigTools extends CourierMcpTools {
             },
           ],
         };
-      }
+      },
+      { readOnlyHint: true }
     );
   }
 }

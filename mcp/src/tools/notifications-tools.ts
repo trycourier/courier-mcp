@@ -20,7 +20,8 @@ export class NotificationsTools extends CourierMcpTools {
       },
       async ({ cursor }) => {
         return handleToolCall(() => this.mcp.courier.notifications.list(cursor ? { cursor } : {}));
-      }
+      },
+      { readOnlyHint: true }
     );
 
     this.registerToolIfNeeded(
@@ -31,7 +32,8 @@ export class NotificationsTools extends CourierMcpTools {
       },
       async ({ notification_id }) => {
         return handleToolCall(() => this.mcp.courier.notifications.retrieveContent(notification_id));
-      }
+      },
+      { readOnlyHint: true }
     );
 
     this.registerToolIfNeeded(
@@ -42,7 +44,8 @@ export class NotificationsTools extends CourierMcpTools {
       },
       async ({ notification_id }) => {
         return handleToolCall(() => this.mcp.courier.notifications.draft.retrieveContent(notification_id));
-      }
+      },
+      { readOnlyHint: true }
     );
   }
 }

@@ -226,7 +226,8 @@ export class DocsTools extends CourierMcpTools {
 
           return { guide };
         });
-      }
+      },
+      { readOnlyHint: true }
     );
   }
 }

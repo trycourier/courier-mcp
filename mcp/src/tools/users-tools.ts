@@ -25,7 +25,8 @@ export class UsersTools extends CourierMcpTools {
         return handleToolCall(() =>
           this.mcp.courier.users.preferences.retrieve(user_id, tenant_id ? { tenant_id } : {})
         );
-      }
+      },
+      { readOnlyHint: true }
     );
 
     this.registerToolIfNeeded(
@@ -48,7 +49,8 @@ export class UsersTools extends CourierMcpTools {
             topic,
           } as any);
         });
-      }
+      },
+      { readOnlyHint: false, idempotentHint: true }
     );
 
     this.registerToolIfNeeded(
@@ -66,7 +68,8 @@ export class UsersTools extends CourierMcpTools {
           if (limit) query.limit = limit;
           return this.mcp.courier.users.tenants.list(user_id, query);
         });
-      }
+      },
+      { readOnlyHint: true }
     );
 
     this.registerToolIfNeeded(
@@ -84,7 +87,8 @@ export class UsersTools extends CourierMcpTools {
           await this.mcp.courier.users.tenants.addSingle(tenant_id, params);
           return { success: true, user_id, tenant_id };
         });
-      }
+      },
+      { readOnlyHint: false, idempotentHint: true }
     );
 
     this.registerToolIfNeeded(
@@ -99,7 +103,8 @@ export class UsersTools extends CourierMcpTools {
           await this.mcp.courier.users.tenants.removeSingle(tenant_id, { user_id });
           return { success: true, message: `User ${user_id} removed from tenant ${tenant_id}` };
         });
-      }
+      },
+      { destructiveHint: true, idempotentHint: true }
     );
   }
 }

@@ -31,7 +31,8 @@ export class AuthTokenTools extends CourierMcpTools {
             expires_in,
           })
         );
-      }
+      },
+      { readOnlyHint: false, idempotentHint: false }
     );
   }
 }

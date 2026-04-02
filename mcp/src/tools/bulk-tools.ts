@@ -22,7 +22,8 @@ export class BulkTools extends CourierMcpTools {
       },
       async ({ message }) => {
         return handleToolCall(() => this.mcp.courier.bulk.createJob({ message } as any));
-      }
+      },
+      { readOnlyHint: false, idempotentHint: false }
     );
 
     this.registerToolIfNeeded(
@@ -37,7 +38,8 @@ export class BulkTools extends CourierMcpTools {
           await this.mcp.courier.bulk.addUsers(job_id, { users } as any);
           return { success: true, job_id, users_added: users.length };
         });
-      }
+      },
+      { readOnlyHint: false, idempotentHint: false }
     );
 
     this.registerToolIfNeeded(
@@ -51,7 +53,8 @@ export class BulkTools extends CourierMcpTools {
           await this.mcp.courier.bulk.runJob(job_id);
           return { success: true, job_id, message: 'Bulk job started' };
         });
-      }
+      },
+      { readOnlyHint: false, idempotentHint: false }
     );
 
     this.registerToolIfNeeded(
@@ -62,7 +65,8 @@ export class BulkTools extends CourierMcpTools {
       },
       async ({ job_id }) => {
         return handleToolCall(() => this.mcp.courier.bulk.retrieveJob(job_id));
-      }
+      },
+      { readOnlyHint: true }
     );
 
     this.registerToolIfNeeded(
@@ -74,7 +78,8 @@ export class BulkTools extends CourierMcpTools {
       },
       async ({ job_id, cursor }) => {
         return handleToolCall(() => this.mcp.courier.bulk.listUsers(job_id, cursor ? { cursor } : {}));
-      }
+      },
+      { readOnlyHint: true }
     );
   }
 }

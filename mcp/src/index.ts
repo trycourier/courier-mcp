@@ -22,7 +22,7 @@ import { TranslationsTools } from './tools/translations-tools.js';
 import { UsersTools } from './tools/users-tools.js';
 
 import { CourierMcpConfig } from './utils/config.js';
-import { MCP_DETAILS } from './utils/version.js';
+import { MCP_DETAILS, PACKAGE_NAME, PACKAGE_VERSION } from './utils/version.js';
 
 export default class CourierMcp extends McpServer {
 
@@ -63,6 +63,7 @@ export default class CourierMcp extends McpServer {
 
 export { CourierMcpConfig };
 export { CourierMcpLogLevel } from './utils/types.js';
+export { PACKAGE_NAME, PACKAGE_VERSION } from './utils/version.js';
 
 export {
   SendTools,
