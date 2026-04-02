@@ -41,7 +41,8 @@ export class MessagesTools extends CourierMcpTools {
           }
           return this.mcp.courier.messages.list(query);
         });
-      }
+      },
+      { readOnlyHint: true }
     );
 
     this.registerToolIfNeeded(
@@ -52,7 +53,8 @@ export class MessagesTools extends CourierMcpTools {
       },
       async ({ message_id }) => {
         return handleToolCall(() => this.mcp.courier.messages.retrieve(message_id));
-      }
+      },
+      { readOnlyHint: true }
     );
 
     this.registerToolIfNeeded(
@@ -63,7 +65,8 @@ export class MessagesTools extends CourierMcpTools {
       },
       async ({ message_id }) => {
         return handleToolCall(() => this.mcp.courier.messages.content(message_id));
-      }
+      },
+      { readOnlyHint: true }
     );
 
     this.registerToolIfNeeded(
@@ -75,7 +78,8 @@ export class MessagesTools extends CourierMcpTools {
       },
       async ({ message_id, type }) => {
         return handleToolCall(() => this.mcp.courier.messages.history(message_id, type ? { type } : {}));
-      }
+      },
+      { readOnlyHint: true }
     );
 
     this.registerToolIfNeeded(
@@ -86,7 +90,8 @@ export class MessagesTools extends CourierMcpTools {
       },
       async ({ message_id }) => {
         return handleToolCall(() => this.mcp.courier.messages.cancel(message_id));
-      }
+      },
+      { destructiveHint: true, idempotentHint: true }
     );
   }
 }

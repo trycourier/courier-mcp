@@ -24,7 +24,8 @@ export class ProfilesTools extends CourierMcpTools {
       },
       async ({ user_id }) => {
         return handleToolCall(() => this.mcp.courier.profiles.retrieve(user_id));
-      }
+      },
+      { readOnlyHint: true }
     );
 
     this.registerToolIfNeeded(
@@ -36,7 +37,8 @@ export class ProfilesTools extends CourierMcpTools {
       },
       async ({ user_id, profile }) => {
         return handleToolCall(() => this.mcp.courier.profiles.create(user_id, { profile }));
-      }
+      },
+      { readOnlyHint: false, idempotentHint: true }
     );
 
     this.registerToolIfNeeded(
@@ -48,7 +50,8 @@ export class ProfilesTools extends CourierMcpTools {
       },
       async ({ user_id, profile }) => {
         return handleToolCall(() => this.mcp.courier.profiles.replace(user_id, { profile }));
-      }
+      },
+      { readOnlyHint: false, destructiveHint: true, idempotentHint: true }
     );
 
     this.registerToolIfNeeded(
@@ -62,7 +65,8 @@ export class ProfilesTools extends CourierMcpTools {
           await this.mcp.courier.profiles.delete(user_id);
           return { success: true, message: `Profile ${user_id} deleted` };
         });
-      }
+      },
+      { destructiveHint: true, idempotentHint: true }
     );
 
     this.registerToolIfNeeded(
@@ -74,7 +78,8 @@ export class ProfilesTools extends CourierMcpTools {
       },
       async ({ user_id, cursor }) => {
         return handleToolCall(() => this.mcp.courier.profiles.lists.retrieve(user_id, cursor ? { cursor } : {}));
-      }
+      },
+      { readOnlyHint: true }
     );
 
     this.registerToolIfNeeded(
@@ -91,7 +96,8 @@ export class ProfilesTools extends CourierMcpTools {
       },
       async ({ user_id, lists }) => {
         return handleToolCall(() => this.mcp.courier.profiles.lists.subscribe(user_id, { lists }));
-      }
+      },
+      { readOnlyHint: false, idempotentHint: true }
     );
 
     this.registerToolIfNeeded(
@@ -102,7 +108,8 @@ export class ProfilesTools extends CourierMcpTools {
       },
       async ({ user_id }) => {
         return handleToolCall(() => this.mcp.courier.profiles.lists.delete(user_id));
-      }
+      },
+      { destructiveHint: true, idempotentHint: true }
     );
   }
 }

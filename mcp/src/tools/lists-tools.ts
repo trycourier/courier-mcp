@@ -29,7 +29,8 @@ export class ListsTools extends CourierMcpTools {
           if (cursor) query.cursor = cursor;
           return this.mcp.courier.lists.list(query);
         });
-      }
+      },
+      { readOnlyHint: true }
     );
 
     this.registerToolIfNeeded(
@@ -40,7 +41,8 @@ export class ListsTools extends CourierMcpTools {
       },
       async ({ list_id }) => {
         return handleToolCall(() => this.mcp.courier.lists.retrieve(list_id));
-      }
+      },
+      { readOnlyHint: true }
     );
 
     this.registerToolIfNeeded(
@@ -52,7 +54,8 @@ export class ListsTools extends CourierMcpTools {
       },
       async ({ list_id, cursor }) => {
         return handleToolCall(() => this.mcp.courier.lists.subscriptions.list(list_id, cursor ? { cursor } : {}));
-      }
+      },
+      { readOnlyHint: true }
     );
 
     this.registerToolIfNeeded(
@@ -67,7 +70,8 @@ export class ListsTools extends CourierMcpTools {
           await this.mcp.courier.lists.update(list_id, { name });
           return { success: true, list_id, name };
         });
-      }
+      },
+      { readOnlyHint: false, idempotentHint: true }
     );
 
     this.registerToolIfNeeded(
@@ -93,7 +97,8 @@ export class ListsTools extends CourierMcpTools {
           await this.mcp.courier.lists.subscriptions.subscribeUser(user_id, params as any);
           return { success: true, list_id, user_id };
         });
-      }
+      },
+      { readOnlyHint: false, idempotentHint: true }
     );
 
     this.registerToolIfNeeded(
@@ -108,7 +113,8 @@ export class ListsTools extends CourierMcpTools {
           await this.mcp.courier.lists.subscriptions.unsubscribeUser(user_id, { list_id });
           return { success: true, message: `${user_id} unsubscribed from ${list_id}` };
         });
-      }
+      },
+      { destructiveHint: true, idempotentHint: true }
     );
   }
 }

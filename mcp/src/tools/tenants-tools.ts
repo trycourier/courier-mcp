@@ -21,7 +21,8 @@ export class TenantsTools extends CourierMcpTools {
       },
       async ({ tenant_id }) => {
         return handleToolCall(() => this.mcp.courier.tenants.retrieve(tenant_id));
-      }
+      },
+      { readOnlyHint: true }
     );
 
     this.registerToolIfNeeded(
@@ -46,7 +47,8 @@ export class TenantsTools extends CourierMcpTools {
           if (brand_id) body.brand_id = brand_id;
           return this.mcp.courier.tenants.update(tenant_id, body);
         });
-      }
+      },
+      { readOnlyHint: false, idempotentHint: true }
     );
 
     this.registerToolIfNeeded(
@@ -63,7 +65,8 @@ export class TenantsTools extends CourierMcpTools {
           if (limit) query.limit = limit;
           return this.mcp.courier.tenants.list(query);
         });
-      }
+      },
+      { readOnlyHint: true }
     );
 
     this.registerToolIfNeeded(
@@ -77,7 +80,8 @@ export class TenantsTools extends CourierMcpTools {
           await this.mcp.courier.tenants.delete(tenant_id);
           return { success: true, message: `Tenant ${tenant_id} deleted` };
         });
-      }
+      },
+      { destructiveHint: true, idempotentHint: true }
     );
   }
 }

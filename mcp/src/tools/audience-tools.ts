@@ -22,7 +22,8 @@ export class AudienceTools extends CourierMcpTools {
       },
       async ({ audience_id }) => {
         return handleToolCall(() => this.mcp.courier.audiences.retrieve(audience_id));
-      }
+      },
+      { readOnlyHint: true }
     );
 
     this.registerToolIfNeeded(
@@ -34,7 +35,8 @@ export class AudienceTools extends CourierMcpTools {
       },
       async ({ audience_id, cursor }) => {
         return handleToolCall(() => this.mcp.courier.audiences.listMembers(audience_id, cursor ? { cursor } : {}));
-      }
+      },
+      { readOnlyHint: true }
     );
 
     this.registerToolIfNeeded(
@@ -45,7 +47,8 @@ export class AudienceTools extends CourierMcpTools {
       },
       async ({ cursor }) => {
         return handleToolCall(() => this.mcp.courier.audiences.list(cursor ? { cursor } : {}));
-      }
+      },
+      { readOnlyHint: true }
     );
 
     this.registerToolIfNeeded(
@@ -65,7 +68,8 @@ export class AudienceTools extends CourierMcpTools {
           if (filter !== undefined) body.filter = filter;
           return this.mcp.courier.audiences.update(audience_id, body);
         });
-      }
+      },
+      { readOnlyHint: false, idempotentHint: true }
     );
 
     this.registerToolIfNeeded(
@@ -79,7 +83,8 @@ export class AudienceTools extends CourierMcpTools {
           await this.mcp.courier.audiences.delete(audience_id);
           return { success: true, message: `Audience ${audience_id} deleted` };
         });
-      }
+      },
+      { destructiveHint: true, idempotentHint: true }
     );
   }
 }

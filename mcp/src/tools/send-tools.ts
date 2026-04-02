@@ -36,7 +36,8 @@ export class SendTools extends CourierMcpTools {
           }
           return this.mcp.courier.send.message({ message });
         });
-      }
+      },
+      { readOnlyHint: false, idempotentHint: false }
     );
 
     this.registerToolIfNeeded(
@@ -61,7 +62,8 @@ export class SendTools extends CourierMcpTools {
           }
           return this.mcp.courier.send.message({ message });
         });
-      }
+      },
+      { readOnlyHint: false, idempotentHint: false }
     );
 
     this.registerToolIfNeeded(
@@ -87,7 +89,8 @@ export class SendTools extends CourierMcpTools {
           }
           return this.mcp.courier.send.message({ message });
         });
-      }
+      },
+      { readOnlyHint: false, idempotentHint: false }
     );
 
     this.registerToolIfNeeded(
@@ -112,7 +115,8 @@ export class SendTools extends CourierMcpTools {
           }
           return this.mcp.courier.send.message({ message });
         });
-      }
+      },
+      { readOnlyHint: false, idempotentHint: false }
     );
   }
 }

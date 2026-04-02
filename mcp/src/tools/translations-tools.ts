@@ -20,7 +20,8 @@ export class TranslationsTools extends CourierMcpTools {
       },
       async ({ locale, domain }) => {
         return handleToolCall(() => this.mcp.courier.translations.retrieve(locale, { domain }));
-      }
+      },
+      { readOnlyHint: true }
     );
 
     this.registerToolIfNeeded(
@@ -36,7 +37,8 @@ export class TranslationsTools extends CourierMcpTools {
           await this.mcp.courier.translations.update(locale, { body, domain });
           return { success: true, locale };
         });
-      }
+      },
+      { readOnlyHint: false, idempotentHint: true }
     );
   }
 }
