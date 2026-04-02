@@ -18,6 +18,10 @@ on:
     paths:
       - 'mcp/package.json'
 
+permissions:
+  contents: read
+  pull-requests: write
+
 jobs:
   bump:
     name: Bump patch version
@@ -46,7 +50,7 @@ jobs:
           VERSION=$(jq -r '.version' mcp/package.json)
           jq --arg v "$VERSION" '.version = $v' server.json > server.json.tmp && mv server.json.tmp server.json
 
-      - name: Create branch and open PR
+      - name: Push branch
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -58,10 +62,18 @@ jobs:
           git commit -m "chore: bump @trycourier/courier-mcp to $VERSION [auto]"
           git push -u origin "$BRANCH"
 
-          gh pr create \
-            --title "chore: bump @trycourier/courier-mcp to $VERSION [auto]" \
-            --body "Automated patch bump after Dependabot SDK update." \
-            --base main \
-            --head "$BRANCH"
+          echo "branch=$BRANCH" >> "$GITHUB_OUTPUT"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+        id: push
         env:
           GH_TOKEN: ${{ secrets.REPO_TOKEN }}
+
+      - name: Open PR
+        run: |
+          gh pr create \
+            --title "chore: bump @trycourier/courier-mcp to ${{ steps.push.outputs.version }} [auto]" \
+            --body "Automated patch bump after Dependabot SDK update." \
+            --base main \
+            --head "${{ steps.push.outputs.branch }}"
+        env:
+          GH_TOKEN: ${{ github.token }}
