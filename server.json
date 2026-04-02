@@ -1,0 +1,32 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.trycourier/courier",
+  "title": "Courier",
+  "description": "Courier's official MCP server for sending notifications, managing templates, and configuring integrations.",
+  "websiteUrl": "https://www.courier.com",
+  "icons": [
+    {
+      "src": "https://www.courier.com/favicon-96x96.png",
+      "mimeType": "image/png"
+    }
+  ],
+  "repository": {
+    "url": "https://github.com/trycourier/courier-mcp",
+    "source": "github"
+  },
+  "version": "0.0.0",
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://mcp.courier.com",
+      "headers": [
+        {
+          "name": "api_key",
+          "description": "Your Courier API key",
+          "isRequired": true,
+          "isSecret": true
+        }
+      ]
+    }
+  ]
+}
