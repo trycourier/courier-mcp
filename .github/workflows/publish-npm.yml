@@ -1,6 +1,7 @@
 # Publishes to npm when the version in mcp/package.json differs from
 # the latest published version. Runs on every push to main, on GitHub
-# release, or via manual dispatch.
+# release, or via manual dispatch. After npm publish, publishes the
+# server metadata to the MCP Registry via OIDC authentication.
 name: Publish NPM
 on:
   workflow_dispatch:
@@ -10,9 +11,14 @@ on:
       - main
     paths:
       - 'mcp/**'
+      - 'server.json'
 
   release:
     types: [published]
+
+permissions:
+  id-token: write
+  contents: read
 
 jobs:
   publish:
@@ -56,3 +62,14 @@ jobs:
           npm publish --access public
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Install mcp-publisher
+        working-directory: .
+        run: |
+          curl -L "https://github.com/modelcontextprotocol/registry/releases/latest/download/mcp-publisher_linux_amd64.tar.gz" | tar xz mcp-publisher
+
+      - name: Publish to MCP Registry
+        working-directory: .
+        run: |
+          ./mcp-publisher login github-oidc
+          ./mcp-publisher publish

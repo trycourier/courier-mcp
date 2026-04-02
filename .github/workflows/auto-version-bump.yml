@@ -35,11 +35,16 @@ jobs:
         working-directory: mcp
         run: npm version patch --no-git-tag-version
 
+      - name: Sync version to server.json
+        run: |
+          VERSION=$(jq -r '.version' mcp/package.json)
+          jq --arg v "$VERSION" '.version = $v' server.json > server.json.tmp && mv server.json.tmp server.json
+
       - name: Commit and push
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           VERSION=$(jq -r '.version' mcp/package.json)
-          git add mcp/package.json mcp/package-lock.json
+          git add mcp/package.json mcp/package-lock.json server.json
           git commit -m "chore: bump @trycourier/courier-mcp to $VERSION [auto]"
           git push
