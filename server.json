@@ -3,6 +3,13 @@
   "name": "io.github.trycourier/courier",
   "title": "Courier",
   "description": "Courier's official MCP server for sending notifications, managing templates, and configuring integrations.",
+  "websiteUrl": "https://www.courier.com",
+  "icons": [
+    {
+      "src": "https://www.courier.com/favicon-96x96.png",
+      "mimeType": "image/png"
+    }
+  ],
   "repository": {
     "url": "https://github.com/trycourier/courier-mcp",
     "source": "github"
