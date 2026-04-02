@@ -1,13 +1,18 @@
-# Automatically bumps the patch version of @trycourier/courier-mcp after
-# a Dependabot PR merges. The push (via REPO_TOKEN) triggers publish-npm.yml,
-# which publishes the new version, which triggers bump-services.yml.
+# Bumps the patch version of @trycourier/courier-mcp after a Dependabot PR
+# merges, then opens a PR so the change flows through branch protection.
+# When that PR merges, the push to main triggers publish-npm.yml, which
+# publishes the new version and triggers bump-services.yml.
 #
 # Uses pull_request_target (not pull_request) because GitHub restricts
 # pull_request events from Dependabot: no secret access, read-only perms.
 # pull_request_target runs in the base branch context with full permissions.
+#
+# Also supports workflow_dispatch as a manual fallback.
 name: Auto Version Bump
 
 on:
+  workflow_dispatch:
+
   pull_request_target:
     types: [closed]
     paths:
@@ -17,8 +22,9 @@ jobs:
   bump:
     name: Bump patch version
     if: >-
-      github.event.pull_request.merged == true &&
-      github.event.pull_request.user.login == 'dependabot[bot]'
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.pull_request.merged == true &&
+       github.event.pull_request.user.login == 'dependabot[bot]')
     runs-on: ubuntu-latest
 
     steps:
@@ -40,11 +46,22 @@ jobs:
           VERSION=$(jq -r '.version' mcp/package.json)
           jq --arg v "$VERSION" '.version = $v' server.json > server.json.tmp && mv server.json.tmp server.json
 
-      - name: Commit and push
+      - name: Create branch and open PR
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           VERSION=$(jq -r '.version' mcp/package.json)
+          BRANCH="auto/bump-mcp-${VERSION}"
+
+          git checkout -b "$BRANCH"
           git add mcp/package.json mcp/package-lock.json server.json
           git commit -m "chore: bump @trycourier/courier-mcp to $VERSION [auto]"
-          git push
+          git push -u origin "$BRANCH"
+
+          gh pr create \
+            --title "chore: bump @trycourier/courier-mcp to $VERSION [auto]" \
+            --body "Automated patch bump after Dependabot SDK update." \
+            --base main \
+            --head "$BRANCH"
+        env:
+          GH_TOKEN: ${{ secrets.REPO_TOKEN }}
