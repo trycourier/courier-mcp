@@ -45,12 +45,6 @@ app.get('/.well-known/mcp/server-card.json', (_req: Request, res: Response) => {
           title: 'Courier API Key',
           description: 'Your Courier API key (from app.courier.com/settings/api-keys)',
         },
-        base_url: {
-          type: 'string',
-          title: 'Base URL',
-          description: 'Courier API base URL (defaults to https://api.courier.com)',
-          default: 'https://api.courier.com',
-        },
       },
       required: ['api_key'],
     },
