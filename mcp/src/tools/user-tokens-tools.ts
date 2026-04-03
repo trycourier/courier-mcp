@@ -8,6 +8,8 @@ export class UserTokensTools extends CourierMcpTools {
     'list_user_push_tokens',
     'get_user_push_token',
     'create_or_replace_user_push_token',
+    'patch_user_token',
+    'delete_user_token',
   ];
 
   public register() {
@@ -62,6 +64,43 @@ export class UserTokensTools extends CourierMcpTools {
         });
       },
       { readOnlyHint: false, idempotentHint: true }
+    );
+
+    this.registerToolIfNeeded(
+      UserTokensTools.tools[3],
+      'Apply a JSON Patch (RFC 6902) to a specific push token.',
+      {
+        user_id: z.string().describe('The user ID'),
+        token: z.string().describe('The token identifier'),
+        patch: z.array(z.object({
+          op: z.string().describe('Patch operation (add, remove, replace, move, copy, test)'),
+          path: z.string().describe('JSON pointer path'),
+          value: z.string().optional().describe('Value for the operation'),
+        })).describe('Array of JSON Patch operations'),
+      },
+      async ({ user_id, token, patch }) => {
+        return handleToolCall(async () => {
+          await this.mcp.courier.users.tokens.update(token, { user_id, patch });
+          return { success: true, message: `Token ${token} patched for user ${user_id}` };
+        });
+      },
+      { readOnlyHint: false, idempotentHint: false }
+    );
+
+    this.registerToolIfNeeded(
+      UserTokensTools.tools[4],
+      'Delete a specific push token for a user.',
+      {
+        user_id: z.string().describe('The user ID'),
+        token: z.string().describe('The token identifier to delete'),
+      },
+      async ({ user_id, token }) => {
+        return handleToolCall(async () => {
+          await this.mcp.courier.users.tokens.delete(token, { user_id });
+          return { success: true, message: `Token ${token} deleted for user ${user_id}` };
+        });
+      },
+      { destructiveHint: true, idempotentHint: true }
     );
   }
 }

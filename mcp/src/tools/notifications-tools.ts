@@ -2,12 +2,29 @@ import { z } from "zod";
 import { CourierMcpTools } from "./courier-mcp-tools.js";
 import { handleToolCall } from "../utils/error-handler.js";
 
+const notificationTemplatePayload = z.object({
+  name: z.string(),
+  tags: z.array(z.string()),
+  brand: z.any().nullable(),
+  subscription: z.any().nullable(),
+  routing: z.any().nullable(),
+  content: z.any(),
+});
+
 export class NotificationsTools extends CourierMcpTools {
 
   static readonly tools: string[] = [
     'list_notifications',
     'get_notification_content',
     'get_notification_draft_content',
+    'create_notification',
+    'get_notification',
+    'replace_notification',
+    'archive_notification',
+    'list_notification_versions',
+    'publish_notification',
+    'list_notification_checks',
+    'update_notification_checks',
   ];
 
   public register() {
@@ -46,6 +63,153 @@ export class NotificationsTools extends CourierMcpTools {
         return handleToolCall(() => this.mcp.courier.notifications.retrieveContent(notification_id, { version: 'draft' }));
       },
       { readOnlyHint: true }
+    );
+
+    this.registerToolIfNeeded(
+      NotificationsTools.tools[3],
+      "Create a notification template with name, tags, brand, subscription, routing, and content.",
+      {
+        notification: notificationTemplatePayload.describe('Notification template payload'),
+        state: z.enum(['DRAFT', 'PUBLISHED']).optional().describe('Template state after creation (defaults to DRAFT)'),
+      },
+      async ({ notification, state }) => {
+        return handleToolCall(() =>
+          this.mcp.courier.notifications.create({
+            notification: notification as any,
+            ...(state !== undefined ? { state } : {}),
+          })
+        );
+      },
+      { readOnlyHint: false, idempotentHint: false }
+    );
+
+    this.registerToolIfNeeded(
+      NotificationsTools.tools[4],
+      "Retrieve a notification template by ID. Optionally request draft, published, or a version such as v001.",
+      {
+        notification_id: z.string().describe('The notification template ID'),
+        version: z.string().optional().describe('Version to retrieve: draft, published, or a string like v001'),
+      },
+      async ({ notification_id, version }) => {
+        return handleToolCall(() =>
+          this.mcp.courier.notifications.retrieve(
+            notification_id,
+            version !== undefined ? { version } : undefined
+          )
+        );
+      },
+      { readOnlyHint: true }
+    );
+
+    this.registerToolIfNeeded(
+      NotificationsTools.tools[5],
+      "Replace a notification template entirely (full document PUT).",
+      {
+        notification_id: z.string().describe('The notification template ID to replace'),
+        notification: notificationTemplatePayload.describe('Full notification template payload'),
+        state: z.enum(['DRAFT', 'PUBLISHED']).optional().describe('Template state after update (defaults to DRAFT)'),
+      },
+      async ({ notification_id, notification, state }) => {
+        return handleToolCall(() =>
+          this.mcp.courier.notifications.replace(notification_id, {
+            notification: notification as any,
+            ...(state !== undefined ? { state } : {}),
+          })
+        );
+      },
+      { readOnlyHint: false, idempotentHint: true }
+    );
+
+    this.registerToolIfNeeded(
+      NotificationsTools.tools[6],
+      "Archive a notification template by ID.",
+      {
+        notification_id: z.string().describe('The notification template ID to archive'),
+      },
+      async ({ notification_id }) => {
+        return handleToolCall(async () => {
+          await this.mcp.courier.notifications.archive(notification_id);
+          return { success: true, message: `Notification ${notification_id} archived` };
+        });
+      },
+      { destructiveHint: true, idempotentHint: true }
+    );
+
+    this.registerToolIfNeeded(
+      NotificationsTools.tools[7],
+      "List version history for a notification template.",
+      {
+        notification_id: z.string().describe('The notification template ID'),
+        cursor: z.string().optional().describe('Pagination cursor from a previous response'),
+        limit: z.number().optional().describe('Max versions per page (default 10, max 10)'),
+      },
+      async ({ notification_id, cursor, limit }) => {
+        return handleToolCall(() =>
+          this.mcp.courier.notifications.listVersions(notification_id, {
+            ...(cursor !== undefined ? { cursor } : {}),
+            ...(limit !== undefined ? { limit } : {}),
+          })
+        );
+      },
+      { readOnlyHint: true }
+    );
+
+    this.registerToolIfNeeded(
+      NotificationsTools.tools[8],
+      "Publish a notification template. Optionally publish a specific historical version instead of the current draft.",
+      {
+        notification_id: z.string().describe('The notification template ID to publish'),
+        version: z.string().optional().describe('Historical version to publish (e.g. v001); omit to publish current draft'),
+      },
+      async ({ notification_id, version }) => {
+        return handleToolCall(async () => {
+          await this.mcp.courier.notifications.publish(
+            notification_id,
+            version !== undefined ? { version } : {}
+          );
+          return { success: true, message: `Notification ${notification_id} published` };
+        });
+      },
+      { readOnlyHint: false, idempotentHint: false }
+    );
+
+    this.registerToolIfNeeded(
+      NotificationsTools.tools[9],
+      "List checks for a notification submission.",
+      {
+        notification_id: z.string().describe('The notification template ID'),
+        submission_id: z.string().describe('The submission ID for the checks resource'),
+      },
+      async ({ notification_id, submission_id }) => {
+        return handleToolCall(() =>
+          this.mcp.courier.notifications.checks.list(submission_id, { id: notification_id })
+        );
+      },
+      { readOnlyHint: true }
+    );
+
+    this.registerToolIfNeeded(
+      NotificationsTools.tools[10],
+      "Update check statuses for a notification submission.",
+      {
+        notification_id: z.string().describe('The notification template ID'),
+        submission_id: z.string().describe('The submission ID for the checks resource'),
+        checks: z
+          .array(
+            z.object({
+              id: z.string().describe('Check ID'),
+              status: z.enum(['RESOLVED', 'FAILED', 'PENDING']).describe('Check status'),
+              type: z.literal('custom').describe('Check type'),
+            })
+          )
+          .describe('Checks to update'),
+      },
+      async ({ notification_id, submission_id, checks }) => {
+        return handleToolCall(() =>
+          this.mcp.courier.notifications.checks.update(submission_id, { id: notification_id, checks })
+        );
+      },
+      { readOnlyHint: false, idempotentHint: true }
     );
   }
 }
