@@ -8,14 +8,14 @@ The official [Model Context Protocol](https://modelcontextprotocol.io/) (MCP) se
 
 Courier runs a hosted MCP server at `https://mcp.courier.com`. No local setup required.
 
-<a href="https://cursor.com/en/install-mcp?name=courier&config=eyJ1cmwiOiAiaHR0cHM6Ly9tY3AuY291cmllci5jb20iLCAiaGVhZGVycyI6IHsiYXBpX2tleSI6ICJZb3VyIEFQSSBLZXkifX0="><img src="https://cursor.com/deeplink/mcp-install-dark.svg" alt="Install in Cursor" height="32" /></a>
+<a href="https://cursor.com/en/install-mcp?name=Courier&config=eyJ1cmwiOiAiaHR0cHM6Ly9tY3AuY291cmllci5jb20iLCAiaGVhZGVycyI6IHsiYXBpX2tleSI6ICJZb3VyIEFQSSBLZXkifX0="><img src="https://cursor.com/deeplink/mcp-install-dark.svg" alt="Install in Cursor" height="32" /></a>
 
 **Cursor** — add to `.cursor/mcp.json`:
 
 ```json
 {
   "mcpServers": {
-    "courier": {
+    "Courier": {
       "url": "https://mcp.courier.com",
       "headers": {
         "api_key": "YOUR_COURIER_API_KEY"
@@ -28,7 +28,7 @@ Courier runs a hosted MCP server at `https://mcp.courier.com`. No local setup re
 **Claude Code:**
 
 ```bash
-claude mcp add courier --transport http --url https://mcp.courier.com --header "api_key: YOUR_COURIER_API_KEY"
+claude mcp add Courier --transport http --url https://mcp.courier.com --header "api_key: YOUR_COURIER_API_KEY"
 ```
 
 **Claude Desktop** — add to `claude_desktop_config.json`:
@@ -36,7 +36,7 @@ claude mcp add courier --transport http --url https://mcp.courier.com --header "
 ```json
 {
   "mcpServers": {
-    "courier": {
+    "Courier": {
       "url": "https://mcp.courier.com",
       "headers": {
         "api_key": "YOUR_COURIER_API_KEY"
