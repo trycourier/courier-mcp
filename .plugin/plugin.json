@@ -1,6 +1,6 @@
 {
   "name": "courier",
-  "version": "1.3.2",
+  "version": "1.3.3",
   "description": "Send notifications, manage users, and orchestrate messaging workflows. 60 tools for the full Courier API across email, SMS, push, chat, and in-app.",
   "author": {
     "name": "Courier",
