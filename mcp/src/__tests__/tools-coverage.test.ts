@@ -54,7 +54,7 @@ describe('Tool coverage - one call per tool', () => {
 
   it('get_notification_draft_content', async () => {
     await client.callTool({ name: 'get_notification_draft_content', arguments: { notification_id: 'n-1' } });
-    expect(mockCourier.notifications.draft.retrieveContent).toHaveBeenCalledWith('n-1');
+    expect(mockCourier.notifications.retrieveContent).toHaveBeenCalledWith('n-1', { version: 'draft' });
   });
 
   // --- Brands ---
