@@ -43,7 +43,7 @@ export class NotificationsTools extends CourierMcpTools {
         notification_id: z.string().describe('The notification template ID'),
       },
       async ({ notification_id }) => {
-        return handleToolCall(() => this.mcp.courier.notifications.draft.retrieveContent(notification_id));
+        return handleToolCall(() => this.mcp.courier.notifications.retrieveContent(notification_id, { version: 'draft' }));
       },
       { readOnlyHint: true }
     );
