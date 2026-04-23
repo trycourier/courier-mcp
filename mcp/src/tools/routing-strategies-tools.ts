@@ -10,6 +10,7 @@ export class RoutingStrategiesTools extends CourierMcpTools {
     'replace_routing_strategy',
     'archive_routing_strategy',
     'list_routing_strategies',
+    'list_routing_strategy_notifications',
   ];
 
   public register() {
@@ -109,6 +110,25 @@ export class RoutingStrategiesTools extends CourierMcpTools {
           if (cursor) query.cursor = cursor;
           if (limit) query.limit = limit;
           return this.mcp.courier.routingStrategies.list(query);
+        });
+      },
+      { readOnlyHint: true }
+    );
+
+    this.registerToolIfNeeded(
+      RoutingStrategiesTools.tools[5],
+      'List notification templates associated with a routing strategy. Useful for checking linked templates before archiving.',
+      {
+        routing_strategy_id: z.string().describe('The routing strategy ID (rs_ prefix)'),
+        cursor: z.string().optional().describe('Pagination cursor'),
+        limit: z.number().optional().describe('Max results per page (default 20, max 100)'),
+      },
+      async ({ routing_strategy_id, cursor, limit }) => {
+        return handleToolCall(() => {
+          const query: Record<string, any> = {};
+          if (cursor) query.cursor = cursor;
+          if (limit) query.limit = limit;
+          return this.mcp.courier.routingStrategies.listNotifications(routing_strategy_id, query);
         });
       },
       { readOnlyHint: true }

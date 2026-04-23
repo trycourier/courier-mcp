@@ -31,6 +31,7 @@ export function createMockCourier() {
       list: vi.fn().mockResolvedValue({ results: [], paging: {} }),
       update: vi.fn().mockResolvedValue(undefined),
       delete: vi.fn().mockResolvedValue(undefined),
+      restore: vi.fn().mockResolvedValue(undefined),
       subscriptions: {
         list: vi.fn().mockResolvedValue({ items: [], paging: {} }),
         subscribeUser: vi.fn().mockResolvedValue(undefined),
@@ -49,11 +50,27 @@ export function createMockCourier() {
     notifications: {
       list: vi.fn().mockResolvedValue({ results: [], paging: {} }),
       retrieveContent: vi.fn().mockResolvedValue({ blocks: [], channels: [] }),
+      create: vi.fn().mockResolvedValue({ notification: { id: 'nt-1' }, state: 'DRAFT' }),
+      retrieve: vi.fn().mockResolvedValue({ notification: { id: 'nt-1', name: 'Test' }, state: 'PUBLISHED', created: 1, creator: 'u' }),
+      replace: vi.fn().mockResolvedValue({ notification: { id: 'nt-1' }, state: 'DRAFT' }),
+      archive: vi.fn().mockResolvedValue(undefined),
+      listVersions: vi.fn().mockResolvedValue({ results: [], paging: {} }),
+      publish: vi.fn().mockResolvedValue(undefined),
+      putContent: vi.fn().mockResolvedValue({ id: 'nt-1', elements: [], state: 'DRAFT', version: 'v001' }),
+      putElement: vi.fn().mockResolvedValue({ id: 'nt-1', elements: [], state: 'DRAFT', version: 'v001' }),
+      putLocale: vi.fn().mockResolvedValue({ id: 'nt-1', elements: [], state: 'DRAFT', version: 'v001' }),
+      checks: {
+        list: vi.fn().mockResolvedValue({ checks: [] }),
+        update: vi.fn().mockResolvedValue({ checks: [] }),
+        delete: vi.fn().mockResolvedValue(undefined),
+      },
     },
     brands: {
       create: vi.fn().mockResolvedValue({ id: 'brand-1', name: 'Test' }),
       retrieve: vi.fn().mockResolvedValue({ id: 'brand-1', name: 'Test' }),
       list: vi.fn().mockResolvedValue({ results: [], paging: {} }),
+      update: vi.fn().mockResolvedValue({ id: 'brand-1', name: 'Updated' }),
+      delete: vi.fn().mockResolvedValue(undefined),
     },
     auth: {
       issueToken: vi.fn().mockResolvedValue({ token: 'jwt-token-123' }),
@@ -84,6 +101,22 @@ export function createMockCourier() {
       update: vi.fn().mockResolvedValue({ id: 't-1', name: 'Acme' }),
       list: vi.fn().mockResolvedValue({ items: [], has_more: false, type: 'list', url: '' }),
       delete: vi.fn().mockResolvedValue(undefined),
+      listUsers: vi.fn().mockResolvedValue({ items: [], paging: {} }),
+      preferences: {
+        items: {
+          update: vi.fn().mockResolvedValue({ message: 'ok' }),
+          delete: vi.fn().mockResolvedValue(undefined),
+        },
+      },
+      templates: {
+        list: vi.fn().mockResolvedValue({ results: [], paging: {} }),
+        retrieve: vi.fn().mockResolvedValue({ id: 'tmpl-1' }),
+        replace: vi.fn().mockResolvedValue({ id: 'tmpl-1' }),
+        publish: vi.fn().mockResolvedValue({ id: 'tmpl-1' }),
+        versions: {
+          retrieve: vi.fn().mockResolvedValue({ id: 'tmpl-1', version: 'v1' }),
+        },
+      },
     },
     translations: {
       retrieve: vi.fn().mockResolvedValue('msgid "hello"\nmsgstr "bonjour"'),
@@ -92,17 +125,47 @@ export function createMockCourier() {
     users: {
       preferences: {
         retrieve: vi.fn().mockResolvedValue({ items: [], paging: {} }),
+        retrieveTopic: vi.fn().mockResolvedValue({ topic: { id: 'topic-1', status: 'OPTED_IN' } }),
         updateOrCreateTopic: vi.fn().mockResolvedValue({ message: 'ok' }),
       },
       tenants: {
         list: vi.fn().mockResolvedValue({ items: [], has_more: false, type: 'list', url: '' }),
         addSingle: vi.fn().mockResolvedValue(undefined),
         removeSingle: vi.fn().mockResolvedValue(undefined),
+        addMultiple: vi.fn().mockResolvedValue(undefined),
+        removeAll: vi.fn().mockResolvedValue(undefined),
       },
       tokens: {
         list: vi.fn().mockResolvedValue({ tokens: [] }),
         retrieve: vi.fn().mockResolvedValue({ token: 'tok-1', provider_key: 'firebase-fcm' }),
         addSingle: vi.fn().mockResolvedValue(undefined),
+        update: vi.fn().mockResolvedValue(undefined),
+        delete: vi.fn().mockResolvedValue(undefined),
+      },
+    },
+    routingStrategies: {
+      create: vi.fn().mockResolvedValue({ id: 'rs-1' }),
+      retrieve: vi.fn().mockResolvedValue({ id: 'rs-1', name: 'Default', routing: { method: 'single', channels: ['email'] }, channels: {}, providers: {}, created: 1, creator: 'u' }),
+      replace: vi.fn().mockResolvedValue({ id: 'rs-1' }),
+      archive: vi.fn().mockResolvedValue(undefined),
+      list: vi.fn().mockResolvedValue({ results: [], paging: {} }),
+      listNotifications: vi.fn().mockResolvedValue({ results: [], paging: {} }),
+    },
+    journeys: {
+      list: vi.fn().mockResolvedValue({ results: [], paging: {} }),
+      invoke: vi.fn().mockResolvedValue({ runId: 'jr-1' }),
+    },
+    requests: {
+      archive: vi.fn().mockResolvedValue(undefined),
+    },
+    providers: {
+      list: vi.fn().mockResolvedValue({ results: [], paging: {} }),
+      create: vi.fn().mockResolvedValue({ id: 'prov-1', provider: 'sendgrid', title: 'SendGrid', settings: {}, created: 1 }),
+      retrieve: vi.fn().mockResolvedValue({ id: 'prov-1', provider: 'sendgrid', title: 'SendGrid', settings: {}, created: 1 }),
+      update: vi.fn().mockResolvedValue({ id: 'prov-1', provider: 'sendgrid', title: 'SendGrid', settings: {}, created: 1 }),
+      delete: vi.fn().mockResolvedValue(undefined),
+      catalog: {
+        list: vi.fn().mockResolvedValue({ results: [], paging: {} }),
       },
     },
   } as any;

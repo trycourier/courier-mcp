@@ -19,6 +19,7 @@ import { UsersTools } from "../tools/users-tools.js";
 import { RequestsTools } from "../tools/requests-tools.js";
 import { RoutingStrategiesTools } from "../tools/routing-strategies-tools.js";
 import { JourneysTools } from "../tools/journeys-tools.js";
+import { ProvidersTools } from "../tools/providers-tools.js";
 
 export class CourierMcpToolsRegistry {
 
@@ -48,6 +49,7 @@ export class CourierMcpToolsRegistry {
       ...RequestsTools.tools,
       ...RoutingStrategiesTools.tools,
       ...JourneysTools.tools,
+      ...ProvidersTools.tools,
     ];
   }
 

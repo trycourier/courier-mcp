@@ -98,7 +98,7 @@ describe('MCP protocol', () => {
 
   it('listTools returns all tools with descriptions', async () => {
     const { tools } = await client.listTools();
-    expect(tools.length).toBe(97);
+    expect(tools.length).toBe(108);
     for (const tool of tools) {
       expect(tool.name).toBeTruthy();
       expect(tool.description).toBeTruthy();
