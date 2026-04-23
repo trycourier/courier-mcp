@@ -49,9 +49,6 @@ export function createMockCourier() {
     notifications: {
       list: vi.fn().mockResolvedValue({ results: [], paging: {} }),
       retrieveContent: vi.fn().mockResolvedValue({ blocks: [], channels: [] }),
-      draft: {
-        retrieveContent: vi.fn().mockResolvedValue({ blocks: [], channels: [] }),
-      },
     },
     brands: {
       create: vi.fn().mockResolvedValue({ id: 'brand-1', name: 'Test' }),
