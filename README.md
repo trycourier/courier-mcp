@@ -88,6 +88,10 @@ Then point your IDE at `http://localhost:3000` with the same config format above
 |----------|-------|
 | **Config** | `get_environment_config` — check which API key, base URL, and package version the MCP session is using |
 
+### Safer defaults (optional client policies)
+
+Tools that send live traffic, carry `destructiveHint` in MCP annotations, or mutate provider integrations are listed in code as `RECOMMENDED_CLIENT_DISABLED_TOOLS` ([source](mcp/src/policy/recommended-client-disabled-tools.ts)). Export it from `@trycourier/courier-mcp` if you want to drive codegen or docs. Teams typically paste subsets into **Claude Code** (`permissions.deny` / `mcp__<serverName>__<toolName>`) or **Codex** (`[mcp_servers.<name>.disabled_tools]` in `config.toml`). This does not change hosted MCP behavior until each client applies its own policy.
+
 ## Architecture
 
 ```
@@ -95,6 +99,7 @@ courier-mcp/
 ├── mcp/                    # MCP package (@trycourier/courier-mcp on npm)
 │   └── src/
 │       ├── index.ts        # CourierMcp server class
+│       ├── policy/         # Optional client policy helpers (e.g. recommended disable list)
 │       ├── tools/          # Tool definitions (one file per API resource)
 │       └── utils/          # Config, error handling, registry
 ├── server/                 # Express server (hosts the MCP package via HTTP)

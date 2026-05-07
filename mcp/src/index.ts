@@ -100,3 +100,4 @@ export {
 
 import { CourierMcpToolsRegistry } from './utils/courier-mcp-tools-registry.js';
 export { CourierMcpToolsRegistry as CourierMcpTools };
+export { RECOMMENDED_CLIENT_DISABLED_TOOLS } from './policy/recommended-client-disabled-tools.js';
