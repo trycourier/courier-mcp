@@ -4,15 +4,10 @@ import { handleToolCall } from "../utils/error-handler.js";
 
 export class ProvidersTools extends CourierMcpTools {
 
-  /** Included in defaultTools (read-only). */
   static readonly tools: string[] = [
     'list_providers',
     'get_provider',
     'list_provider_catalog',
-  ];
-
-  /** Opt-in only; merged into allAvailableTools with ConfigTools. */
-  static readonly optInTools: string[] = [
     'create_provider',
     'update_provider',
     'delete_provider',
@@ -69,8 +64,8 @@ export class ProvidersTools extends CourierMcpTools {
     );
 
     this.registerToolIfNeeded(
-      ProvidersTools.optInTools[0],
-      'Create a new provider configuration. The provider field must be a known Courier provider key (see catalog).',
+      ProvidersTools.tools[3],
+      'Create a new provider (integration) configuration. Once routing strategies or notification templates reference this config, credential or settings mistakes can affect live sends—confirm provider key and settings against list_provider_catalog before saving. The provider field must be a known Courier provider key.',
       {
         provider: z.string().describe('Provider key from the catalog (e.g. sendgrid, twilio, firebase-fcm)'),
         title: z.string().optional().describe('Display name for this provider configuration'),
@@ -90,7 +85,7 @@ export class ProvidersTools extends CourierMcpTools {
     );
 
     this.registerToolIfNeeded(
-      ProvidersTools.optInTools[1],
+      ProvidersTools.tools[4],
       'Replace an existing provider configuration. Full replacement — retrieve current config with get_provider first; omitted optional fields are cleared. Changing API keys or settings affects live delivery if this integration is in use.',
       {
         provider_id: z.string().describe('The provider configuration ID'),
@@ -112,7 +107,7 @@ export class ProvidersTools extends CourierMcpTools {
     );
 
     this.registerToolIfNeeded(
-      ProvidersTools.optInTools[2],
+      ProvidersTools.tools[5],
       'Delete a provider configuration. Returns 409 if the provider is still referenced by routing or notifications.',
       {
         provider_id: z.string().describe('The provider configuration ID to delete'),

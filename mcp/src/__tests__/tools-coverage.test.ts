@@ -824,10 +824,7 @@ describe('Tool filtering - registerToolIfNeeded respects availableTools', () => 
       const tools = await client.listTools();
       const names = tools.tools.map((t: any) => t.name);
       expect(names).not.toContain('get_environment_config');
-      expect(names).not.toContain('create_provider');
-      expect(names).not.toContain('update_provider');
-      expect(names).not.toContain('delete_provider');
-      expect(names.length).toBe(105);
+      expect(names.length).toBe(108);
     } finally {
       await cleanup();
     }
@@ -840,9 +837,6 @@ describe('Tool filtering - registerToolIfNeeded respects availableTools', () => 
       const tools = await client.listTools();
       const names = tools.tools.map((t: any) => t.name);
       expect(names).toContain('get_environment_config');
-      expect(names).toContain('create_provider');
-      expect(names).toContain('update_provider');
-      expect(names).toContain('delete_provider');
       expect(names.length).toBe(109);
     } finally {
       await cleanup();

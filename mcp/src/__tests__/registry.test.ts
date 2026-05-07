@@ -48,13 +48,7 @@ describe('CourierMcpToolsRegistry', () => {
       }
     });
 
-    it('does not include opt-in provider write tools', () => {
-      for (const tool of ProvidersTools.optInTools) {
-        expect(defaults).not.toContain(tool);
-      }
-    });
-
-    it('includes read-only provider tools', () => {
+    it('includes all provider tools', () => {
       for (const tool of ProvidersTools.tools) {
         expect(defaults).toContain(tool);
       }
@@ -83,12 +77,6 @@ describe('CourierMcpToolsRegistry', () => {
 
     it('includes ConfigTools', () => {
       for (const tool of ConfigTools.tools) {
-        expect(all).toContain(tool);
-      }
-    });
-
-    it('includes opt-in provider write tools', () => {
-      for (const tool of ProvidersTools.optInTools) {
         expect(all).toContain(tool);
       }
     });
