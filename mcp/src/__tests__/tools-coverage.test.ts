@@ -424,6 +424,24 @@ describe('Tool coverage - one call per tool', () => {
     expect(mockCourier.users.tokens.delete).toHaveBeenCalledWith('tok-1', { user_id: 'u-1' });
   });
 
+  it('bulk_add_user_tokens', async () => {
+    await client.callTool({ name: 'bulk_add_user_tokens', arguments: {
+      user_id: 'u-1',
+      tokens: [
+        { token: 'tok-a', provider_key: 'firebase-fcm' },
+        { token: 'tok-b', provider_key: 'apn' },
+      ],
+    }});
+    expect(mockCourier.users.tokens.addMultiple).toHaveBeenCalledWith('u-1', {
+      body: {
+        tokens: [
+          { token: 'tok-a', provider_key: 'firebase-fcm' },
+          { token: 'tok-b', provider_key: 'apn' },
+        ],
+      },
+    });
+  });
+
   // --- Users (new in PR #26) ---
 
   it('get_user_preference_topic', async () => {
@@ -806,7 +824,10 @@ describe('Tool filtering - registerToolIfNeeded respects availableTools', () => 
       const tools = await client.listTools();
       const names = tools.tools.map((t: any) => t.name);
       expect(names).not.toContain('get_environment_config');
-      expect(names.length).toBe(107);
+      expect(names).not.toContain('create_provider');
+      expect(names).not.toContain('update_provider');
+      expect(names).not.toContain('delete_provider');
+      expect(names.length).toBe(105);
     } finally {
       await cleanup();
     }
@@ -819,7 +840,10 @@ describe('Tool filtering - registerToolIfNeeded respects availableTools', () => 
       const tools = await client.listTools();
       const names = tools.tools.map((t: any) => t.name);
       expect(names).toContain('get_environment_config');
-      expect(names.length).toBe(108);
+      expect(names).toContain('create_provider');
+      expect(names).toContain('update_provider');
+      expect(names).toContain('delete_provider');
+      expect(names.length).toBe(109);
     } finally {
       await cleanup();
     }

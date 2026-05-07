@@ -63,7 +63,7 @@ export class ProfilesTools extends CourierMcpTools {
         patch: z.array(z.object({
           op: z.string().describe('Patch operation (add, remove, replace, move, copy, test)'),
           path: z.string().describe('JSON pointer path (e.g. /email, /phone_number)'),
-          value: z.string().optional().describe('Value for the operation'),
+          value: z.any().optional().describe('Value for the operation (any JSON type)'),
         })).describe('Array of JSON Patch operations to apply to the profile'),
       },
       async ({ user_id, patch }) => {

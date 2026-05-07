@@ -55,11 +55,13 @@ export class CourierMcpToolsRegistry {
 
   /**
    * Every registered tool, including diagnostic/meta tools that are
-   * not part of the default set (e.g. get_environment_config).
+   * not part of the default set (e.g. get_environment_config), and
+   * provider write operations (create/update/delete provider).
    */
   static get allAvailableTools(): string[] {
     return [
       ...this.defaultTools,
+      ...ProvidersTools.optInTools,
       ...ConfigTools.tools,
     ];
   }

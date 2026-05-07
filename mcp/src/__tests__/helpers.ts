@@ -139,6 +139,7 @@ export function createMockCourier() {
         list: vi.fn().mockResolvedValue({ tokens: [] }),
         retrieve: vi.fn().mockResolvedValue({ token: 'tok-1', provider_key: 'firebase-fcm' }),
         addSingle: vi.fn().mockResolvedValue(undefined),
+        addMultiple: vi.fn().mockResolvedValue(undefined),
         update: vi.fn().mockResolvedValue(undefined),
         delete: vi.fn().mockResolvedValue(undefined),
       },

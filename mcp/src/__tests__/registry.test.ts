@@ -6,6 +6,7 @@ import { BulkTools } from '../tools/bulk-tools.js';
 import { ConfigTools } from '../tools/config-tools.js';
 import { TenantsTools } from '../tools/tenants-tools.js';
 import { UsersTools } from '../tools/users-tools.js';
+import { ProvidersTools } from '../tools/providers-tools.js';
 
 describe('CourierMcpToolsRegistry', () => {
   describe('defaultTools', () => {
@@ -47,6 +48,18 @@ describe('CourierMcpToolsRegistry', () => {
       }
     });
 
+    it('does not include opt-in provider write tools', () => {
+      for (const tool of ProvidersTools.optInTools) {
+        expect(defaults).not.toContain(tool);
+      }
+    });
+
+    it('includes read-only provider tools', () => {
+      for (const tool of ProvidersTools.tools) {
+        expect(defaults).toContain(tool);
+      }
+    });
+
     it('does not include removed SDK context tools', () => {
       expect(defaults).not.toContain('get_courier_sdk_context');
       expect(defaults).not.toContain('scan_courier_imports');
@@ -70,6 +83,12 @@ describe('CourierMcpToolsRegistry', () => {
 
     it('includes ConfigTools', () => {
       for (const tool of ConfigTools.tools) {
+        expect(all).toContain(tool);
+      }
+    });
+
+    it('includes opt-in provider write tools', () => {
+      for (const tool of ProvidersTools.optInTools) {
         expect(all).toContain(tool);
       }
     });

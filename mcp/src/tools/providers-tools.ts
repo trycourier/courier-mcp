@@ -4,13 +4,18 @@ import { handleToolCall } from "../utils/error-handler.js";
 
 export class ProvidersTools extends CourierMcpTools {
 
+  /** Included in defaultTools (read-only). */
   static readonly tools: string[] = [
     'list_providers',
-    'create_provider',
     'get_provider',
+    'list_provider_catalog',
+  ];
+
+  /** Opt-in only; merged into allAvailableTools with ConfigTools. */
+  static readonly optInTools: string[] = [
+    'create_provider',
     'update_provider',
     'delete_provider',
-    'list_provider_catalog',
   ];
 
   public register() {
@@ -33,6 +38,38 @@ export class ProvidersTools extends CourierMcpTools {
 
     this.registerToolIfNeeded(
       ProvidersTools.tools[1],
+      'Fetch a single provider configuration by ID.',
+      {
+        provider_id: z.string().describe('The provider configuration ID'),
+      },
+      async ({ provider_id }) => {
+        return handleToolCall(() => this.mcp.courier.providers.retrieve(provider_id));
+      },
+      { readOnlyHint: true }
+    );
+
+    this.registerToolIfNeeded(
+      ProvidersTools.tools[2],
+      'List available provider types from the catalog with their configuration schemas.',
+      {
+        keys: z.string().optional().describe('Comma-separated provider keys to filter by'),
+        name: z.string().optional().describe('Substring match on provider name'),
+        channel: z.string().optional().describe('Filter by channel type (email, sms, push, etc.)'),
+      },
+      async ({ keys, name, channel }) => {
+        return handleToolCall(() => {
+          const query: Record<string, any> = {};
+          if (keys) query.keys = keys;
+          if (name) query.name = name;
+          if (channel) query.channel = channel;
+          return this.mcp.courier.providers.catalog.list(query);
+        });
+      },
+      { readOnlyHint: true }
+    );
+
+    this.registerToolIfNeeded(
+      ProvidersTools.optInTools[0],
       'Create a new provider configuration. The provider field must be a known Courier provider key (see catalog).',
       {
         provider: z.string().describe('Provider key from the catalog (e.g. sendgrid, twilio, firebase-fcm)'),
@@ -53,20 +90,8 @@ export class ProvidersTools extends CourierMcpTools {
     );
 
     this.registerToolIfNeeded(
-      ProvidersTools.tools[2],
-      'Fetch a single provider configuration by ID.',
-      {
-        provider_id: z.string().describe('The provider configuration ID'),
-      },
-      async ({ provider_id }) => {
-        return handleToolCall(() => this.mcp.courier.providers.retrieve(provider_id));
-      },
-      { readOnlyHint: true }
-    );
-
-    this.registerToolIfNeeded(
-      ProvidersTools.tools[3],
-      'Replace an existing provider configuration. Full replacement; omitted optional fields are cleared.',
+      ProvidersTools.optInTools[1],
+      'Replace an existing provider configuration. Full replacement — retrieve current config with get_provider first; omitted optional fields are cleared. Changing API keys or settings affects live delivery if this integration is in use.',
       {
         provider_id: z.string().describe('The provider configuration ID'),
         provider: z.string().describe('Provider key (must match existing; changing provider type is not supported)'),
@@ -87,7 +112,7 @@ export class ProvidersTools extends CourierMcpTools {
     );
 
     this.registerToolIfNeeded(
-      ProvidersTools.tools[4],
+      ProvidersTools.optInTools[2],
       'Delete a provider configuration. Returns 409 if the provider is still referenced by routing or notifications.',
       {
         provider_id: z.string().describe('The provider configuration ID to delete'),
@@ -99,26 +124,6 @@ export class ProvidersTools extends CourierMcpTools {
         });
       },
       { destructiveHint: true, idempotentHint: true }
-    );
-
-    this.registerToolIfNeeded(
-      ProvidersTools.tools[5],
-      'List available provider types from the catalog with their configuration schemas.',
-      {
-        keys: z.string().optional().describe('Comma-separated provider keys to filter by'),
-        name: z.string().optional().describe('Substring match on provider name'),
-        channel: z.string().optional().describe('Filter by channel type (email, sms, push, etc.)'),
-      },
-      async ({ keys, name, channel }) => {
-        return handleToolCall(() => {
-          const query: Record<string, any> = {};
-          if (keys) query.keys = keys;
-          if (name) query.name = name;
-          if (channel) query.channel = channel;
-          return this.mcp.courier.providers.catalog.list(query);
-        });
-      },
-      { readOnlyHint: true }
     );
   }
 }
