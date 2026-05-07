@@ -7,6 +7,7 @@ export class AutomationsTools extends CourierMcpTools {
   static readonly tools: string[] = [
     'invoke_automation_template',
     'invoke_ad_hoc_automation',
+    'list_automations',
   ];
 
   public register() {
@@ -61,6 +62,24 @@ export class AutomationsTools extends CourierMcpTools {
         });
       },
       { readOnlyHint: false, idempotentHint: false }
+    );
+
+    this.registerToolIfNeeded(
+      AutomationsTools.tools[2],
+      'List automation templates in the workspace. Optionally filter by version.',
+      {
+        cursor: z.string().optional().describe('Pagination cursor'),
+        version: z.enum(['published', 'draft']).optional().describe('Filter by version state'),
+      },
+      async ({ cursor, version }) => {
+        return handleToolCall(() => {
+          const query: Record<string, any> = {};
+          if (cursor) query.cursor = cursor;
+          if (version) query.version = version;
+          return this.mcp.courier.automations.list(query);
+        });
+      },
+      { readOnlyHint: true }
     );
   }
 }

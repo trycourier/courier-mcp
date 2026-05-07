@@ -8,6 +8,7 @@ export class ProfilesTools extends CourierMcpTools {
     'get_user_profile_by_id',
     'create_or_merge_user',
     'replace_profile',
+    'patch_profile',
     'delete_profile',
     'get_user_list_subscriptions',
     'subscribe_user_to_lists',
@@ -56,6 +57,26 @@ export class ProfilesTools extends CourierMcpTools {
 
     this.registerToolIfNeeded(
       ProfilesTools.tools[3],
+      'Partially update a user profile via JSON Patch (RFC 6902). Use add/replace/remove operations on specific profile paths.',
+      {
+        user_id: z.string().describe('The user ID'),
+        patch: z.array(z.object({
+          op: z.string().describe('Patch operation (add, remove, replace, move, copy, test)'),
+          path: z.string().describe('JSON pointer path (e.g. /email, /phone_number)'),
+          value: z.any().optional().describe('Value for the operation (any JSON type)'),
+        })).describe('Array of JSON Patch operations to apply to the profile'),
+      },
+      async ({ user_id, patch }) => {
+        return handleToolCall(async () => {
+          await this.mcp.courier.profiles.update(user_id, { patch } as any);
+          return { success: true, message: `Profile ${user_id} patched` };
+        });
+      },
+      { readOnlyHint: false, idempotentHint: false }
+    );
+
+    this.registerToolIfNeeded(
+      ProfilesTools.tools[4],
       'Delete a user profile permanently.',
       {
         user_id: z.string().describe('The user ID to delete'),
@@ -70,7 +91,7 @@ export class ProfilesTools extends CourierMcpTools {
     );
 
     this.registerToolIfNeeded(
-      ProfilesTools.tools[4],
+      ProfilesTools.tools[5],
       'Get all list subscriptions for a user.',
       {
         user_id: z.string().describe('The user ID'),
@@ -83,7 +104,7 @@ export class ProfilesTools extends CourierMcpTools {
     );
 
     this.registerToolIfNeeded(
-      ProfilesTools.tools[5],
+      ProfilesTools.tools[6],
       'Subscribe a user to one or more lists. Creates lists that do not exist.',
       {
         user_id: z.string().describe('The user ID'),
@@ -101,7 +122,7 @@ export class ProfilesTools extends CourierMcpTools {
     );
 
     this.registerToolIfNeeded(
-      ProfilesTools.tools[6],
+      ProfilesTools.tools[7],
       'Delete all list subscriptions for a user.',
       {
         user_id: z.string().describe('The user ID'),

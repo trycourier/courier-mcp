@@ -6,6 +6,7 @@ import { BulkTools } from '../tools/bulk-tools.js';
 import { ConfigTools } from '../tools/config-tools.js';
 import { TenantsTools } from '../tools/tenants-tools.js';
 import { UsersTools } from '../tools/users-tools.js';
+import { ProvidersTools } from '../tools/providers-tools.js';
 
 describe('CourierMcpToolsRegistry', () => {
   describe('defaultTools', () => {
@@ -44,6 +45,12 @@ describe('CourierMcpToolsRegistry', () => {
     it('does not include diagnostic tools', () => {
       for (const tool of ConfigTools.tools) {
         expect(defaults).not.toContain(tool);
+      }
+    });
+
+    it('includes all provider tools', () => {
+      for (const tool of ProvidersTools.tools) {
+        expect(defaults).toContain(tool);
       }
     });
 

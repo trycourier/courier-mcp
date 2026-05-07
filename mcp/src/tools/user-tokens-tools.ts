@@ -2,12 +2,24 @@ import { z } from "zod";
 import { CourierMcpTools } from "./courier-mcp-tools.js";
 import { handleToolCall } from "../utils/error-handler.js";
 
+const deviceSchema = z.object({
+  app_id: z.string().optional(),
+  ad_id: z.string().optional(),
+  device_id: z.string().optional(),
+  platform: z.string().optional(),
+  manufacturer: z.string().optional(),
+  model: z.string().optional(),
+}).optional().describe('Device metadata');
+
 export class UserTokensTools extends CourierMcpTools {
 
   static readonly tools: string[] = [
     'list_user_push_tokens',
     'get_user_push_token',
     'create_or_replace_user_push_token',
+    'bulk_add_user_tokens',
+    'patch_user_token',
+    'delete_user_token',
   ];
 
   public register() {
@@ -62,6 +74,68 @@ export class UserTokensTools extends CourierMcpTools {
         });
       },
       { readOnlyHint: false, idempotentHint: true }
+    );
+
+    this.registerToolIfNeeded(
+      UserTokensTools.tools[3],
+      'Add multiple push/device tokens for a user in one request. Overwrites matching existing tokens.',
+      {
+        user_id: z.string().describe('The user ID'),
+        tokens: z.array(z.object({
+          token: z.string().describe('The token string'),
+          provider_key: z.enum(["firebase-fcm", "apn", "expo", "onesignal"]).describe('Push provider'),
+          device: deviceSchema,
+          expiry_date: z.union([z.string(), z.boolean()]).optional().describe('Expiry as ISO string, false to disable, or omit for default'),
+          properties: z.any().optional(),
+          tracking: z.any().optional(),
+        })).min(1).describe('Token records to upsert'),
+      },
+      async ({ user_id, tokens }) => {
+        return handleToolCall(async () => {
+          await this.mcp.courier.users.tokens.addMultiple(user_id, {
+            body: { tokens },
+          });
+          return { success: true, user_id, count: tokens.length };
+        });
+      },
+      { readOnlyHint: false, idempotentHint: false }
+    );
+
+    this.registerToolIfNeeded(
+      UserTokensTools.tools[4],
+      'Apply a JSON Patch (RFC 6902) to a specific push token.',
+      {
+        user_id: z.string().describe('The user ID'),
+        token: z.string().describe('The token identifier'),
+        patch: z.array(z.object({
+          op: z.string().describe('Patch operation (add, remove, replace, move, copy, test)'),
+          path: z.string().describe('JSON pointer path'),
+          value: z.any().optional().describe('Value for the operation (any JSON type)'),
+        })).describe('Array of JSON Patch operations'),
+      },
+      async ({ user_id, token, patch }) => {
+        return handleToolCall(async () => {
+          await this.mcp.courier.users.tokens.update(token, { user_id, patch });
+          return { success: true, message: `Token ${token} patched for user ${user_id}` };
+        });
+      },
+      { readOnlyHint: false, idempotentHint: false }
+    );
+
+    this.registerToolIfNeeded(
+      UserTokensTools.tools[5],
+      'Delete a specific push token for a user.',
+      {
+        user_id: z.string().describe('The user ID'),
+        token: z.string().describe('The token identifier to delete'),
+      },
+      async ({ user_id, token }) => {
+        return handleToolCall(async () => {
+          await this.mcp.courier.users.tokens.delete(token, { user_id });
+          return { success: true, message: `Token ${token} deleted for user ${user_id}` };
+        });
+      },
+      { destructiveHint: true, idempotentHint: true }
     );
   }
 }

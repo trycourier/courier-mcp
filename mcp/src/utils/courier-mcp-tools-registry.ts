@@ -16,6 +16,10 @@ import { UserTokensTools } from "../tools/user-tokens-tools.js";
 import { TenantsTools } from "../tools/tenants-tools.js";
 import { TranslationsTools } from "../tools/translations-tools.js";
 import { UsersTools } from "../tools/users-tools.js";
+import { RequestsTools } from "../tools/requests-tools.js";
+import { RoutingStrategiesTools } from "../tools/routing-strategies-tools.js";
+import { JourneysTools } from "../tools/journeys-tools.js";
+import { ProvidersTools } from "../tools/providers-tools.js";
 
 export class CourierMcpToolsRegistry {
 
@@ -42,6 +46,10 @@ export class CourierMcpToolsRegistry {
       ...TenantsTools.tools,
       ...TranslationsTools.tools,
       ...UsersTools.tools,
+      ...RequestsTools.tools,
+      ...RoutingStrategiesTools.tools,
+      ...JourneysTools.tools,
+      ...ProvidersTools.tools,
     ];
   }
 

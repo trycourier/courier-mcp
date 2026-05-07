@@ -11,6 +11,10 @@ export class ListsTools extends CourierMcpTools {
     'create_list',
     'subscribe_user_to_list',
     'unsubscribe_user_from_list',
+    'delete_list',
+    'restore_list',
+    'bulk_subscribe_to_list',
+    'add_subscribers_to_list',
   ];
 
   public register() {
@@ -115,6 +119,74 @@ export class ListsTools extends CourierMcpTools {
         });
       },
       { destructiveHint: true, idempotentHint: true }
+    );
+
+    this.registerToolIfNeeded(
+      ListsTools.tools[6],
+      "Delete a list by its ID.",
+      {
+        list_id: z.string().describe('The list ID'),
+      },
+      async ({ list_id }) => {
+        return handleToolCall(async () => {
+          await this.mcp.courier.lists.delete(list_id);
+          return { success: true, message: `List ${list_id} deleted` };
+        });
+      },
+      { destructiveHint: true, idempotentHint: true }
+    );
+
+    this.registerToolIfNeeded(
+      ListsTools.tools[7],
+      "Restore a previously deleted list.",
+      {
+        list_id: z.string().describe('The list ID'),
+      },
+      async ({ list_id }) => {
+        return handleToolCall(async () => {
+          await this.mcp.courier.lists.restore(list_id, {});
+          return { success: true, message: `List ${list_id} restored` };
+        });
+      },
+      { readOnlyHint: false, idempotentHint: true }
+    );
+
+    const listRecipientsSchema = z.array(
+      z.object({
+        recipientId: z.string().describe('Recipient ID'),
+      })
+    ).describe('Recipients to set on the list');
+
+    this.registerToolIfNeeded(
+      ListsTools.tools[8],
+      "Replace all subscribers on a list with the given recipients.",
+      {
+        list_id: z.string().describe('The list ID'),
+        recipients: listRecipientsSchema,
+      },
+      async ({ list_id, recipients }) => {
+        return handleToolCall(async () => {
+          await this.mcp.courier.lists.subscriptions.subscribe(list_id, { recipients });
+          return { success: true, message: `Replaced subscribers on list ${list_id}` };
+        });
+      },
+      { readOnlyHint: false, idempotentHint: true }
+    );
+
+    this.registerToolIfNeeded(
+      ListsTools.tools[9],
+      "Append subscribers to a list without removing existing subscribers.",
+      {
+        list_id: z.string().describe('The list ID'),
+        recipients: listRecipientsSchema,
+      },
+      async ({ list_id, recipients }) => {
+        return handleToolCall(async () => {
+          await this.mcp.courier.lists.subscriptions.add(list_id, { recipients });
+          return { success: true, message: `Added ${recipients.length} subscriber(s) to list ${list_id}` };
+        });
+      },
+      { readOnlyHint: false, idempotentHint: false }
     );
   }
 }

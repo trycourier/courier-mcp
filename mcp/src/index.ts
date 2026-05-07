@@ -20,6 +20,10 @@ import { MessagesTools } from './tools/messages-tools.js';
 import { TenantsTools } from './tools/tenants-tools.js';
 import { TranslationsTools } from './tools/translations-tools.js';
 import { UsersTools } from './tools/users-tools.js';
+import { RequestsTools } from './tools/requests-tools.js';
+import { RoutingStrategiesTools } from './tools/routing-strategies-tools.js';
+import { JourneysTools } from './tools/journeys-tools.js';
+import { ProvidersTools } from './tools/providers-tools.js';
 
 import { CourierMcpConfig } from './utils/config.js';
 import { MCP_DETAILS, PACKAGE_NAME, PACKAGE_VERSION } from './utils/version.js';
@@ -58,6 +62,10 @@ export default class CourierMcp extends McpServer {
     new TranslationsTools(this).register();
     new UserTokensTools(this).register();
     new UsersTools(this).register();
+    new RequestsTools(this).register();
+    new RoutingStrategiesTools(this).register();
+    new JourneysTools(this).register();
+    new ProvidersTools(this).register();
   }
 }
 
@@ -84,7 +92,12 @@ export {
   TenantsTools,
   TranslationsTools,
   UsersTools,
+  RequestsTools,
+  RoutingStrategiesTools,
+  JourneysTools,
+  ProvidersTools,
 };
 
 import { CourierMcpToolsRegistry } from './utils/courier-mcp-tools-registry.js';
 export { CourierMcpToolsRegistry as CourierMcpTools };
+export { RECOMMENDED_CLIENT_DISABLED_TOOLS } from './policy/recommended-client-disabled-tools.js';
