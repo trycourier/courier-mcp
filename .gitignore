@@ -4,4 +4,5 @@
 **/cdk.out/
 **/.idea/
 **/.env
+.mcpregistry_*
 
