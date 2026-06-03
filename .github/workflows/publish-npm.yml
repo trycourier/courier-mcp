@@ -1,10 +1,6 @@
-# Publishes to npm when the version in mcp/package.json differs from
-# the latest published version. Runs on every push to main, on GitHub
-# release, or via manual dispatch. After npm publish, publishes the
-# server metadata to the MCP Registry via OIDC authentication.
-#
-# npm publish uses Trusted Publisher OIDC (package settings → publish-npm.yml).
-# Requires Node 22+ and npm CLI 11.5.1+ for OIDC trusted publishing.
+# Publishes to npm when mcp/package.json version differs from the latest on the registry.
+# Uses npm Trusted Publisher OIDC (package settings → publish-npm.yml on this repo).
+# No NPM_TOKEN — setup-node exchanges GitHub OIDC for a short-lived publish credential.
 name: Publish NPM
 on:
   workflow_dispatch:
@@ -37,7 +33,7 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: '24'
           registry-url: 'https://registry.npmjs.org'
 
       - name: Install dependencies
@@ -49,10 +45,6 @@ jobs:
       - name: Build
         run: npm run build
 
-      # Node 22 ships npm 10.x; trusted publishing requires npm 11.5.1+ (see npm docs).
-      - name: Upgrade npm for OIDC trusted publishing
-        run: npm install -g npm@latest
-
       - name: Publish to NPM
         run: |
           PACKAGE_NAME="$(jq -r '.name' package.json)"
@@ -60,12 +52,12 @@ jobs:
           PUBLISHED="$(npm view "$PACKAGE_NAME" version 2>/dev/null || echo "")"
 
           if [ "$VERSION" = "$PUBLISHED" ]; then
-            echo "$PACKAGE_NAME@$VERSION is already published, skipping."
+            echo "$PACKAGE_NAME@$VERSION is already on npm, skipping publish."
             echo "npm_skip=true" >> "$GITHUB_ENV"
             exit 0
           fi
 
-          echo "Publishing $PACKAGE_NAME@$VERSION (current npm: ${PUBLISHED:-none}) via Trusted Publisher OIDC"
+          echo "Publishing $PACKAGE_NAME@$VERSION (npm latest: ${PUBLISHED:-none})"
           npm publish --provenance --access public
 
       - name: Install mcp-publisher
