@@ -16,22 +16,26 @@ export class BrandsTools extends CourierMcpTools {
 
     this.registerToolIfNeeded(
       BrandsTools.tools[0],
-      'Create a new brand with name, colors, and email/inapp settings.',
+      'Create a new brand. The API requires settings — omitting it returns a 400. If you do not have specific brand colors, omit settings and a safe default will be used automatically (black primary, white secondary). Example: { name: "Acme", settings: { colors: { primary: "#1a73e8", secondary: "#ffffff" } } }.',
       {
         name: z.string().describe('Brand display name'),
         id: z.string().optional().describe('Optional brand ID; auto-generated if omitted'),
         settings: z.object({
-          colors: z.record(z.any()).optional(),
-          inapp: z.record(z.any()).optional(),
-          email: z.record(z.any()).optional(),
-        }).optional().describe('Brand settings (colors, email, inapp)'),
+          colors: z.object({
+            primary: z.string().describe('Primary brand color (hex, e.g. "#1a73e8")'),
+            secondary: z.string().describe('Secondary brand color (hex, e.g. "#ffffff")'),
+            tertiary: z.string().optional().describe('Tertiary brand color (hex)'),
+          }).optional().describe('Brand colors'),
+          inapp: z.record(z.any()).optional().describe('In-app notification settings'),
+          email: z.record(z.any()).optional().describe('Email template settings (header, footer)'),
+        }).optional().describe('Brand appearance settings. If omitted, defaults to { colors: { primary: "#000000", secondary: "#ffffff" } }.'),
         snippets: z.record(z.any()).optional().describe('Brand snippets'),
       },
       async ({ name, id, settings, snippets }) => {
         return handleToolCall(() => {
-          const body: any = { name };
+          const effectiveSettings = settings ?? { colors: { primary: '#000000', secondary: '#ffffff' }, inapp: {}, email: {} };
+          const body: any = { name, settings: effectiveSettings };
           if (id) body.id = id;
-          if (settings) body.settings = settings;
           if (snippets) body.snippets = snippets;
           return this.mcp.courier.brands.create(body);
         });

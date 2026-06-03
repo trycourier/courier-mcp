@@ -13,7 +13,7 @@ export class JourneysTools extends CourierMcpTools {
 
     this.registerToolIfNeeded(
       JourneysTools.tools[0],
-      'List journey templates in the workspace. Optionally filter by version (published or draft).',
+      'List journey templates in the workspace. Optionally filter by version (published or draft). Note: journey creation, editing, and publishing are not available via MCP — use the Journeys REST API directly (POST /journeys, PUT /journeys/{id}, POST /journeys/{id}/publish) or the Courier Studio UI. This tool is for discovery only.',
       {
         cursor: z.string().optional().describe('Pagination cursor'),
         version: z.enum(['published', 'draft']).optional().describe('Filter by version state. Defaults to published.'),
@@ -31,7 +31,7 @@ export class JourneysTools extends CourierMcpTools {
 
     this.registerToolIfNeeded(
       JourneysTools.tools[1],
-      'Invoke a journey run from a journey template. Triggers the automation workflow for the specified user.',
+      'Invoke a journey run from a journey template. Call list_journeys first to find the template_id. Example: { template_id: "j-onboarding", user_id: "user-123", data: { plan: "pro" } }.',
       {
         template_id: z.string().describe('The journey template ID'),
         user_id: z.string().optional().describe('Recipient user ID. Can also be resolved from profile or data.'),

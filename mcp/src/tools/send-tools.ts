@@ -42,7 +42,7 @@ export class SendTools extends CourierMcpTools {
 
     this.registerToolIfNeeded(
       SendTools.tools[1],
-      'Send a message to a user using a pre-configured notification template. Optionally pass data and routing.',
+      'Send a message to a user using a published notification template. The template must be published before sending — call publish_notification first if needed. Example: { user_id: "user-123", template: "nt_01abc123", data: { name: "Alex", resetUrl: "https://app.example.com/reset" } }.',
       {
         user_id: z.string().describe('The recipient user ID'),
         template: z.string().describe('Template ID or notification slug'),
