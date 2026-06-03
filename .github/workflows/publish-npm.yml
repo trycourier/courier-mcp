@@ -49,6 +49,10 @@ jobs:
       - name: Build
         run: npm run build
 
+      # Node 22 ships npm 10.x; trusted publishing requires npm 11.5.1+ (see npm docs).
+      - name: Upgrade npm for OIDC trusted publishing
+        run: npm install -g npm@latest
+
       - name: Publish to NPM
         run: |
           PACKAGE_NAME="$(jq -r '.name' package.json)"
