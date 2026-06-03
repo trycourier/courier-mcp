@@ -1,15 +1,19 @@
 # Opens a PR in trycourier/services to bump @trycourier/courier-mcp
 # whenever a new version is published to npm.
 #
-# Checks out the services repo, updates the dependency version, runs
-# npm install to regenerate the lockfile, then commits and opens a PR.
+# Checks out staging, updates apps/mcp, refreshes package-lock.json, then
+# force-pushes mcp-bump-<version> (updates an open PR if one already exists).
 #
-# Requires a SERVICES_REPO_TOKEN secret (PAT with contents:write +
-# pull-requests:write on trycourier/services).
+# Requires SERVICES_REPO_TOKEN (contents:write + pull-requests:write on services).
 name: Bump MCP in Services
 
 on:
   workflow_dispatch:
+    inputs:
+      refresh_services_pr:
+        description: Re-run bump for the current npm version (e.g. fix a broken lockfile on an open services PR)
+        type: boolean
+        default: false
 
   workflow_run:
     workflows: ["Publish NPM"]
@@ -33,6 +37,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: trycourier/services
+          ref: staging
           token: ${{ secrets.SERVICES_REPO_TOKEN }}
           path: services-repo
 
@@ -43,6 +48,8 @@ jobs:
       - name: Check and update dependency
         id: update
         working-directory: services-repo
+        env:
+          REFRESH: ${{ github.event_name == 'workflow_dispatch' && inputs.refresh_services_pr == true }}
         run: |
           VERSION="${{ steps.version.outputs.version }}"
           FILE="apps/mcp/package.json"
@@ -59,14 +66,20 @@ jobs:
             exit 1
           fi
 
-          if [ "$CURRENT" = "^${VERSION}" ]; then
-            echo "@trycourier/courier-mcp already at ^${VERSION}, skipping."
+          if [ "$CURRENT" = "^${VERSION}" ] && [ "$REFRESH" != "true" ]; then
+            echo "@trycourier/courier-mcp already at ^${VERSION} on staging, skipping."
             echo "skip=true" >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
-          echo "Bumping @trycourier/courier-mcp: ${CURRENT} → ^${VERSION}"
-          echo "current=$CURRENT" >> "$GITHUB_OUTPUT"
+          if [ "$CURRENT" = "^${VERSION}" ]; then
+            echo "Refreshing services PR for @trycourier/courier-mcp ^${VERSION}"
+            echo "current=^${VERSION}" >> "$GITHUB_OUTPUT"
+          else
+            echo "Bumping @trycourier/courier-mcp: ${CURRENT} → ^${VERSION}"
+            echo "current=$CURRENT" >> "$GITHUB_OUTPUT"
+          fi
+
           echo "skip=false" >> "$GITHUB_OUTPUT"
 
           jq --arg v "^${VERSION}" '
@@ -80,7 +93,23 @@ jobs:
       - name: Install dependencies to update lockfile
         if: steps.update.outputs.skip != 'true'
         working-directory: services-repo
-        run: npm install --package-lock-only
+        run: |
+          # --package-lock-only can leave stale apps/mcp nested entries at the old
+          # version; npm ci on Node 24 / npm 11 then fails with "Missing from lock file".
+          node -e "
+            const fs = require('fs');
+            const lock = JSON.parse(fs.readFileSync('package-lock.json', 'utf8'));
+            for (const key of Object.keys(lock.packages)) {
+              if (
+                key === 'apps/mcp/node_modules/@trycourier/courier-mcp' ||
+                key === 'apps/mcp/node_modules/@trycourier/courier'
+              ) {
+                delete lock.packages[key];
+              }
+            }
+            fs.writeFileSync('package-lock.json', JSON.stringify(lock, null, 2) + '\n');
+          "
+          npm install -w apps/mcp
 
       - name: Commit, push, and open PR
         if: steps.update.outputs.skip != 'true'
@@ -93,12 +122,20 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          git checkout -b "$BRANCH"
+          git checkout -B "$BRANCH"
           git add apps/mcp/package.json package-lock.json
           git commit -m "chore: bump @trycourier/courier-mcp to ^${VERSION}"
-          git push -u origin "$BRANCH"
+          git push --force-with-lease origin "$BRANCH"
+
+          EXISTING=$(gh pr list --repo trycourier/services --head "$BRANCH" --state open --json number -q '.[0].number')
+          if [ -n "$EXISTING" ]; then
+            echo "Updated open services PR #${EXISTING} (${BRANCH})"
+            exit 0
+          fi
 
           gh pr create \
+            --base staging \
+            --head "$BRANCH" \
             --title "chore: bump @trycourier/courier-mcp to ^${VERSION}" \
             --body "$(cat <<EOF
           Automated bump from [courier-mcp](https://github.com/trycourier/courier-mcp).
