@@ -60,8 +60,8 @@ describe('Tool coverage - one call per tool', () => {
   // --- Brands ---
 
   it('create_brand', async () => {
-    await client.callTool({ name: 'create_brand', arguments: { name: 'Acme' } });
-    expect(mockCourier.brands.create).toHaveBeenCalledWith(expect.objectContaining({ name: 'Acme' }));
+    await client.callTool({ name: 'create_brand', arguments: { name: 'Acme', settings: { colors: { primary: '#000000', secondary: '#ffffff' } } } });
+    expect(mockCourier.brands.create).toHaveBeenCalledWith(expect.objectContaining({ name: 'Acme', settings: { colors: { primary: '#000000', secondary: '#ffffff' } } }));
   });
 
   it('get_brand', async () => {
@@ -824,7 +824,7 @@ describe('Tool filtering - registerToolIfNeeded respects availableTools', () => 
       const tools = await client.listTools();
       const names = tools.tools.map((t: any) => t.name);
       expect(names).not.toContain('get_environment_config');
-      expect(names.length).toBe(108);
+      expect(names.length).toBe(109);
     } finally {
       await cleanup();
     }
@@ -837,7 +837,7 @@ describe('Tool filtering - registerToolIfNeeded respects availableTools', () => 
       const tools = await client.listTools();
       const names = tools.tools.map((t: any) => t.name);
       expect(names).toContain('get_environment_config');
-      expect(names.length).toBe(109);
+      expect(names.length).toBe(110);
     } finally {
       await cleanup();
     }
