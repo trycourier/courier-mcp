@@ -1,6 +1,6 @@
 # Courier MCP Server
 
-The official [Model Context Protocol](https://modelcontextprotocol.io/) (MCP) server for the [Courier](https://www.courier.com) notification API. It gives AI agents full access to the Courier API — send messages, manage profiles, debug deliveries, configure lists, and more — through 110 tools backed by the [`@trycourier/courier`](https://www.npmjs.com/package/@trycourier/courier) Node SDK.
+The official [Model Context Protocol](https://modelcontextprotocol.io/) (MCP) server for the [Courier](https://www.courier.com) notification API. It gives AI agents full access to the Courier API — send messages, manage profiles, debug deliveries, configure lists, and more — through 116 tools backed by the [`@trycourier/courier`](https://www.npmjs.com/package/@trycourier/courier) Node SDK.
 
 ## Install
 
@@ -81,7 +81,7 @@ Then point your IDE at `http://localhost:3000` with the same config format above
 | **Tenants** | `get_tenant`, `create_or_update_tenant`, `list_tenants`, `delete_tenant`, `list_tenant_users`, `update_tenant_preference`, `delete_tenant_preference`, `list_tenant_templates`, `get_tenant_template`, `replace_tenant_template`, `publish_tenant_template`, `get_tenant_template_version` |
 | **Users** | `get_user_preferences`, `get_user_preference_topic`, `update_user_preference_topic`, `list_user_tenants`, `add_user_to_tenant`, `remove_user_from_tenant`, `bulk_add_user_tenants`, `remove_all_user_tenants` |
 | **Routing Strategies** | `create_routing_strategy`, `get_routing_strategy`, `replace_routing_strategy`, `archive_routing_strategy`, `list_routing_strategies`, `list_routing_strategy_notifications` |
-| **Journeys** | `list_journeys`, `invoke_journey` |
+| **Journeys** | `list_journeys`, `invoke_journey`, `create_journey`, `get_journey`, `replace_journey`, `publish_journey`, `archive_journey`, `list_journey_versions` |
 | **Requests** | `archive_request` |
 | **Providers** | `list_providers`, `get_provider`, `list_provider_catalog`, `create_provider`, `update_provider`, `delete_provider` |
 | **Translations** | `get_translation`, `update_translation` |

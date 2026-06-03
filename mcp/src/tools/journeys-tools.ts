@@ -7,13 +7,19 @@ export class JourneysTools extends CourierMcpTools {
   static readonly tools: string[] = [
     'list_journeys',
     'invoke_journey',
+    'create_journey',
+    'get_journey',
+    'replace_journey',
+    'publish_journey',
+    'archive_journey',
+    'list_journey_versions',
   ];
 
   public register() {
 
     this.registerToolIfNeeded(
       JourneysTools.tools[0],
-      'List journey templates in the workspace. Optionally filter by version (published or draft). Note: journey creation, editing, and publishing are not available via MCP — use the Journeys REST API directly (POST /journeys, PUT /journeys/{id}, POST /journeys/{id}/publish) or the Courier Studio UI. This tool is for discovery only.',
+      'List journey templates in the workspace. Call this first to discover journey IDs before calling invoke_journey, get_journey, or replace_journey. Optionally filter by version (published or draft).',
       {
         cursor: z.string().optional().describe('Pagination cursor'),
         version: z.enum(['published', 'draft']).optional().describe('Filter by version state. Defaults to published.'),
@@ -48,6 +54,105 @@ export class JourneysTools extends CourierMcpTools {
         });
       },
       { readOnlyHint: false, idempotentHint: false }
+    );
+
+    this.registerToolIfNeeded(
+      JourneysTools.tools[2],
+      'Create a new journey. Defaults to DRAFT state. Send nodes are not allowed on create — create the shell with a trigger node, then call replace_journey to add send nodes after linking notification templates. Call publish_journey to make it live. Node ids are server-generated; do NOT include an id field. Example: { name: "Welcome Journey", nodes: [{ type: "trigger", trigger_type: "api-invoke" }], enabled: true }.',
+      {
+        name: z.string().describe('Journey display name'),
+        nodes: z.array(z.record(z.any())).describe('Array of journey node objects. Node ids are server-generated — do NOT include an id field. Trigger node example: { type: "trigger", trigger_type: "api-invoke" }. Send node example: { type: "send", template: "nt_abc" }. Delay node example: { type: "delay", mode: "duration", duration: "PT1H" }.'),
+        enabled: z.boolean().optional().describe('Whether the journey is active. Defaults to true.'),
+        state: z.enum(['DRAFT', 'PUBLISHED']).optional().describe('Create as DRAFT (default) or PUBLISHED immediately.'),
+      },
+      async ({ name, nodes, enabled, state }) => {
+        return handleToolCall(() => {
+          const body: Record<string, any> = { name, nodes };
+          if (enabled !== undefined) body.enabled = enabled;
+          if (state !== undefined) body.state = state;
+          return this.mcp.courier.journeys.create(body as any);
+        });
+      },
+      { readOnlyHint: false, idempotentHint: false }
+    );
+
+    this.registerToolIfNeeded(
+      JourneysTools.tools[3],
+      'Get a journey by ID. Pass version=draft to retrieve the working draft, or version=vN for a historical version. Defaults to published.',
+      {
+        journey_id: z.string().describe('The journey template ID'),
+        version: z.string().optional().describe('Version to retrieve: "draft", "published" (default), or a version string like "v001"'),
+      },
+      async ({ journey_id, version }) => {
+        return handleToolCall(() =>
+          this.mcp.courier.journeys.retrieve(journey_id, version ? { version } : undefined)
+        );
+      },
+      { readOnlyHint: true }
+    );
+
+    this.registerToolIfNeeded(
+      JourneysTools.tools[4],
+      'Replace (update) a journey draft. Full document replacement — include all nodes and properties in the body. Call publish_journey afterwards to make changes live, or pass state: "PUBLISHED" to publish immediately. Send node template IDs must already be scoped to this journey.',
+      {
+        journey_id: z.string().describe('The journey template ID to update'),
+        name: z.string().describe('Journey display name'),
+        nodes: z.array(z.record(z.any())).describe('Complete array of journey nodes. Use server-assigned node ids from get_journey — do NOT invent new ids. Each node requires type plus type-specific fields.'),
+        enabled: z.boolean().optional().describe('Whether the journey is active.'),
+        state: z.enum(['DRAFT', 'PUBLISHED']).optional().describe('Set to PUBLISHED to publish immediately after replace.'),
+      },
+      async ({ journey_id, name, nodes, enabled, state }) => {
+        return handleToolCall(() => {
+          const body: Record<string, any> = { name, nodes };
+          if (enabled !== undefined) body.enabled = enabled;
+          if (state !== undefined) body.state = state;
+          return this.mcp.courier.journeys.replace(journey_id, body as any);
+        });
+      },
+      { readOnlyHint: false, idempotentHint: true }
+    );
+
+    this.registerToolIfNeeded(
+      JourneysTools.tools[5],
+      'Publish the current draft of a journey, making it live and invokable. Pass version to roll back to a prior published version instead of publishing the draft. Returns 404 if there is no draft to publish.',
+      {
+        journey_id: z.string().describe('The journey template ID to publish'),
+        version: z.string().optional().describe('Historical version to roll back to (e.g. "v001"). Omit to publish the current draft.'),
+      },
+      async ({ journey_id, version }) => {
+        return handleToolCall(async () => {
+          await this.mcp.courier.journeys.publish(journey_id, version ? { version } : undefined);
+          return { success: true, message: `Journey ${journey_id} published` };
+        });
+      },
+      { readOnlyHint: false, idempotentHint: false }
+    );
+
+    this.registerToolIfNeeded(
+      JourneysTools.tools[6],
+      'Archive a journey. Archived journeys cannot be invoked but existing runs continue to completion.',
+      {
+        journey_id: z.string().describe('The journey template ID to archive'),
+      },
+      async ({ journey_id }) => {
+        return handleToolCall(async () => {
+          await this.mcp.courier.journeys.archive(journey_id);
+          return { success: true, message: `Journey ${journey_id} archived` };
+        });
+      },
+      { destructiveHint: true, idempotentHint: true }
+    );
+
+    this.registerToolIfNeeded(
+      JourneysTools.tools[7],
+      'List published versions of a journey, ordered most recent first.',
+      {
+        journey_id: z.string().describe('The journey template ID'),
+      },
+      async ({ journey_id }) => {
+        return handleToolCall(() => this.mcp.courier.journeys.listVersions(journey_id));
+      },
+      { readOnlyHint: true }
     );
   }
 }

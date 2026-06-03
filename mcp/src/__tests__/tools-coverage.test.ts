@@ -562,6 +562,36 @@ describe('Tool coverage - one call per tool', () => {
     expect(mockCourier.journeys.invoke).toHaveBeenCalledWith('j-1', {});
   });
 
+  it('create_journey', async () => {
+    await client.callTool({ name: 'create_journey', arguments: { name: 'Test Journey', nodes: [{ id: 'trigger-1', type: 'trigger', trigger_type: 'api' }] } });
+    expect(mockCourier.journeys.create).toHaveBeenCalledWith(expect.objectContaining({ name: 'Test Journey' }));
+  });
+
+  it('get_journey', async () => {
+    await client.callTool({ name: 'get_journey', arguments: { journey_id: 'j-1' } });
+    expect(mockCourier.journeys.retrieve).toHaveBeenCalledWith('j-1', undefined);
+  });
+
+  it('replace_journey', async () => {
+    await client.callTool({ name: 'replace_journey', arguments: { journey_id: 'j-1', name: 'Updated Journey', nodes: [] } });
+    expect(mockCourier.journeys.replace).toHaveBeenCalledWith('j-1', expect.objectContaining({ name: 'Updated Journey' }));
+  });
+
+  it('publish_journey', async () => {
+    await client.callTool({ name: 'publish_journey', arguments: { journey_id: 'j-1' } });
+    expect(mockCourier.journeys.publish).toHaveBeenCalledWith('j-1', undefined);
+  });
+
+  it('archive_journey', async () => {
+    await client.callTool({ name: 'archive_journey', arguments: { journey_id: 'j-1' } });
+    expect(mockCourier.journeys.archive).toHaveBeenCalledWith('j-1');
+  });
+
+  it('list_journey_versions', async () => {
+    await client.callTool({ name: 'list_journey_versions', arguments: { journey_id: 'j-1' } });
+    expect(mockCourier.journeys.listVersions).toHaveBeenCalledWith('j-1');
+  });
+
   // --- Requests (new in PR #26) ---
 
   it('archive_request', async () => {
@@ -824,7 +854,7 @@ describe('Tool filtering - registerToolIfNeeded respects availableTools', () => 
       const tools = await client.listTools();
       const names = tools.tools.map((t: any) => t.name);
       expect(names).not.toContain('get_environment_config');
-      expect(names.length).toBe(109);
+      expect(names.length).toBe(115);
     } finally {
       await cleanup();
     }
@@ -837,7 +867,7 @@ describe('Tool filtering - registerToolIfNeeded respects availableTools', () => 
       const tools = await client.listTools();
       const names = tools.tools.map((t: any) => t.name);
       expect(names).toContain('get_environment_config');
-      expect(names.length).toBe(110);
+      expect(names.length).toBe(116);
     } finally {
       await cleanup();
     }

@@ -153,8 +153,14 @@ export function createMockCourier() {
       listNotifications: vi.fn().mockResolvedValue({ results: [], paging: {} }),
     },
     journeys: {
-      list: vi.fn().mockResolvedValue({ results: [], paging: {} }),
+      list: vi.fn().mockResolvedValue({ templates: [], cursor: undefined }),
       invoke: vi.fn().mockResolvedValue({ runId: 'jr-1' }),
+      create: vi.fn().mockResolvedValue({ id: 'j-new', name: 'Test Journey', version: 'draft' }),
+      retrieve: vi.fn().mockResolvedValue({ id: 'j-1', name: 'Test Journey', version: 'published' }),
+      replace: vi.fn().mockResolvedValue({ id: 'j-1', name: 'Test Journey', version: 'draft' }),
+      publish: vi.fn().mockResolvedValue(undefined),
+      archive: vi.fn().mockResolvedValue(undefined),
+      listVersions: vi.fn().mockResolvedValue({ results: [], paging: {} }),
     },
     requests: {
       archive: vi.fn().mockResolvedValue(undefined),
