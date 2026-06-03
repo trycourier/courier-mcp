@@ -507,6 +507,11 @@ describe('Tool coverage - one call per tool', () => {
     expect(mockCourier.tenants.templates.versions.retrieve).toHaveBeenCalledWith('v1', { tenant_id: 't-1', template_id: 'tmpl-1' });
   });
 
+  it('delete_tenant_template', async () => {
+    await client.callTool({ name: 'delete_tenant_template', arguments: { tenant_id: 't-1', template_id: 'tmpl-1' } });
+    expect(mockCourier.tenants.templates.delete).toHaveBeenCalledWith('tmpl-1', { tenant_id: 't-1' });
+  });
+
   // --- Automations (new in PR #26) ---
 
   it('list_automations', async () => {
@@ -560,6 +565,97 @@ describe('Tool coverage - one call per tool', () => {
   it('invoke_journey', async () => {
     await client.callTool({ name: 'invoke_journey', arguments: { template_id: 'j-1' } });
     expect(mockCourier.journeys.invoke).toHaveBeenCalledWith('j-1', {});
+  });
+
+  it('create_journey', async () => {
+    await client.callTool({ name: 'create_journey', arguments: { name: 'Test Journey', nodes: [{ id: 'trigger-1', type: 'trigger', trigger_type: 'api' }] } });
+    expect(mockCourier.journeys.create).toHaveBeenCalledWith(expect.objectContaining({ name: 'Test Journey' }));
+  });
+
+  it('get_journey', async () => {
+    await client.callTool({ name: 'get_journey', arguments: { journey_id: 'j-1' } });
+    expect(mockCourier.journeys.retrieve).toHaveBeenCalledWith('j-1', undefined);
+  });
+
+  it('replace_journey', async () => {
+    await client.callTool({ name: 'replace_journey', arguments: { journey_id: 'j-1', name: 'Updated Journey', nodes: [] } });
+    expect(mockCourier.journeys.replace).toHaveBeenCalledWith('j-1', expect.objectContaining({ name: 'Updated Journey' }));
+  });
+
+  it('publish_journey', async () => {
+    await client.callTool({ name: 'publish_journey', arguments: { journey_id: 'j-1' } });
+    expect(mockCourier.journeys.publish).toHaveBeenCalledWith('j-1', undefined);
+  });
+
+  it('archive_journey', async () => {
+    await client.callTool({ name: 'archive_journey', arguments: { journey_id: 'j-1' } });
+    expect(mockCourier.journeys.archive).toHaveBeenCalledWith('j-1');
+  });
+
+  it('list_journey_versions', async () => {
+    await client.callTool({ name: 'list_journey_versions', arguments: { journey_id: 'j-1' } });
+    expect(mockCourier.journeys.listVersions).toHaveBeenCalledWith('j-1');
+  });
+
+  it('list_journey_templates', async () => {
+    await client.callTool({ name: 'list_journey_templates', arguments: { journey_id: 'j-1' } });
+    expect(mockCourier.journeys.templates.list).toHaveBeenCalledWith('j-1', {});
+  });
+
+  it('create_journey_template', async () => {
+    await client.callTool({
+      name: 'create_journey_template',
+      arguments: {
+        journey_id: 'j-1',
+        channel: 'email',
+        notification: {
+          name: 'Welcome',
+          tags: [],
+          brand: null,
+          subscription: null,
+          content: { version: '2022-01-01', elements: [{ type: 'text', content: 'Hi!' }] },
+        },
+      },
+    });
+    expect(mockCourier.journeys.templates.create).toHaveBeenCalledWith('j-1', expect.objectContaining({ channel: 'email' }));
+  });
+
+  it('get_journey_template', async () => {
+    await client.callTool({ name: 'get_journey_template', arguments: { notification_id: 'jt-1', journey_id: 'j-1' } });
+    expect(mockCourier.journeys.templates.retrieve).toHaveBeenCalledWith('jt-1', expect.objectContaining({ templateId: 'j-1' }), undefined);
+  });
+
+  it('replace_journey_template', async () => {
+    await client.callTool({
+      name: 'replace_journey_template',
+      arguments: {
+        notification_id: 'jt-1',
+        journey_id: 'j-1',
+        notification: {
+          name: 'Welcome v2',
+          tags: [],
+          brand: null,
+          subscription: null,
+          content: { version: '2022-01-01', elements: [] },
+        },
+      },
+    });
+    expect(mockCourier.journeys.templates.replace).toHaveBeenCalledWith('jt-1', expect.objectContaining({ templateId: 'j-1' }));
+  });
+
+  it('archive_journey_template', async () => {
+    await client.callTool({ name: 'archive_journey_template', arguments: { notification_id: 'jt-1', journey_id: 'j-1' } });
+    expect(mockCourier.journeys.templates.archive).toHaveBeenCalledWith('jt-1', { templateId: 'j-1' });
+  });
+
+  it('publish_journey_template', async () => {
+    await client.callTool({ name: 'publish_journey_template', arguments: { notification_id: 'jt-1', journey_id: 'j-1' } });
+    expect(mockCourier.journeys.templates.publish).toHaveBeenCalledWith('jt-1', expect.objectContaining({ templateId: 'j-1' }));
+  });
+
+  it('list_journey_template_versions', async () => {
+    await client.callTool({ name: 'list_journey_template_versions', arguments: { notification_id: 'jt-1', journey_id: 'j-1' } });
+    expect(mockCourier.journeys.templates.listVersions).toHaveBeenCalledWith('jt-1', { templateId: 'j-1' });
   });
 
   // --- Requests (new in PR #26) ---
@@ -824,7 +920,7 @@ describe('Tool filtering - registerToolIfNeeded respects availableTools', () => 
       const tools = await client.listTools();
       const names = tools.tools.map((t: any) => t.name);
       expect(names).not.toContain('get_environment_config');
-      expect(names.length).toBe(109);
+      expect(names.length).toBe(123);
     } finally {
       await cleanup();
     }
@@ -837,7 +933,7 @@ describe('Tool filtering - registerToolIfNeeded respects availableTools', () => 
       const tools = await client.listTools();
       const names = tools.tools.map((t: any) => t.name);
       expect(names).toContain('get_environment_config');
-      expect(names.length).toBe(110);
+      expect(names.length).toBe(124);
     } finally {
       await cleanup();
     }
