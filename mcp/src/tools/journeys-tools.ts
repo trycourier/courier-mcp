@@ -13,6 +13,13 @@ export class JourneysTools extends CourierMcpTools {
     'publish_journey',
     'archive_journey',
     'list_journey_versions',
+    'list_journey_templates',
+    'create_journey_template',
+    'get_journey_template',
+    'replace_journey_template',
+    'archive_journey_template',
+    'publish_journey_template',
+    'list_journey_template_versions',
   ];
 
   public register() {
@@ -151,6 +158,160 @@ export class JourneysTools extends CourierMcpTools {
       },
       async ({ journey_id }) => {
         return handleToolCall(() => this.mcp.courier.journeys.listVersions(journey_id));
+      },
+      { readOnlyHint: true }
+    );
+
+    // --- Journey template sub-resource tools ---
+
+    this.registerToolIfNeeded(
+      JourneysTools.tools[8],
+      'List notification templates scoped to a journey. Journey-scoped templates can only be used by send nodes within the same journey. Call this to discover template IDs before wiring send nodes in replace_journey.',
+      {
+        journey_id: z.string().describe('The journey template ID'),
+        cursor: z.string().optional().describe('Pagination cursor'),
+        limit: z.number().optional().describe('Page size (1–100)'),
+      },
+      async ({ journey_id, cursor, limit }) => {
+        return handleToolCall(() => {
+          const query: Record<string, any> = {};
+          if (cursor) query.cursor = cursor;
+          if (limit) query.limit = limit;
+          return this.mcp.courier.journeys.templates.list(journey_id, query);
+        });
+      },
+      { readOnlyHint: true }
+    );
+
+    this.registerToolIfNeeded(
+      JourneysTools.tools[9],
+      'Create a notification template scoped to a journey. Defaults to DRAFT; pass state: "PUBLISHED" to publish on create. The template can then be referenced in journey send nodes. Example: { journey_id: "j-abc", channel: "email", notification: { name: "Welcome Email", tags: [], brand: null, subscription: null, content: { version: "2022-01-01", elements: [{ type: "text", content: "Hello!" }] } } }.',
+      {
+        journey_id: z.string().describe('The journey template ID'),
+        channel: z.string().describe('Channel for this template (e.g. "email", "push", "sms", "inbox")'),
+        notification: z.object({
+          name: z.string().describe('Template display name'),
+          tags: z.array(z.string()).describe('Tag list (use [] if none)'),
+          brand: z.object({ id: z.string() }).nullable().describe('Brand to apply, or null'),
+          subscription: z.object({ topic_id: z.string() }).nullable().describe('Subscription topic, or null'),
+          content: z.object({
+            version: z.literal('2022-01-01'),
+            elements: z.array(z.record(z.any())).describe('Elemental content nodes'),
+            scope: z.enum(['default', 'strict']).optional(),
+          }),
+        }).describe('Notification template definition'),
+        provider_key: z.string().optional().describe('Specific provider key to target'),
+        state: z.string().optional().describe('Initial state: "DRAFT" (default) or "PUBLISHED"'),
+      },
+      async ({ journey_id, channel, notification, provider_key, state }) => {
+        return handleToolCall(() => {
+          const body: Record<string, any> = { channel, notification };
+          if (provider_key) body.providerKey = provider_key;
+          if (state) body.state = state;
+          return this.mcp.courier.journeys.templates.create(journey_id, body as any);
+        });
+      },
+      { readOnlyHint: false, idempotentHint: false }
+    );
+
+    this.registerToolIfNeeded(
+      JourneysTools.tools[10],
+      'Get a journey-scoped notification template by notification ID. Pass version=draft to retrieve the working draft (required before the template has been published). Defaults to published.',
+      {
+        notification_id: z.string().describe('The notification template ID'),
+        journey_id: z.string().describe('The journey template ID that owns this notification'),
+        version: z.string().optional().describe('Version to retrieve: "draft", "published" (default), or "vN"'),
+      },
+      async ({ notification_id, journey_id, version }) => {
+        return handleToolCall(() =>
+          this.mcp.courier.journeys.templates.retrieve(
+            notification_id,
+            { templateId: journey_id },
+            version ? ({ query: { version } } as any) : undefined
+          )
+        );
+      },
+      { readOnlyHint: true }
+    );
+
+    this.registerToolIfNeeded(
+      JourneysTools.tools[11],
+      'Replace the draft of a journey-scoped notification template. Full document replacement. Call publish_journey_template afterwards to make it live.',
+      {
+        notification_id: z.string().describe('The notification template ID'),
+        journey_id: z.string().describe('The journey template ID that owns this notification'),
+        notification: z.object({
+          name: z.string(),
+          tags: z.array(z.string()),
+          brand: z.object({ id: z.string() }).nullable(),
+          subscription: z.object({ topic_id: z.string() }).nullable(),
+          content: z.object({
+            version: z.literal('2022-01-01'),
+            elements: z.array(z.record(z.any())),
+            scope: z.enum(['default', 'strict']).optional(),
+          }),
+        }).describe('Full notification template definition'),
+        state: z.string().optional().describe('"PUBLISHED" to publish immediately after replace'),
+      },
+      async ({ notification_id, journey_id, notification, state }) => {
+        return handleToolCall(() =>
+          this.mcp.courier.journeys.templates.replace(notification_id, {
+            templateId: journey_id,
+            notification,
+            ...(state ? { state } : {}),
+          } as any)
+        );
+      },
+      { readOnlyHint: false, idempotentHint: true }
+    );
+
+    this.registerToolIfNeeded(
+      JourneysTools.tools[12],
+      'Archive a journey-scoped notification template. Archived templates cannot be sent.',
+      {
+        notification_id: z.string().describe('The notification template ID'),
+        journey_id: z.string().describe('The journey template ID that owns this notification'),
+      },
+      async ({ notification_id, journey_id }) => {
+        return handleToolCall(async () => {
+          await this.mcp.courier.journeys.templates.archive(notification_id, { templateId: journey_id });
+          return { success: true, message: `Journey template ${notification_id} archived` };
+        });
+      },
+      { destructiveHint: true, idempotentHint: true }
+    );
+
+    this.registerToolIfNeeded(
+      JourneysTools.tools[13],
+      'Publish the current draft of a journey-scoped notification template. Optionally pass version to roll back to a prior version.',
+      {
+        notification_id: z.string().describe('The notification template ID'),
+        journey_id: z.string().describe('The journey template ID that owns this notification'),
+        version: z.string().optional().describe('Version to roll back to (e.g. "v1"). Omit to publish current draft.'),
+      },
+      async ({ notification_id, journey_id, version }) => {
+        return handleToolCall(async () => {
+          await this.mcp.courier.journeys.templates.publish(notification_id, {
+            templateId: journey_id,
+            ...(version ? { version } : {}),
+          });
+          return { success: true, message: `Journey template ${notification_id} published` };
+        });
+      },
+      { readOnlyHint: false, idempotentHint: false }
+    );
+
+    this.registerToolIfNeeded(
+      JourneysTools.tools[14],
+      'List published versions of a journey-scoped notification template, ordered most recent first.',
+      {
+        notification_id: z.string().describe('The notification template ID'),
+        journey_id: z.string().describe('The journey template ID that owns this notification'),
+      },
+      async ({ notification_id, journey_id }) => {
+        return handleToolCall(() =>
+          this.mcp.courier.journeys.templates.listVersions(notification_id, { templateId: journey_id })
+        );
       },
       { readOnlyHint: true }
     );

@@ -113,6 +113,7 @@ export function createMockCourier() {
         retrieve: vi.fn().mockResolvedValue({ id: 'tmpl-1' }),
         replace: vi.fn().mockResolvedValue({ id: 'tmpl-1' }),
         publish: vi.fn().mockResolvedValue({ id: 'tmpl-1' }),
+        delete: vi.fn().mockResolvedValue(undefined),
         versions: {
           retrieve: vi.fn().mockResolvedValue({ id: 'tmpl-1', version: 'v1' }),
         },
@@ -161,6 +162,15 @@ export function createMockCourier() {
       publish: vi.fn().mockResolvedValue(undefined),
       archive: vi.fn().mockResolvedValue(undefined),
       listVersions: vi.fn().mockResolvedValue({ results: [], paging: {} }),
+      templates: {
+        list: vi.fn().mockResolvedValue({ results: [], paging: {} }),
+        create: vi.fn().mockResolvedValue({ id: 'jt-new', name: 'Welcome Email', state: 'DRAFT' }),
+        retrieve: vi.fn().mockResolvedValue({ id: 'jt-1', name: 'Welcome Email', state: 'PUBLISHED' }),
+        replace: vi.fn().mockResolvedValue({ id: 'jt-1', name: 'Welcome Email', state: 'DRAFT' }),
+        archive: vi.fn().mockResolvedValue(undefined),
+        publish: vi.fn().mockResolvedValue(undefined),
+        listVersions: vi.fn().mockResolvedValue({ results: [], paging: {} }),
+      },
     },
     requests: {
       archive: vi.fn().mockResolvedValue(undefined),

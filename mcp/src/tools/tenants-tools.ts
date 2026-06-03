@@ -17,6 +17,7 @@ export class TenantsTools extends CourierMcpTools {
     'replace_tenant_template',
     'publish_tenant_template',
     'get_tenant_template_version',
+    'delete_tenant_template',
   ];
 
   private static readonly channelClassification = z.enum([
@@ -276,6 +277,22 @@ export class TenantsTools extends CourierMcpTools {
         );
       },
       { readOnlyHint: true }
+    );
+
+    this.registerToolIfNeeded(
+      TenantsTools.tools[12],
+      'Delete a tenant notification template. Returns 204 on success, 404 if the template does not exist for this tenant.',
+      {
+        tenant_id: z.string().describe('The tenant ID that owns the template'),
+        template_id: z.string().describe('The notification template ID to delete'),
+      },
+      async ({ tenant_id, template_id }) => {
+        return handleToolCall(async () => {
+          await this.mcp.courier.tenants.templates.delete(template_id, { tenant_id });
+          return { success: true, message: `Tenant template ${template_id} deleted from tenant ${tenant_id}` };
+        });
+      },
+      { destructiveHint: true, idempotentHint: false }
     );
   }
 }
