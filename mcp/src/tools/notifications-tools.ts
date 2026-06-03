@@ -71,7 +71,7 @@ export class NotificationsTools extends CourierMcpTools {
 
     this.registerToolIfNeeded(
       NotificationsTools.tools[3],
-      "Create a notification template with name, tags, brand, subscription, routing, and content.",
+      "Create a V2 notification template. name is required. Provide content inline or set it immediately after creation via put_notification_content. To send with this template you must publish it first via publish_notification (or pass state: 'PUBLISHED' on create). Link a routing strategy via notification.routing.strategy_id to control which channels are used. Example: { notification: { name: 'welcome-email', tags: [], brand: null, subscription: null, routing: { strategy_id: 'rs_01abc' }, content: { version: '2022-01-01', elements: [] } } }.",
       {
         notification: notificationTemplatePayload.describe('Notification template payload'),
         state: z.enum(['DRAFT', 'PUBLISHED']).optional().describe('Template state after creation (defaults to DRAFT)'),
@@ -160,7 +160,7 @@ export class NotificationsTools extends CourierMcpTools {
 
     this.registerToolIfNeeded(
       NotificationsTools.tools[8],
-      "Publish a notification template. Optionally publish a specific historical version instead of the current draft.",
+      "Publish a notification template, making it available for sending. Must be called before send_message_template unless the template was created with state: 'PUBLISHED'. Publishes the current draft by default; pass version (e.g. 'v001') to publish a specific historical version. Returns 204 on success.",
       {
         notification_id: z.string().describe('The notification template ID to publish'),
         version: z.string().optional().describe('Historical version to publish (e.g. v001); omit to publish current draft'),
@@ -218,7 +218,7 @@ export class NotificationsTools extends CourierMcpTools {
 
     this.registerToolIfNeeded(
       NotificationsTools.tools[11],
-      'Replace the elemental content of a V2 notification template. Overwrites all elements.',
+      'Replace the elemental content of a V2 notification template. Overwrites all elements. Use channel elements to target specific channels. Multi-channel example: elements: [{ type: "channel", channel: "email", elements: [{ type: "meta", title: "Hello" }, { type: "text", content: "Email body" }] }, { type: "channel", channel: "push", elements: [{ type: "meta", title: "Hello" }, { type: "text", content: "Push body" }] }, { type: "channel", channel: "inbox", elements: [{ type: "text", content: "Inbox plain text only" }] }].',
       {
         notification_id: z.string().describe('The notification template ID (nt_ prefix)'),
         elements: z.array(z.record(z.any())).describe('Array of elemental content nodes'),
@@ -267,7 +267,7 @@ export class NotificationsTools extends CourierMcpTools {
 
     this.registerToolIfNeeded(
       NotificationsTools.tools[13],
-      'Set locale-specific content overrides for a V2 notification template.',
+      'Set locale-specific content overrides for a V2 notification template. Each element override must reference an existing element by its id. Example for Spanish locale: { notification_id: "nt_01abc", locale_id: "es", elements: [{ id: "elem_meta_1", title: "Restablecer contraseña" }, { id: "elem_text_1", content: "Haga clic en el enlace para restablecer su contraseña." }] }.',
       {
         notification_id: z.string().describe('The notification template ID (nt_ prefix)'),
         locale_id: z.string().describe('Locale identifier (e.g. es, fr, pt-BR)'),

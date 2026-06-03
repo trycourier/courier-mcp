@@ -122,10 +122,10 @@ export class TenantsTools extends CourierMcpTools {
 
     this.registerToolIfNeeded(
       TenantsTools.tools[5],
-      'Create or replace default notification preference for a topic on a tenant.',
+      'Set the default notification preference for a subscription topic on a tenant. This controls tenant-level defaults — it does NOT set per-user preferences (use the user preferences API for that). The topic_id must already exist as a subscription topic in the workspace; a 404 means the topic has not been created yet. Example: { tenant_id: "acme", topic_id: "marketing-updates", status: "OPTED_IN", has_custom_routing: true, custom_routing: ["email", "push"] }.',
       {
         tenant_id: z.string().describe('The tenant ID'),
-        topic_id: z.string().describe('The subscription topic ID'),
+        topic_id: z.string().describe('The subscription topic ID — must already exist in the workspace. A 404 response means the topic does not exist; create it in the Preferences Editor first.'),
         status: z.enum(['OPTED_IN', 'OPTED_OUT', 'REQUIRED']).describe('Subscription status for the topic'),
         custom_routing: z
           .array(TenantsTools.channelClassification)
