@@ -14,7 +14,7 @@
     "url": "https://github.com/trycourier/courier-mcp",
     "source": "github"
   },
-  "version": "1.3.4",
+  "version": "1.3.5",
   "remotes": [
     {
       "type": "streamable-http",
