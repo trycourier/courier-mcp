@@ -1,6 +1,6 @@
 # Courier MCP Server
 
-The official [Model Context Protocol](https://modelcontextprotocol.io/) (MCP) server for the [Courier](https://www.courier.com) notification API. It gives AI agents full access to the Courier API — send messages, manage profiles, debug deliveries, configure lists, and more — through 60 tools backed by the [`@trycourier/courier`](https://www.npmjs.com/package/@trycourier/courier) Node SDK.
+The official [Model Context Protocol](https://modelcontextprotocol.io/) (MCP) server for the [Courier](https://www.courier.com) notification API. It gives AI agents full access to the Courier API — send messages, manage profiles, debug deliveries, configure lists, and more — through 110 tools backed by the [`@trycourier/courier`](https://www.npmjs.com/package/@trycourier/courier) Node SDK.
 
 ## Install
 
@@ -58,7 +58,7 @@ Then point your IDE at `http://localhost:3000` with the same config format above
 
 ## Tools
 
-59 default tools organized by API resource, plus 1 diagnostic tool available in local installs.
+109 default tools organized by API resource, plus 1 diagnostic tool available in local installs.
 
 ### Default tools
 
@@ -66,20 +66,24 @@ Then point your IDE at `http://localhost:3000` with the same config format above
 |----------|-------|
 | **Send** | `send_message`, `send_message_template`, `send_message_to_list`, `send_message_to_list_template` |
 | **Messages** | `list_messages`, `get_message`, `get_message_content`, `get_message_history`, `cancel_message` |
-| **Profiles** | `get_user_profile_by_id`, `create_or_merge_user`, `replace_profile`, `delete_profile`, `get_user_list_subscriptions`, `subscribe_user_to_lists`, `delete_user_list_subscriptions` |
-| **Lists** | `list_lists`, `get_list`, `get_list_subscribers`, `create_list`, `subscribe_user_to_list`, `unsubscribe_user_from_list` |
+| **Profiles** | `get_user_profile_by_id`, `create_or_merge_user`, `replace_profile`, `patch_profile`, `delete_profile`, `get_user_list_subscriptions`, `subscribe_user_to_lists`, `delete_user_list_subscriptions` |
+| **Lists** | `list_lists`, `get_list`, `get_list_subscribers`, `create_list`, `delete_list`, `restore_list`, `subscribe_user_to_list`, `unsubscribe_user_from_list`, `bulk_subscribe_to_list`, `add_subscribers_to_list` |
 | **Audiences** | `get_audience`, `list_audience_members`, `list_audiences`, `update_audience`, `delete_audience` |
-| **Notifications** | `list_notifications`, `get_notification_content`, `get_notification_draft_content` |
-| **Brands** | `create_brand`, `get_brand`, `list_brands` |
+| **Notifications** | `list_notifications`, `get_notification`, `get_notification_content`, `get_notification_draft_content`, `create_notification`, `replace_notification`, `archive_notification`, `publish_notification`, `list_notification_versions`, `list_notification_checks`, `update_notification_checks`, `put_notification_content`, `put_notification_element`, `put_notification_locale`, `cancel_notification_submission` |
+| **Brands** | `create_brand`, `get_brand`, `list_brands`, `update_brand`, `delete_brand` |
 | **Auth** | `generate_jwt_for_user` |
-| **User Tokens** | `list_user_push_tokens`, `get_user_push_token`, `create_or_replace_user_push_token` |
+| **Device Tokens** | `list_user_push_tokens`, `get_user_push_token`, `create_or_replace_user_push_token`, `bulk_add_user_tokens`, `patch_user_token`, `delete_user_token` |
 | **Docs** | `courier_installation_guide` |
-| **Automations** | `invoke_automation_template`, `invoke_ad_hoc_automation` |
+| **Automations** | `invoke_automation_template`, `invoke_ad_hoc_automation`, `list_automations`, `cancel_automation` |
 | **Bulk** | `create_bulk_job`, `add_bulk_users`, `run_bulk_job`, `get_bulk_job`, `list_bulk_users` |
 | **Audit Events** | `get_audit_event`, `list_audit_events` |
 | **Inbound** | `track_inbound_event` |
-| **Tenants** | `get_tenant`, `create_or_update_tenant`, `list_tenants`, `delete_tenant` |
-| **Users** | `get_user_preferences`, `update_user_preference_topic`, `list_user_tenants`, `add_user_to_tenant`, `remove_user_from_tenant` |
+| **Tenants** | `get_tenant`, `create_or_update_tenant`, `list_tenants`, `delete_tenant`, `list_tenant_users`, `update_tenant_preference`, `delete_tenant_preference`, `list_tenant_templates`, `get_tenant_template`, `replace_tenant_template`, `publish_tenant_template`, `get_tenant_template_version` |
+| **Users** | `get_user_preferences`, `get_user_preference_topic`, `update_user_preference_topic`, `list_user_tenants`, `add_user_to_tenant`, `remove_user_from_tenant`, `bulk_add_user_tenants`, `remove_all_user_tenants` |
+| **Routing Strategies** | `create_routing_strategy`, `get_routing_strategy`, `replace_routing_strategy`, `archive_routing_strategy`, `list_routing_strategies`, `list_routing_strategy_notifications` |
+| **Journeys** | `list_journeys`, `invoke_journey` |
+| **Requests** | `archive_request` |
+| **Providers** | `list_providers`, `get_provider`, `list_provider_catalog`, `create_provider`, `update_provider`, `delete_provider` |
 | **Translations** | `get_translation`, `update_translation` |
 
 ### Diagnostic tools (local only)
