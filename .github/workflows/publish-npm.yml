@@ -2,6 +2,9 @@
 # the latest published version. Runs on every push to main, on GitHub
 # release, or via manual dispatch. After npm publish, publishes the
 # server metadata to the MCP Registry via OIDC authentication.
+#
+# npm publish uses Trusted Publisher OIDC (package settings → publish-npm.yml).
+# Requires Node 22+ and npm CLI 11.5.1+ for OIDC trusted publishing.
 name: Publish NPM
 on:
   workflow_dispatch:
@@ -34,7 +37,8 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
+          registry-url: 'https://registry.npmjs.org'
 
       - name: Install dependencies
         run: npm install
@@ -47,28 +51,27 @@ jobs:
 
       - name: Publish to NPM
         run: |
-          npm config set '//registry.npmjs.org/:_authToken' "$NPM_TOKEN"
-
           PACKAGE_NAME="$(jq -r '.name' package.json)"
           VERSION="$(jq -r '.version' package.json)"
           PUBLISHED="$(npm view "$PACKAGE_NAME" version 2>/dev/null || echo "")"
 
           if [ "$VERSION" = "$PUBLISHED" ]; then
             echo "$PACKAGE_NAME@$VERSION is already published, skipping."
+            echo "npm_skip=true" >> "$GITHUB_ENV"
             exit 0
           fi
 
-          echo "Publishing $PACKAGE_NAME@$VERSION (current npm: ${PUBLISHED:-none})"
-          npm publish --access public
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          echo "Publishing $PACKAGE_NAME@$VERSION (current npm: ${PUBLISHED:-none}) via Trusted Publisher OIDC"
+          npm publish --provenance --access public
 
       - name: Install mcp-publisher
+        if: env.npm_skip != 'true'
         working-directory: .
         run: |
           curl -L "https://github.com/modelcontextprotocol/registry/releases/latest/download/mcp-publisher_linux_amd64.tar.gz" | tar xz mcp-publisher
 
       - name: Publish to MCP Registry
+        if: env.npm_skip != 'true'
         working-directory: .
         run: |
           ./mcp-publisher login github-oidc

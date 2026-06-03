@@ -25,6 +25,14 @@
   ],
   "author": "Courier",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/trycourier/courier-mcp.git"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
   "devDependencies": {
     "@types/node": "^24.0.14",
     "nodemon": "^3.0.0",
