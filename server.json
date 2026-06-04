@@ -3,7 +3,7 @@
   "name": "io.github.trycourier/courier",
   "title": "Courier",
   "description": "Send notifications, manage templates, and configure integrations with Courier.",
-  "websiteUrl": "https://www.courier.com",
+  "websiteUrl": "https://courier.com",
   "icons": [
     {
       "src": "https://www.courier.com/favicon-96x96.png",

@@ -25,6 +25,7 @@
   ],
   "author": "Courier",
   "license": "MIT",
+  "homepage": "https://courier.com",
   "repository": {
     "type": "git",
     "url": "https://github.com/trycourier/courier-mcp.git"
