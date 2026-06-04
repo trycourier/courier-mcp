@@ -125,7 +125,8 @@ jobs:
           git checkout -B "$BRANCH"
           git add apps/mcp/package.json package-lock.json
           git commit -m "chore: bump @trycourier/courier-mcp to ^${VERSION}"
-          git push --force-with-lease origin "$BRANCH"
+          git fetch origin "$BRANCH" 2>/dev/null || true
+          git push --force origin "$BRANCH"
 
           EXISTING=$(gh pr list --repo trycourier/services --head "$BRANCH" --state open --json number -q '.[0].number')
           if [ -n "$EXISTING" ]; then
