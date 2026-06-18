@@ -58,7 +58,7 @@ Then point your IDE at `http://localhost:3000` with the same config format above
 
 ## Tools
 
-109 default tools organized by API resource, plus 1 diagnostic tool available in local installs.
+123 default tools organized by API resource, plus 1 diagnostic tool available in local installs.
 
 ### Default tools
 
