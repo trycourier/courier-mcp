@@ -17,8 +17,13 @@ app.post('/', (req: Request, res: Response, next: NextFunction) => {
   return statelessHandler(createServer)(req, res, next);
 });
 
-// Stateless mode doesn't support SSE streaming. Return 405 so MCP clients
-// know this endpoint exists but doesn't accept GET (instead of a confusing 404).
+// MCP clients open an OPTIONAL standalone GET SSE stream to receive
+// server-initiated messages. A stateless server never pushes anything on it, so
+// we don't offer one. The MCP SDK client treats a 405 here as the documented
+// "no SSE stream at this endpoint" signal and continues cleanly; it only fails
+// fatally ("Failed to open SSE stream") on other non-2xx codes — notably the
+// Express-default 404 you get when this route is missing entirely. So the route
+// must exist and answer 405.
 app.get('/', (_req: Request, res: Response) => {
   res.status(405).set('Allow', 'POST').send('SSE not supported on stateless server');
 });
