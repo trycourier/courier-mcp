@@ -6,6 +6,8 @@ import { SendTools } from "../tools/send-tools.js";
  */
 const DESTRUCTIVE_HINT_TOOLS: readonly string[] = [
   "archive_notification",
+  "archive_preference_section",
+  "archive_preference_topic",
   "archive_request",
   "archive_routing_strategy",
   "cancel_message",
@@ -18,6 +20,7 @@ const DESTRUCTIVE_HINT_TOOLS: readonly string[] = [
   "delete_tenant",
   "delete_tenant_preference",
   "delete_user_list_subscriptions",
+  "delete_user_preference_topic",
   "delete_user_token",
   "remove_all_user_tenants",
   "remove_user_from_tenant",

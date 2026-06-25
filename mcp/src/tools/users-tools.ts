@@ -8,6 +8,7 @@ export class UsersTools extends CourierMcpTools {
     'get_user_preferences',
     'get_user_preference_topic',
     'update_user_preference_topic',
+    'delete_user_preference_topic',
     'list_user_tenants',
     'add_user_to_tenant',
     'remove_user_from_tenant',
@@ -76,6 +77,24 @@ export class UsersTools extends CourierMcpTools {
 
     this.registerToolIfNeeded(
       UsersTools.tools[3],
+      "Delete a user's preference for a specific subscription topic, reverting it to the topic's default status.",
+      {
+        user_id: z.string().describe('The user ID'),
+        topic_id: z.string().describe('The subscription topic ID'),
+      },
+      async ({ user_id, topic_id }) => {
+        return handleToolCall(async () => {
+          await this.mcp.courier.delete(
+            `/users/${encodeURIComponent(user_id)}/preferences/${encodeURIComponent(topic_id)}`
+          );
+          return { success: true, message: `Preference for topic ${topic_id} deleted for user ${user_id}` };
+        });
+      },
+      { destructiveHint: true, idempotentHint: true }
+    );
+
+    this.registerToolIfNeeded(
+      UsersTools.tools[4],
       "List all tenants a user belongs to.",
       {
         user_id: z.string().describe('The user ID'),
@@ -94,7 +113,7 @@ export class UsersTools extends CourierMcpTools {
     );
 
     this.registerToolIfNeeded(
-      UsersTools.tools[4],
+      UsersTools.tools[5],
       'Add a user to a tenant.',
       {
         user_id: z.string().describe('The user ID'),
@@ -113,7 +132,7 @@ export class UsersTools extends CourierMcpTools {
     );
 
     this.registerToolIfNeeded(
-      UsersTools.tools[5],
+      UsersTools.tools[6],
       'Remove a user from a tenant.',
       {
         user_id: z.string().describe('The user ID'),
@@ -129,7 +148,7 @@ export class UsersTools extends CourierMcpTools {
     );
 
     this.registerToolIfNeeded(
-      UsersTools.tools[6],
+      UsersTools.tools[7],
       'Add a user to multiple tenants at once. A custom profile can be supplied per tenant.',
       {
         user_id: z.string().describe('The user ID'),
@@ -148,7 +167,7 @@ export class UsersTools extends CourierMcpTools {
     );
 
     this.registerToolIfNeeded(
-      UsersTools.tools[7],
+      UsersTools.tools[8],
       'Remove a user from all tenants.',
       {
         user_id: z.string().describe('The user ID'),

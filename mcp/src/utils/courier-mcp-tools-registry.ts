@@ -20,6 +20,8 @@ import { RequestsTools } from "../tools/requests-tools.js";
 import { RoutingStrategiesTools } from "../tools/routing-strategies-tools.js";
 import { JourneysTools } from "../tools/journeys-tools.js";
 import { ProvidersTools } from "../tools/providers-tools.js";
+import { PreferenceSectionsTools } from "../tools/preference-sections-tools.js";
+import { DigestsTools } from "../tools/digests-tools.js";
 
 export class CourierMcpToolsRegistry {
 
@@ -50,6 +52,8 @@ export class CourierMcpToolsRegistry {
       ...RoutingStrategiesTools.tools,
       ...JourneysTools.tools,
       ...ProvidersTools.tools,
+      ...PreferenceSectionsTools.tools,
+      ...DigestsTools.tools,
     ];
   }
 

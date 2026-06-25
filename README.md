@@ -1,6 +1,6 @@
 # Courier MCP Server
 
-The official [Model Context Protocol](https://modelcontextprotocol.io/) (MCP) server for the [Courier](https://www.courier.com) notification API. It gives AI agents full access to the Courier API — send messages, manage profiles, debug deliveries, configure lists, and more — through 124 tools backed by the [`@trycourier/courier`](https://www.npmjs.com/package/@trycourier/courier) Node SDK.
+The official [Model Context Protocol](https://modelcontextprotocol.io/) (MCP) server for the [Courier](https://www.courier.com) notification API. It gives AI agents full access to the Courier API — send messages, manage profiles, debug deliveries, configure lists, and more — through 141 tools backed by the [`@trycourier/courier`](https://www.npmjs.com/package/@trycourier/courier) Node SDK.
 
 ## Install
 
@@ -58,7 +58,7 @@ Then point your IDE at `http://localhost:3000` with the same config format above
 
 ## Tools
 
-123 default tools organized by API resource, plus 1 diagnostic tool available in local installs.
+140 default tools organized by API resource, plus 1 diagnostic tool available in local installs.
 
 ### Default tools
 
@@ -79,9 +79,11 @@ Then point your IDE at `http://localhost:3000` with the same config format above
 | **Audit Events** | `get_audit_event`, `list_audit_events` |
 | **Inbound** | `track_inbound_event` |
 | **Tenants** | `get_tenant`, `create_or_update_tenant`, `list_tenants`, `delete_tenant`, `list_tenant_users`, `update_tenant_preference`, `delete_tenant_preference`, `list_tenant_templates`, `get_tenant_template`, `replace_tenant_template`, `publish_tenant_template`, `get_tenant_template_version`, `delete_tenant_template` |
-| **Users** | `get_user_preferences`, `get_user_preference_topic`, `update_user_preference_topic`, `list_user_tenants`, `add_user_to_tenant`, `remove_user_from_tenant`, `bulk_add_user_tenants`, `remove_all_user_tenants` |
+| **Users** | `get_user_preferences`, `get_user_preference_topic`, `update_user_preference_topic`, `delete_user_preference_topic`, `list_user_tenants`, `add_user_to_tenant`, `remove_user_from_tenant`, `bulk_add_user_tenants`, `remove_all_user_tenants` |
+| **Preference Sections** | `list_preference_sections`, `create_preference_section`, `get_preference_section`, `replace_preference_section`, `archive_preference_section`, `publish_preferences`, `list_preference_topics`, `create_preference_topic`, `get_preference_topic`, `replace_preference_topic`, `archive_preference_topic` |
+| **Digests** | `release_digest`, `list_digest_instances` |
 | **Routing Strategies** | `create_routing_strategy`, `get_routing_strategy`, `replace_routing_strategy`, `archive_routing_strategy`, `list_routing_strategies`, `list_routing_strategy_notifications` |
-| **Journeys** | `list_journeys`, `invoke_journey`, `create_journey`, `get_journey`, `replace_journey`, `publish_journey`, `archive_journey`, `list_journey_versions`, `list_journey_templates`, `create_journey_template`, `get_journey_template`, `replace_journey_template`, `archive_journey_template`, `publish_journey_template`, `list_journey_template_versions` |
+| **Journeys** | `list_journeys`, `invoke_journey`, `create_journey`, `get_journey`, `replace_journey`, `publish_journey`, `archive_journey`, `list_journey_versions`, `list_journey_templates`, `create_journey_template`, `get_journey_template`, `replace_journey_template`, `archive_journey_template`, `publish_journey_template`, `list_journey_template_versions`, `get_journey_template_content`, `put_journey_template_content`, `put_journey_template_locale` |
 | **Requests** | `archive_request` |
 | **Providers** | `list_providers`, `get_provider`, `list_provider_catalog`, `create_provider`, `update_provider`, `delete_provider` |
 | **Translations** | `get_translation`, `update_translation` |

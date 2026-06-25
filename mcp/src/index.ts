@@ -24,6 +24,8 @@ import { RequestsTools } from './tools/requests-tools.js';
 import { RoutingStrategiesTools } from './tools/routing-strategies-tools.js';
 import { JourneysTools } from './tools/journeys-tools.js';
 import { ProvidersTools } from './tools/providers-tools.js';
+import { PreferenceSectionsTools } from './tools/preference-sections-tools.js';
+import { DigestsTools } from './tools/digests-tools.js';
 
 import { CourierMcpConfig } from './utils/config.js';
 import { MCP_DETAILS, PACKAGE_NAME, PACKAGE_VERSION } from './utils/version.js';
@@ -66,6 +68,8 @@ export default class CourierMcp extends McpServer {
     new RoutingStrategiesTools(this).register();
     new JourneysTools(this).register();
     new ProvidersTools(this).register();
+    new PreferenceSectionsTools(this).register();
+    new DigestsTools(this).register();
   }
 }
 

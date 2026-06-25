@@ -697,6 +697,99 @@ describe('Tool coverage - one call per tool', () => {
     expect(mockCourier.providers.catalog.list).toHaveBeenCalled();
   });
 
+  // --- Preference Sections (raw HTTP escape hatch) ---
+
+  it('list_preference_sections', async () => {
+    await client.callTool({ name: 'list_preference_sections', arguments: {} });
+    expect(mockCourier.get).toHaveBeenCalledWith('/preferences/sections');
+  });
+
+  it('create_preference_section', async () => {
+    await client.callTool({ name: 'create_preference_section', arguments: { name: 'Account', routing_options: ['email'] } });
+    expect(mockCourier.post).toHaveBeenCalledWith('/preferences/sections', { body: expect.objectContaining({ name: 'Account', routing_options: ['email'] }) });
+  });
+
+  it('get_preference_section', async () => {
+    await client.callTool({ name: 'get_preference_section', arguments: { section_id: 'sec-1' } });
+    expect(mockCourier.get).toHaveBeenCalledWith('/preferences/sections/sec-1');
+  });
+
+  it('replace_preference_section', async () => {
+    await client.callTool({ name: 'replace_preference_section', arguments: { section_id: 'sec-1', name: 'Renamed' } });
+    expect(mockCourier.put).toHaveBeenCalledWith('/preferences/sections/sec-1', { body: expect.objectContaining({ name: 'Renamed' }) });
+  });
+
+  it('archive_preference_section', async () => {
+    await client.callTool({ name: 'archive_preference_section', arguments: { section_id: 'sec-1' } });
+    expect(mockCourier.delete).toHaveBeenCalledWith('/preferences/sections/sec-1');
+  });
+
+  it('publish_preferences', async () => {
+    await client.callTool({ name: 'publish_preferences', arguments: {} });
+    expect(mockCourier.post).toHaveBeenCalledWith('/preferences/publish');
+  });
+
+  it('list_preference_topics', async () => {
+    await client.callTool({ name: 'list_preference_topics', arguments: { section_id: 'sec-1' } });
+    expect(mockCourier.get).toHaveBeenCalledWith('/preferences/sections/sec-1/topics');
+  });
+
+  it('create_preference_topic', async () => {
+    await client.callTool({ name: 'create_preference_topic', arguments: { section_id: 'sec-1', name: 'Marketing', default_status: 'OPTED_OUT' } });
+    expect(mockCourier.post).toHaveBeenCalledWith('/preferences/sections/sec-1/topics', { body: expect.objectContaining({ name: 'Marketing', default_status: 'OPTED_OUT' }) });
+  });
+
+  it('get_preference_topic', async () => {
+    await client.callTool({ name: 'get_preference_topic', arguments: { section_id: 'sec-1', topic_id: 'top-1' } });
+    expect(mockCourier.get).toHaveBeenCalledWith('/preferences/sections/sec-1/topics/top-1');
+  });
+
+  it('replace_preference_topic', async () => {
+    await client.callTool({ name: 'replace_preference_topic', arguments: { section_id: 'sec-1', topic_id: 'top-1', name: 'Updates', default_status: 'OPTED_IN' } });
+    expect(mockCourier.put).toHaveBeenCalledWith('/preferences/sections/sec-1/topics/top-1', { body: expect.objectContaining({ name: 'Updates', default_status: 'OPTED_IN' }) });
+  });
+
+  it('archive_preference_topic', async () => {
+    await client.callTool({ name: 'archive_preference_topic', arguments: { section_id: 'sec-1', topic_id: 'top-1' } });
+    expect(mockCourier.delete).toHaveBeenCalledWith('/preferences/sections/sec-1/topics/top-1');
+  });
+
+  // --- Digests (raw HTTP escape hatch) ---
+
+  it('release_digest', async () => {
+    await client.callTool({ name: 'release_digest', arguments: { schedule_id: 'sch/abc' } });
+    expect(mockCourier.post).toHaveBeenCalledWith('/digests/schedules/sch%2Fabc/trigger');
+  });
+
+  it('list_digest_instances', async () => {
+    await client.callTool({ name: 'list_digest_instances', arguments: { schedule_id: 'sch/abc', limit: 50 } });
+    expect(mockCourier.get).toHaveBeenCalledWith('/digests/schedules/sch%2Fabc/instances', { query: expect.objectContaining({ limit: 50 }) });
+  });
+
+  // --- Journey template content (raw HTTP escape hatch) ---
+
+  it('get_journey_template_content', async () => {
+    await client.callTool({ name: 'get_journey_template_content', arguments: { journey_id: 'j-1', notification_id: 'n-1', version: 'draft' } });
+    expect(mockCourier.get).toHaveBeenCalledWith('/journeys/j-1/templates/n-1/content', { query: expect.objectContaining({ version: 'draft' }) });
+  });
+
+  it('put_journey_template_content', async () => {
+    await client.callTool({ name: 'put_journey_template_content', arguments: { journey_id: 'j-1', notification_id: 'n-1', elements: [] } });
+    expect(mockCourier.put).toHaveBeenCalledWith('/journeys/j-1/templates/n-1/content', { body: expect.objectContaining({ content: { elements: [] } }) });
+  });
+
+  it('put_journey_template_locale', async () => {
+    await client.callTool({ name: 'put_journey_template_locale', arguments: { journey_id: 'j-1', notification_id: 'n-1', locale_id: 'es', elements: [{ id: 'e-1' }] } });
+    expect(mockCourier.put).toHaveBeenCalledWith('/journeys/j-1/templates/n-1/locales/es', { body: expect.objectContaining({ elements: [{ id: 'e-1' }] }) });
+  });
+
+  // --- Users (raw HTTP escape hatch) ---
+
+  it('delete_user_preference_topic', async () => {
+    await client.callTool({ name: 'delete_user_preference_topic', arguments: { user_id: 'u-1', topic_id: 'top-1' } });
+    expect(mockCourier.delete).toHaveBeenCalledWith('/users/u-1/preferences/top-1');
+  });
+
   // --- Config (diagnostic, not in defaultTools) ---
 
   it('get_environment_config returns masked key and session info', async () => {
@@ -920,7 +1013,7 @@ describe('Tool filtering - registerToolIfNeeded respects availableTools', () => 
       const tools = await client.listTools();
       const names = tools.tools.map((t: any) => t.name);
       expect(names).not.toContain('get_environment_config');
-      expect(names.length).toBe(123);
+      expect(names.length).toBe(140);
     } finally {
       await cleanup();
     }
@@ -933,7 +1026,7 @@ describe('Tool filtering - registerToolIfNeeded respects availableTools', () => 
       const tools = await client.listTools();
       const names = tools.tools.map((t: any) => t.name);
       expect(names).toContain('get_environment_config');
-      expect(names.length).toBe(124);
+      expect(names.length).toBe(141);
     } finally {
       await cleanup();
     }
