@@ -56,6 +56,29 @@ app.get('/.well-known/mcp/server-card.json', (_req: Request, res: Response) => {
   });
 });
 
+// Some MCP clients (notably Cursor) proactively probe OAuth 2.0 discovery
+// endpoints on connect — even for a server like this one that authenticates with
+// an `api_key` header and implements no OAuth. With no route registered, Express
+// answers these probes with its default 404 whose body is HTML. Cursor's client
+// tries to parse that body as JSON and crashes ("Unexpected non-whitespace
+// character after JSON"), which surfaces to the user as a 404 connection error.
+//
+// RFC 9728 says the *absence* of OAuth metadata (a 404) is the correct signal
+// that OAuth is unsupported, and a spec-compliant client treats the 404 as "no
+// auth server, fall back to configured credentials". So the 404 status is right;
+// we just need a JSON body so the probe parses cleanly. We answer every OAuth /
+// OpenID discovery probe (and dynamic client registration) with a 404 + JSON.
+const oauthNotSupported = (_req: Request, res: Response) => {
+  res
+    .status(404)
+    .json({ message: 'OAuth is not supported. Authenticate with the api_key header.' });
+};
+app.all(
+  /^\/\.well-known\/(oauth-authorization-server|oauth-protected-resource|openid-configuration)(\/.*)?$/,
+  oauthNotSupported
+);
+app.all('/register', oauthNotSupported);
+
 app.get('/health', (_req, res) => {
   res.status(200).send('OK');
 });
