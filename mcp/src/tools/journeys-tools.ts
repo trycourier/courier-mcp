@@ -20,6 +20,9 @@ export class JourneysTools extends CourierMcpTools {
     'archive_journey_template',
     'publish_journey_template',
     'list_journey_template_versions',
+    'get_journey_template_content',
+    'put_journey_template_content',
+    'put_journey_template_locale',
   ];
 
   public register() {
@@ -314,6 +317,81 @@ export class JourneysTools extends CourierMcpTools {
         );
       },
       { readOnlyHint: true }
+    );
+
+    // The published SDK does not yet expose content/locale methods on
+    // journeys.templates, so these call the raw HTTP client. Migrate to
+    // `this.mcp.courier.journeys.templates.*` once the SDK is regenerated.
+
+    this.registerToolIfNeeded(
+      JourneysTools.tools[15],
+      'Fetch the elemental content of a journey-scoped notification template. Pass version=draft for the working draft, or vN for a historical version. Defaults to published.',
+      {
+        notification_id: z.string().describe('The notification template ID'),
+        journey_id: z.string().describe('The journey template ID that owns this notification'),
+        version: z.string().optional().describe('Version to retrieve: "draft", "published" (default), or a version string like "v001"'),
+      },
+      async ({ notification_id, journey_id, version }) => {
+        return handleToolCall(() => {
+          const query: Record<string, any> = {};
+          if (version) query.version = version;
+          return this.mcp.courier.get(
+            `/journeys/${encodeURIComponent(journey_id)}/templates/${encodeURIComponent(notification_id)}/content`,
+            { query }
+          );
+        });
+      },
+      { readOnlyHint: true }
+    );
+
+    this.registerToolIfNeeded(
+      JourneysTools.tools[16],
+      'Replace the elemental content of a journey-scoped notification template. Overwrites all elements. Call publish_journey_template afterwards to make it live.',
+      {
+        notification_id: z.string().describe('The notification template ID'),
+        journey_id: z.string().describe('The journey template ID that owns this notification'),
+        elements: z.array(z.record(z.any())).describe('Array of elemental content nodes'),
+        version: z.string().optional().describe('Content version string (e.g. "2022-01-01"). Server defaults when omitted.'),
+        state: z.enum(['DRAFT', 'PUBLISHED']).optional().describe('Template state after update'),
+      },
+      async ({ notification_id, journey_id, elements, version, state }) => {
+        return handleToolCall(() => {
+          const content: Record<string, any> = { elements };
+          if (version !== undefined) content.version = version;
+          const body: Record<string, any> = { content };
+          if (state !== undefined) body.state = state;
+          return this.mcp.courier.put(
+            `/journeys/${encodeURIComponent(journey_id)}/templates/${encodeURIComponent(notification_id)}/content`,
+            { body }
+          );
+        });
+      },
+      { readOnlyHint: false, idempotentHint: true }
+    );
+
+    this.registerToolIfNeeded(
+      JourneysTools.tools[17],
+      'Set locale-specific content overrides for a journey-scoped notification template. Each element override must reference an existing element by its id.',
+      {
+        notification_id: z.string().describe('The notification template ID'),
+        journey_id: z.string().describe('The journey template ID that owns this notification'),
+        locale_id: z.string().describe('Locale identifier (e.g. es, fr, pt-BR)'),
+        elements: z.array(z.object({
+          id: z.string().describe('Target element ID to override'),
+        }).catchall(z.any())).describe('Array of element overrides with id and locale-specific content'),
+        state: z.enum(['DRAFT', 'PUBLISHED']).optional().describe('Template state after update'),
+      },
+      async ({ notification_id, journey_id, locale_id, elements, state }) => {
+        return handleToolCall(() => {
+          const body: Record<string, any> = { elements };
+          if (state !== undefined) body.state = state;
+          return this.mcp.courier.put(
+            `/journeys/${encodeURIComponent(journey_id)}/templates/${encodeURIComponent(notification_id)}/locales/${encodeURIComponent(locale_id)}`,
+            { body }
+          );
+        });
+      },
+      { readOnlyHint: false, idempotentHint: true }
     );
   }
 }

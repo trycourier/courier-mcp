@@ -6,6 +6,12 @@ import { CourierMcpToolsRegistry } from '../utils/courier-mcp-tools-registry.js'
 
 export function createMockCourier() {
   return {
+    // Raw HTTP escape-hatch methods used by tools whose typed SDK resource is
+    // not yet published (preference sections, digests, journey template content).
+    get: vi.fn().mockResolvedValue({ items: [] }),
+    post: vi.fn().mockResolvedValue({ id: 'created-1' }),
+    put: vi.fn().mockResolvedValue({ id: 'updated-1' }),
+    delete: vi.fn().mockResolvedValue(undefined),
     send: { message: vi.fn().mockResolvedValue({ requestId: 'req-123' }) },
     messages: {
       retrieve: vi.fn().mockResolvedValue({ id: 'msg-1', status: 'DELIVERED' }),
