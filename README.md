@@ -54,7 +54,7 @@ cd courier-mcp
 sh dev.sh
 ```
 
-Then point your IDE at `http://localhost:3000` with the same config format above.
+Then point your IDE at `http://localhost:3939` with the same config format above.
 
 ## Tools
 
