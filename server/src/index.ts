@@ -5,7 +5,17 @@ import CourierMcp, { CourierMcpLogLevel, CourierMcpConfig, CourierMcpTools, PACK
 const app = express();
 app.use(express.json());
 
-app.post('/', (req: Request, res: Response, next: NextFunction) => {
+// The single MCP endpoint. Per the MCP Streamable HTTP transport spec, this path
+// must accept POST (JSON-RPC) and answer GET/DELETE with 405 — GET is the client's
+// OPTIONAL server-to-client SSE stream, which a stateless server doesn't offer, and
+// DELETE is client session termination, which we don't support. `statelessHandler`
+// already does all of this: it dispatches POST to the MCP server and returns a
+// spec-compliant 405 for any other method. Routing every method through the one
+// handler (instead of hand-rolling separate 405 routes) means the 405 can't be
+// dropped by accident — a missing GET route falls through to Express's default 404,
+// which MCP clients treat as a fatal "Failed to open SSE stream".
+// Spec: https://modelcontextprotocol.io/specification/2025-06-18/basic/transports
+const mcpHandler = (req: Request, res: Response, next: NextFunction) => {
   const createServer = () => {
     const config = new CourierMcpConfig({
       headers: req.headers,
@@ -15,22 +25,11 @@ app.post('/', (req: Request, res: Response, next: NextFunction) => {
     return new CourierMcp(config);
   };
   return statelessHandler(createServer)(req, res, next);
-});
+};
 
-// MCP clients open an OPTIONAL standalone GET SSE stream to receive
-// server-initiated messages. A stateless server never pushes anything on it, so
-// we don't offer one. The MCP SDK client treats a 405 here as the documented
-// "no SSE stream at this endpoint" signal and continues cleanly; it only fails
-// fatally ("Failed to open SSE stream") on other non-2xx codes — notably the
-// Express-default 404 you get when this route is missing entirely. So the route
-// must exist and answer 405.
-app.get('/', (_req: Request, res: Response) => {
-  res.status(405).set('Allow', 'POST').send('SSE not supported on stateless server');
-});
-
-app.delete('/', (_req: Request, res: Response) => {
-  res.status(405).set('Allow', 'POST').send('Sessions not supported on stateless server');
-});
+app.post('/', mcpHandler);
+app.get('/', mcpHandler);
+app.delete('/', mcpHandler);
 
 app.get('/.well-known/mcp/server-card.json', (_req: Request, res: Response) => {
   res.json({
@@ -60,7 +59,7 @@ app.get('/health', (_req, res) => {
   res.status(200).send('OK');
 });
 
-const PORT = parseInt(process.env.PORT || '3000', 10);
+const PORT = parseInt(process.env.PORT || '3939', 10);
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Stateless MCP server running on port ${PORT}`);
 });
